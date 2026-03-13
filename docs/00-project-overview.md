@@ -1,68 +1,54 @@
-# 00 — Project Overview
+# Project Overview
 
-> Заполняется агентом после качественного снятия задачи.
+## Project Summary
 
----
+Project name: `<fill-project-name>`
 
-## Краткое описание проекта
+Short description:
+Use this repository to manage project discovery, planning, implementation, and operational decisions through a consistent AI-assisted workflow.
 
-<!-- Агент заполняет: 2-3 предложения о том, что это за проект -->
-_TBD — заполняется при инициализации проекта_
+## Goal
 
----
+Describe the business objective the project exists to achieve. Keep this section current when strategy changes.
 
-## Цель проекта
+## Current Status
 
-<!-- Агент заполняет: конкретная, измеримая цель -->
-_TBD_
-
----
-
-## Текущий статус
-
-| Параметр        | Значение                          |
-|-----------------|-----------------------------------|
-| Фаза            | Инициализация                     |
-| Дата старта     | _TBD_                             |
-| Последнее обновление | _TBD_                        |
-| Ответственный   | _TBD_                             |
-
----
+- Lifecycle stage: `Discovery`
+- Delivery status: `Environment not yet validated`
+- Current focus: `Complete business task intake and connect GitHub Project`
 
 ## GitHub Project
 
-| Параметр        | Значение                          |
-|-----------------|-----------------------------------|
-| URL             | _Вписать в docs/09-integrations.md_ |
-| Статусы         | Backlog / In progress / Closed    |
+- URL: `<paste GitHub Project URL in docs/09-integrations.md and mirror here if useful>`
+- Board model: `Kanban`
+- Required statuses: `Backlog`, `In progress`, `Closed`
 
----
+## Documentation Map
 
-## Основные разделы документации
+- `docs/00-project-overview.md`: entry point and navigation
+- `docs/01-product-vision.md`: problem, value, users, success
+- `docs/02-business-requirements.md`: requirements and acceptance criteria
+- `docs/03-scope-and-boundaries.md`: in-scope and out-of-scope
+- `docs/04-tech-stack.md`: chosen technologies and best practices
+- `docs/05-architecture.md`: system structure and data flow
+- `docs/06-decision-log.md`: ADR-lite decision history
+- `docs/07-workflow.md`: operating workflow for the agent
+- `docs/08-vector-db.md`: optional semantic retrieval decision
+- `docs/09-integrations.md`: GitHub Project URL, env vars, tokens
+- `docs/10-glossary.md`: agreed vocabulary
 
-| Файл                          | Содержание                         |
-|-------------------------------|------------------------------------|
-| `docs/01-product-vision.md`   | Продуктовое видение                |
-| `docs/02-business-requirements.md` | Требования                   |
-| `docs/03-scope-and-boundaries.md`  | Рамки проекта                |
-| `docs/04-tech-stack.md`       | Технологический стек               |
-| `docs/05-architecture.md`     | Архитектура                        |
-| `docs/06-decision-log.md`     | Журнал решений                     |
-| `docs/07-workflow.md`         | Рабочий процесс                    |
-| `docs/08-vector-db.md`        | Vector DB (опционально)            |
-| `docs/09-integrations.md`     | Интеграции и переменные окружения  |
-| `docs/10-glossary.md`         | Глоссарий                          |
-
----
-
-## Порядок чтения проекта агентом
+## Required Agent Reading Order
 
 1. `AGENTS.md`
 2. `README.md`
-3. `docs/00-project-overview.md` (этот файл)
+3. `docs/00-project-overview.md`
 4. `docs/01-product-vision.md`
 5. `docs/02-business-requirements.md`
 6. `docs/04-tech-stack.md`
 7. `docs/05-architecture.md`
-8. Актуальные open issues
-9. GitHub Project
+8. Current GitHub issues
+9. Current GitHub Project board
+
+## Notes
+
+Keep this file high signal. It should quickly orient a new agent session without replacing the more detailed docs.

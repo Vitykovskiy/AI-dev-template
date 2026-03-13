@@ -1,118 +1,72 @@
-# 07 — Workflow
+# Workflow
 
-Описание рабочего процесса агента.
+## Agent Working Cycle
 
----
+1. Read mandatory context in the order defined by `AGENTS.md`.
+2. Run environment check.
+3. Perform business task intake.
+4. Persist intake results into docs.
+5. Create Epic and tasks in GitHub.
+6. Align stack and best practices.
+7. Execute tasks one by one.
+8. Finalize each task with persistence before context reset.
 
-## Рабочий цикл агента
+## Task Intake Phase
 
-```
-Новая сессия
-    │
-    ▼
-Чтение контекста (AGENTS.md → docs/ → issues → project)
-    │
-    ▼
-Environment Check
-    │
-    ├─ Проблемы? → Сообщить пользователю, остановиться
-    │
-    ▼
-Получение бизнес-задачи от пользователя
-    │
-    ▼
-ФАЗА 1: Качественное снятие задачи
-    │   - Уточнение цели и ценности
-    │   - Уточнение ограничений и рамок
-    │   - Выявление рисков и неизвестных
-    │   - Предложение вариантов
-    │   - Уточняющие вопросы
-    │   - Формирование business-task-intake.md
-    │
-    ▼
-ФАЗА 2: Фиксация задачи
-    │   - Обновление docs/
-    │   - Создание Epic в GitHub Issues
-    │   - Декомпозиция на задачи
-    │   - Создание labels (setup-labels.sh)
-    │   - Размещение задач в GitHub Project (Backlog)
-    │
-    ▼
-ФАЗА 3: Определение стека и best practices
-    │   - Выбор технологий с обоснованием
-    │   - Фиксация best practices в docs/04-tech-stack.md
-    │
-    ▼
-ФАЗА 4: Реализация (по задачам)
-    │   - Взять задачу → In progress
-    │   - Реализовать
-    │   - Обновить docs + issue + project
-    │   - Закрыть задачу → Closed
-    │   - Persist → Cleanup context
-    │
-    ▼
-Следующая задача или конец
-```
+Mandatory intake sequence:
 
----
+1. Context and current problem
+2. Target result and business value
+3. Users, scenarios, current process
+4. Constraints, dependencies, first-version scope
+5. Success and acceptance criteria
+6. Risks, unknowns, open questions
+7. Implementation options
 
-## Фаза Task Intake
+Interaction rules:
 
-Обязательная фаза. Агент не может пропустить ее.
+- One semantic block at a time
+- Short summary after each block
+- No decomposition before intake is coherent
+- No vector DB discussion during primary intake unless strictly needed
 
-Выход фазы — заполненный `templates/business-task-intake.md`.
+## Decomposition Rules
 
----
+- Tasks must be atomic.
+- Tasks must have a concrete expected result.
+- Tasks must include completion criteria.
+- Tasks must link dependencies when applicable.
+- Tasks must map cleanly to GitHub Issue state.
 
-## Правила декомпозиции
+## Task Status Movement
 
-- Одна задача = один атомарный результат.
-- У каждой задачи есть критерии завершения.
-- Зависимости явно указываются через `depends on #N`.
-- Не смешивать frontend и backend в одной задаче без причины.
+- New task: `Backlog`
+- Active task: `In progress`
+- Completed task: `Closed`
 
----
+## Documentation Update Rules
 
-## Правила движения задач
+- Requirement changes update `docs/02-business-requirements.md`.
+- Scope changes update `docs/03-scope-and-boundaries.md`.
+- Stack and official practices update `docs/04-tech-stack.md`.
+- Architecture changes update `docs/05-architecture.md`.
+- Material decisions update `docs/06-decision-log.md`.
 
-| Триггер                     | Действие                       |
-|-----------------------------|--------------------------------|
-| Задача создана              | Статус → `Backlog`             |
-| Агент берет задачу в работу | Статус → `In progress`         |
-| Задача завершена            | Статус → `Closed`              |
-| Задача заблокирована        | Label `status: blocked`        |
-| Нужна информация            | Label `status: needs-info`     |
+## Finalize -> Persist -> Reset Context
 
----
+Before the agent clears context after a task, it must:
 
-## Правила обновления документации
-
-| Событие                      | Обновить                                         |
-|------------------------------|--------------------------------------------------|
-| Изменение архитектуры        | `docs/05-architecture.md` + `docs/06-decision-log.md` |
-| Изменение требований         | `docs/02-business-requirements.md`               |
-| Изменение стека              | `docs/04-tech-stack.md`                          |
-| Новое допущение              | `docs/06-decision-log.md`                        |
-| Новая интеграция             | `docs/09-integrations.md`                        |
-
----
-
-## Правило: Finalize → Persist → Reset Context
-
-После каждой задачи:
-
-1. **Finalize** — убедиться, что результат реализован.
-2. **Persist** — сохранить в docs + GitHub Issues + GitHub Project.
-3. **Reset Context** — только после этого очищать контекст.
-
-Контекст не используется как долговременное хранилище.
-
----
+1. persist code and documentation;
+2. update the related issue;
+3. update the project card;
+4. update labels or status if needed;
+5. create a dedicated commit;
+6. verify that important state is not trapped in transient context.
 
 ## Known Limitations / Assumptions
 
-1. **GitHub Project создается вручную** — gh CLI не позволяет создать Project автоматически без дополнительных прав.
-2. **Агент не может контролировать права доступа** — если у агента нет прав на Issues/Project, он остановится на environment check.
-3. **Vector DB опциональна** — если пользователь отказался, compose остается в репозитории, но не запускается.
-4. **Контекст агента ограничен** — при длинных сессиях ранние части контекста могут быть усечены; docs являются единственным надежным хранилищем состояния.
-5. **Локальные черновики в `tasks/` не канонические** — canonical backlog всегда в GitHub Issues.
+- The template assumes the team uses GitHub Issues and GitHub Project rather than a separate backlog tool.
+- Project board field names can vary by GitHub plan; the required logical fields remain `Status`, `Priority`, and `Area`.
+- Shell automation assumes `bash` is available. On Windows, Git Bash or WSL is typically required.
+- Vector DB guidance is generic by design and requires project-specific embedding decisions before activation.
+- Some GitHub Project automations may still require repository-specific permissions that the agent cannot infer until environment check.

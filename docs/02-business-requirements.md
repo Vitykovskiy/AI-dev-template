@@ -1,51 +1,40 @@
-# 02 — Business Requirements
+# Business Requirements
 
-> Заполняется агентом после качественного снятия задачи.
+## Business Requirements
 
----
+1. Capture each business requirement as a clear outcome statement.
+2. Tie requirements to business value where possible.
+3. Mark unresolved items as open questions rather than hiding ambiguity.
 
-## Бизнес-требования
+Example format:
 
-| ID     | Требование                  | Приоритет  | Источник   |
-|--------|-----------------------------|------------|------------|
-| BR-01  | _TBD_                       | High       | _TBD_      |
+- `BR-001`: `<requirement>`
+- `BR-002`: `<requirement>`
 
----
+## Functional Requirements
 
-## Функциональные требования
+- `FR-001`: `<functional requirement>`
+- `FR-002`: `<functional requirement>`
 
-| ID     | Требование                  | Приоритет  | Связанные BR |
-|--------|-----------------------------|------------|--------------|
-| FR-01  | _TBD_                       | High       | BR-01        |
+## Non-Functional Requirements
 
----
-
-## Нефункциональные требования
-
-| Категория       | Требование                  | Метрика              |
-|-----------------|-----------------------------|----------------------|
-| Производительность | _TBD_                    | _TBD_                |
-| Безопасность    | _TBD_                       | _TBD_                |
-| Надежность      | _TBD_                       | _TBD_                |
-| Масштабируемость| _TBD_                       | _TBD_                |
-
----
+- `NFR-001`: Performance expectations
+- `NFR-002`: Security expectations
+- `NFR-003`: Reliability expectations
+- `NFR-004`: Observability expectations
 
 ## Acceptance Criteria
 
-### FR-01: _Название_
-- [ ] _TBD_
+- `<criterion 1>`
+- `<criterion 2>`
+- `<criterion 3>`
 
----
+## Open Questions
 
-## Открытые вопросы
+- `<question>`
+- `<question>`
 
-| ID    | Вопрос                     | Ответственный | Статус     |
-|-------|----------------------------|---------------|------------|
-| Q-01  | _TBD_                      | _TBD_         | Open       |
+## Assumptions
 
----
-
-## Допущения
-
-- _TBD_
+- `<assumption>`
+- `<assumption>`

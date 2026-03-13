@@ -1,44 +1,40 @@
-# 05 — Architecture
+# Architecture
 
-> Заполняется агентом после определения стека и снятия задачи.
+## System Context
 
----
+Describe the system boundary, major actors, and key external systems.
 
-## Контекст системы
+## Components
 
-<!-- Что это за система, с чем взаимодействует, кто использует -->
-_TBD_
+| Component | Responsibility | Inputs | Outputs | Notes |
+| --- | --- | --- | --- | --- |
+| `<component>` | `<responsibility>` | `<input>` | `<output>` | `<notes>` |
 
----
+## Responsibility Boundaries
 
-## Компоненты
+- Frontend:
+- Backend:
+- Data layer:
+- Infrastructure:
+- External integrations:
 
-| Компонент       | Зона ответственности         | Технология   |
-|-----------------|------------------------------|--------------|
-| _TBD_           | _TBD_                        | _TBD_        |
+## Data Flows
 
----
+1. `<flow step 1>`
+2. `<flow step 2>`
+3. `<flow step 3>`
 
-## Потоки данных
+## Integrations
 
-```
-[Component A] --> [Component B] --> [Component C]
-```
+- GitHub
+- External APIs: `<fill if applicable>`
+- Internal systems: `<fill if applicable>`
 
-_TBD — описать ключевые потоки данных_
+## Technical Risks
 
----
+- `<technical risk>`
+- `<technical risk>`
 
-## Интеграции
+## Update Rule
 
-| Внешняя система  | Тип интеграции   | Направление   | Описание      |
-|------------------|------------------|---------------|---------------|
-| _TBD_            | REST API         | Outbound      | _TBD_         |
-
----
-
-## Технические риски
-
-| Риск                        | Вероятность | Влияние | Митигация             |
-|-----------------------------|-------------|---------|------------------------|
-| _TBD_                       | Medium      | High    | _TBD_                 |
+If implementation changes component responsibilities, data flow, or integration assumptions, update this file together with `docs/06-decision-log.md`.

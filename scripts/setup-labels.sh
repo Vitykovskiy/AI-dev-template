@@ -1,65 +1,62 @@
 #!/usr/bin/env bash
-# setup-labels.sh — Создание стандартных labels в GitHub репозитории
-# Идемпотентный: повторный запуск безопасен (существующие labels не удаляются)
-# Запуск: bash scripts/setup-labels.sh
 
-set -euo pipefail
+set -u
 
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-ok()   { echo -e "${GREEN}[OK]${NC} $1"; }
-skip() { echo -e "${YELLOW}[SKIP]${NC} $1 (уже существует)"; }
-
-# Определяем репозиторий
-REPO=$(git remote get-url origin 2>/dev/null | sed 's/.*github.com[:/]//' | sed 's/\.git$//' || echo "")
-
-if [ -z "$REPO" ]; then
-  echo "Ошибка: не удалось определить репозиторий из git remote."
+if ! command -v gh >/dev/null 2>&1; then
+  printf '[fail] gh CLI is required to manage labels.\n'
   exit 1
 fi
 
-echo ""
-echo "======================================"
-echo "  Setup Labels для: ${REPO}"
-echo "======================================"
-echo ""
+if ! gh auth status >/dev/null 2>&1; then
+  printf '[fail] gh CLI is not authenticated.\n'
+  exit 1
+fi
 
-create_label() {
+REPO="${1:-}"
+
+if [[ -z "$REPO" ]]; then
+  if gh repo view --json nameWithOwner >/dev/null 2>&1; then
+    REPO="$(gh repo view --json nameWithOwner --jq .nameWithOwner)"
+  else
+    printf '[fail] unable to detect repository. Pass owner/repo explicitly.\n'
+    exit 1
+  fi
+fi
+
+ensure_label() {
   local name="$1"
   local color="$2"
   local description="$3"
 
-  if gh label list --repo "$REPO" --limit 100 | grep -q "^${name}"; then
-    skip "${name}"
-  else
-    gh label create "$name" --repo "$REPO" --color "$color" --description "$description" 2>/dev/null && ok "$name" || skip "$name"
+  if gh label create "$name" --repo "$REPO" --color "$color" --description "$description" >/dev/null 2>&1; then
+    printf '[ok] created label: %s\n' "$name"
+    return 0
   fi
+
+  if gh label edit "$name" --repo "$REPO" --color "$color" --description "$description" >/dev/null 2>&1; then
+    printf '[ok] updated label: %s\n' "$name"
+    return 0
+  fi
+
+  printf '[fail] could not create or update label: %s\n' "$name"
+  return 1
 }
 
-# Type labels
-create_label "type: epic"    "0075ca" "Крупный блок работы"
-create_label "type: feature" "0052cc" "Новая функциональность"
-create_label "type: bug"     "d73a4a" "Дефект"
-create_label "type: task"    "e4e669" "Техническая задача"
+status=0
 
-# Area labels
-create_label "area: frontend" "bfd4f2" "Фронтенд"
-create_label "area: backend"  "d4c5f9" "Бэкенд"
-create_label "area: infra"    "f9d0c4" "Инфраструктура"
-create_label "area: docs"     "cfd3d7" "Документация"
-create_label "area: data"     "e4f9c4" "Данные"
+ensure_label "type: epic" "5319E7" "Large outcome spanning multiple tasks" || status=1
+ensure_label "type: feature" "1D76DB" "New product capability" || status=1
+ensure_label "type: bug" "D73A4A" "Defect requiring correction" || status=1
+ensure_label "type: task" "0E8A16" "Implementation or maintenance task" || status=1
+ensure_label "area: frontend" "FBCA04" "Frontend area" || status=1
+ensure_label "area: backend" "BFD4F2" "Backend area" || status=1
+ensure_label "area: infra" "C5DEF5" "Infrastructure area" || status=1
+ensure_label "area: docs" "7057FF" "Documentation area" || status=1
+ensure_label "area: data" "006B75" "Data area" || status=1
+ensure_label "priority: high" "B60205" "High priority" || status=1
+ensure_label "priority: medium" "D93F0B" "Medium priority" || status=1
+ensure_label "priority: low" "0E8A16" "Low priority" || status=1
+ensure_label "status: blocked" "000000" "Work is blocked" || status=1
+ensure_label "status: needs-info" "EDEDED" "More information is required" || status=1
 
-# Priority labels
-create_label "priority: high"   "b60205" "Высокий приоритет"
-create_label "priority: medium" "fbca04" "Средний приоритет"
-create_label "priority: low"    "0e8a16" "Низкий приоритет"
-
-# Status labels
-create_label "status: blocked"     "ee0701" "Задача заблокирована"
-create_label "status: needs-info"  "cc317c" "Нужна дополнительная информация"
-
-echo ""
-echo "Labels созданы. Репозиторий: https://github.com/${REPO}/labels"
-echo ""
+exit "$status"

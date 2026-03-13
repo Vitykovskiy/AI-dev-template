@@ -1,45 +1,43 @@
-# 04 — Tech Stack
+# Tech Stack
 
-> Заполняется агентом после определения стека. Нельзя использовать незафиксированные «общепринятые» практики.
+## Current Decision Status
 
----
+Status: `TBD after business task intake and environment alignment`
 
-## Выбранный стек
+The agent must not finalize this file before the business problem and delivery constraints are understood.
 
-| Категория       | Технология      | Версия  | Причина выбора          |
-|-----------------|-----------------|---------|-------------------------|
-| _TBD_           | _TBD_           | _TBD_   | _TBD_                   |
+## Candidate Stack Summary
 
----
+| Area | Selected | Why | Alternatives | Risks |
+| --- | --- | --- | --- | --- |
+| Frontend | TBD | TBD | TBD | TBD |
+| Backend | TBD | TBD | TBD | TBD |
+| Data | TBD | TBD | TBD | TBD |
+| Infra | TBD | TBD | TBD | TBD |
 
-## Рассмотренные альтернативы
+## Official Documentation And Best Practices
 
-| Технология    | Почему не выбрана             |
-|---------------|-------------------------------|
-| _TBD_         | _TBD_                         |
+Record only official or primary sources for selected technologies.
 
----
+Example format:
 
-## Риски стека
+- Technology:
+  Official docs:
+  Key best practices:
+  Project conventions:
 
-| Риск                   | Вероятность | Влияние | Митигация             |
-|------------------------|-------------|---------|------------------------|
-| _TBD_                  | Medium      | High    | _TBD_                 |
+## Project Conventions
 
----
+- Document language-specific conventions after stack selection.
+- Record testing expectations.
+- Record migration or deployment conventions.
+- Record versioning or dependency update policies.
 
-## Best Practices
+## Risks
 
-> Зафиксированные best practices по выбранным технологиям. Агент обязан опираться на них в реализации.
+- `<risk tied to a stack choice>`
+- `<risk tied to operational complexity>`
 
-### [Технология 1]
-- Официальная документация: _ссылка_
-- Best practices:
-  - _TBD_
+## Review Trigger
 
----
-
-## Проектные соглашения
-
-<!-- Специфические соглашения для этого проекта, не покрытые стандартными best practices -->
-- _TBD_
+Update this file whenever the selected stack, runtime constraints, or critical practices change.

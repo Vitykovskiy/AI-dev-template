@@ -1,47 +1,38 @@
-# 01 — Product Vision
+# Product Vision
 
-> Заполняется агентом после качественного снятия задачи.
+## Problem
 
----
+Describe the core user or business problem. Do not start from a solution. Summarize the pain, inefficiency, revenue gap, or operational risk that motivates the project.
 
-## Проблема
+## Value Proposition
 
-<!-- Какую проблему решает этот продукт? Почему она важна? -->
-_TBD_
+State the business value created if the problem is solved.
 
----
+- Primary business outcome:
+- Secondary business outcome:
+- Why now:
 
-## Ценность
+## Target Users
 
-<!-- Какую ценность получает пользователь/бизнес? -->
-_TBD_
+- Primary users:
+- Secondary users:
+- Internal stakeholders:
 
----
+## High-Level Use Cases
 
-## Целевые пользователи
+1. `<use case 1>`
+2. `<use case 2>`
+3. `<use case 3>`
 
-| Сегмент        | Описание                     | Ключевая потребность     |
-|----------------|------------------------------|--------------------------|
-| _TBD_          | _TBD_                        | _TBD_                    |
+## Constraints
 
----
+- Budget:
+- Timeline:
+- Compliance or regulatory constraints:
+- Technical or operational constraints:
 
-## High-level Use Cases
+## Success Criteria
 
-1. _TBD_
-2. _TBD_
-3. _TBD_
-
----
-
-## Ограничения
-
-- _TBD_
-
----
-
-## Критерии успеха
-
-| Критерий               | Метрика / Индикатор         |
-|------------------------|-----------------------------|
-| _TBD_                  | _TBD_                       |
+- Quantitative success signal:
+- Qualitative success signal:
+- Review cadence:

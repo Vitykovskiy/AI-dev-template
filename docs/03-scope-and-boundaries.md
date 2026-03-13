@@ -1,29 +1,27 @@
-# 03 — Scope and Boundaries
+# Scope And Boundaries
 
-> Заполняется агентом после качественного снятия задачи.
+## In Scope
 
----
+- `<capability or outcome included in the project>`
+- `<capability or outcome included in the first delivery wave>`
 
-## Что входит в проект
+## Out Of Scope
 
-- _TBD_
+- `<explicitly excluded capability>`
+- `<explicitly excluded integration>`
 
----
+## First Version Constraints
 
-## Что НЕ входит в проект
+- Timeline constraints:
+- Budget constraints:
+- Team constraints:
+- Data or integration constraints:
 
-- _TBD_
+## Deferred Scope
 
----
+- `<idea deferred to later release>`
+- `<nice-to-have item not committed for v1>`
 
-## Ограничения первой версии (v1)
+## Boundary Notes
 
-- _TBD_
-
----
-
-## Deferred Scope (следующие версии)
-
-| Функциональность       | Версия  | Обоснование отсрочки  |
-|------------------------|---------|-----------------------|
-| _TBD_                  | v2      | _TBD_                 |
+Use this file to stop scope drift. If something is intentionally not part of the first version, say it here.

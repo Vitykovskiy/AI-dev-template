@@ -1,55 +1,9 @@
-# 06 — Decision Log
+# Decision Log
 
-Журнал архитектурных и технических решений в формате ADR-lite.
+Use ADR-lite entries. Add new decisions to the top.
 
-> Обновляется агентом при каждом существенном решении.
+## 2026-03-13 - Establish template operating model
 
----
-
-## Шаблон записи
-
-```
-### ADR-XXX: [Краткое название решения]
-
-**Дата:** YYYY-MM-DD
-**Статус:** Proposed / Accepted / Deprecated / Superseded by ADR-YYY
-
-**Контекст:**
-Описание ситуации и проблемы, которую нужно решить.
-
-**Решение:**
-Что именно было решено.
-
-**Причина:**
-Почему именно это решение.
-
-**Альтернативы:**
-Что рассматривалось, но не выбрано.
-
-**Последствия:**
-Что изменится в результате этого решения. Компромиссы.
-```
-
----
-
-## Журнал
-
-### ADR-001: Использование шаблона AI-dev-template
-
-**Дата:** _TBD_
-**Статус:** Accepted
-
-**Контекст:**
-Проект инициализирован из шаблона AI-dev-template.
-
-**Решение:**
-Использовать структуру и workflow из AI-dev-template как базовую.
-
-**Причина:**
-Обеспечить консистентный, предсказуемый процесс разработки с AI-агентом.
-
-**Альтернативы:**
-Создание структуры с нуля.
-
-**Последствия:**
-Workflow агента определяется `AGENTS.md`. Документация ведется в `docs/`.
+- Decision: Use repository docs as the source of truth for project context and GitHub Issues plus GitHub Project as the source of truth for delivery state.
+- Reason: New agent sessions must be able to resume work predictably without relying on transient context.
+- Consequences: Documentation and issue hygiene become mandatory parts of task completion.

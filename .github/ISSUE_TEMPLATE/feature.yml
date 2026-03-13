@@ -1,45 +1,46 @@
 name: Feature
-description: Новая функциональность
+description: Create a feature request tied to an Epic or business requirement.
 title: "[Feature] "
-labels: ["type: feature"]
+labels:
+  - "type: feature"
 body:
   - type: textarea
     id: description
     attributes:
-      label: Описание
-      description: Что именно нужно реализовать?
-      placeholder: Описание функциональности...
+      label: Description
+      description: What should be built?
+      placeholder: Describe the feature.
     validations:
       required: true
-
   - type: textarea
     id: expected_behavior
     attributes:
-      label: Ожидаемое поведение
-      description: Как должна работать функциональность?
-      placeholder: При выполнении X происходит Y...
+      label: Expected behavior
+      description: What should users or systems be able to do?
+      placeholder: Describe the expected behavior.
     validations:
       required: true
-
   - type: textarea
     id: acceptance_criteria
     attributes:
-      label: Acceptance Criteria
-      placeholder: |
-        - [ ] ...
-        - [ ] ...
+      label: Acceptance criteria
+      description: Which conditions determine completion?
+      placeholder: List acceptance criteria.
     validations:
       required: true
-
   - type: textarea
     id: dependencies
     attributes:
-      label: Зависимости
-      placeholder: "Depends on: #N"
-
+      label: Dependencies
+      description: Which issues, systems, or decisions does this feature depend on?
+      placeholder: List dependencies or write None.
+    validations:
+      required: false
   - type: textarea
     id: technical_notes
     attributes:
-      label: Технические замечания
-      description: Технические детали, ограничения, предложения по реализации
-      placeholder: Технические замечания...
+      label: Technical notes
+      description: Add implementation constraints or notes if already known.
+      placeholder: Add technical notes if needed.
+    validations:
+      required: false

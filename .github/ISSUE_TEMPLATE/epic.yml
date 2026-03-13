@@ -1,73 +1,54 @@
 name: Epic
-description: Крупный блок работы, объединяющий связанные задачи
+description: Create a large outcome that will be decomposed into smaller issues.
 title: "[Epic] "
-labels: ["type: epic"]
+labels:
+  - "type: epic"
 body:
-  - type: markdown
-    attributes:
-      value: |
-        ## Epic
-        Заполните все поля. Epic создается агентом после фазы качественного снятия задачи.
-
   - type: textarea
     id: goal
     attributes:
-      label: Цель
-      description: Что должно быть достигнуто в рамках этого Epic?
-      placeholder: Конкретная, измеримая цель...
+      label: Goal
+      description: What outcome should exist when this Epic is done?
+      placeholder: Describe the strategic outcome.
     validations:
       required: true
-
   - type: textarea
     id: business_value
     attributes:
-      label: Бизнес-ценность
-      description: Какую ценность создает этот Epic для бизнеса и пользователей?
-      placeholder: Ценность...
+      label: Business value
+      description: Why does this Epic matter?
+      placeholder: Describe the business value.
     validations:
       required: true
-
   - type: textarea
     id: scope
     attributes:
       label: Scope
-      description: |
-        **Что входит:**
-
-        **Что НЕ входит:**
-      placeholder: |
-        Что входит:
-        - ...
-
-        Что НЕ входит:
-        - ...
+      description: What is included and excluded?
+      placeholder: List what belongs to this Epic.
     validations:
       required: true
-
   - type: textarea
-    id: done_criteria
+    id: completion_criteria
     attributes:
-      label: Критерии завершения
-      description: Когда Epic считается завершенным?
-      placeholder: |
-        - [ ] ...
-        - [ ] ...
+      label: Completion criteria
+      description: What must be true to close the Epic?
+      placeholder: List measurable completion criteria.
     validations:
       required: true
-
   - type: textarea
     id: dependencies
     attributes:
-      label: Зависимости
-      description: Зависимости от других Epic / задач / внешних факторов
-      placeholder: "Depends on: #N"
-
+      label: Dependencies
+      description: Which internal or external dependencies affect this Epic?
+      placeholder: List dependencies or write None.
+    validations:
+      required: false
   - type: textarea
     id: risks
     attributes:
-      label: Риски
-      description: Технические, бизнесовые, операционные риски
-      placeholder: |
-        | Риск | Влияние | Митигация |
-        |------|---------|-----------|
-        | ... | High | ... |
+      label: Risks
+      description: What delivery or business risks should be tracked?
+      placeholder: List known risks.
+    validations:
+      required: false

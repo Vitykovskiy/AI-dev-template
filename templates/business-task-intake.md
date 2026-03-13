@@ -1,134 +1,136 @@
 # Business Task Intake
 
-> Заполняется агентом в фазе качественного снятия задачи.
-> Не переходить к декомпозиции без заполнения этого шаблона.
+Use this template only after receiving a natural-language business request. Complete one block at a time.
 
----
+## 1. Intake Flow
 
-## Метаданные
+1. Context and current problem
+2. Target outcome and business value
+3. Users, scenarios, and current process
+4. Constraints, dependencies, and first-version scope
+5. Success metrics and acceptance criteria
+6. Risks, unknowns, and open questions
+7. Implementation options
+8. Final agreed understanding
 
-| Параметр           | Значение                    |
-|--------------------|-----------------------------|
-| Дата               | _YYYY-MM-DD_                |
-| Источник задачи    | _Кто поставил задачу_       |
-| Связанный Epic     | _#N (после создания)_       |
+## 2. Source Request
 
----
+- Raw request:
+- Request source:
+- Date:
 
-## 1. Исходный запрос
+## 3. Context / Current Problem
 
-> Оригинальная формулировка задачи от пользователя — без изменений.
+- Current situation:
+- Pain points:
+- Why the current state is insufficient:
+- Block summary:
 
-```
-[Вставить оригинальную формулировку]
-```
+## 4. Goal
 
----
+- Target outcome:
+- Expected deliverable:
+- Time horizon:
+- Block summary:
 
-## 2. Цель
+## 5. Business Value
 
-> Что именно должно существовать / работать / быть достигнуто по завершении?
+- Who benefits:
+- Business impact:
+- Cost of not doing it:
+- Block summary:
 
-_TBD_
+## 6. Users
 
----
+- Primary users:
+- Secondary users:
+- Stakeholders:
+- Block summary:
 
-## 3. Бизнес-ценность
+## 7. Scenarios
 
-> Зачем это нужно? Какую проблему решает? Какую ценность создает?
+- Primary scenario:
+- Secondary scenarios:
+- Edge scenarios:
+- Block summary:
 
-_TBD_
+## 8. Current Process / As-Is
 
----
+- Existing workflow:
+- Current tools or systems:
+- Existing bottlenecks:
+- Block summary:
 
-## 4. Целевые пользователи
+## 9. Constraints
 
-| Пользователь / Роль  | Как использует результат     |
-|----------------------|------------------------------|
-| _TBD_                | _TBD_                        |
+- Budget:
+- Timeline:
+- Compliance:
+- Technical constraints:
+- Organizational constraints:
+- Block summary:
 
----
+## 10. Dependencies
 
-## 5. Сценарии использования
+- Internal dependencies:
+- External dependencies:
+- Required decisions:
+- Block summary:
 
-1. _TBD_
-2. _TBD_
+## 11. First-Version Boundaries
 
----
+- Must include:
+- Explicitly exclude:
+- Deferred ideas:
+- Block summary:
 
-## 6. Ограничения
+## 12. Risks
 
-| Тип ограничения    | Описание                    |
-|--------------------|-----------------------------|
-| Временные          | _TBD_                       |
-| Бюджетные          | _TBD_                       |
-| Технологические    | _TBD_                       |
-| Compliance / Legal | _TBD_                       |
+- Delivery risks:
+- Product risks:
+- Technical risks:
+- Operational risks:
+- Block summary:
 
----
+## 13. Success / Acceptance Criteria
 
-## 7. Риски
+- Success metrics:
+- Acceptance criteria:
+- Failure signals:
+- Block summary:
 
-| Риск                          | Вероятность | Влияние | Митигация             |
-|-------------------------------|-------------|---------|------------------------|
-| _TBD_                         | Medium      | High    | _TBD_                 |
+## 14. Implementation Options
 
----
+### Option A
 
-## 8. Варианты реализации
+- Summary:
+- Benefits:
+- Trade-offs:
 
-### Вариант A: _Название_
-- Описание: _TBD_
-- Плюсы: _TBD_
-- Минусы: _TBD_
+### Option B
 
-### Вариант B: _Название_
-- Описание: _TBD_
-- Плюсы: _TBD_
-- Минусы: _TBD_
+- Summary:
+- Benefits:
+- Trade-offs:
 
-**Рекомендованный вариант:** _TBD_
-**Причина:** _TBD_
+### Decision Direction
 
----
+- Preferred option:
+- Why:
 
-## 9. Открытые вопросы
+## 15. Open Questions
 
-| ID    | Вопрос                     | Ответственный | Ответ / Статус |
-|-------|----------------------------|---------------|----------------|
-| Q-01  | _TBD_                      | _TBD_         | Open           |
+- `<question>`
+- `<question>`
 
----
+## 16. Assumptions
 
-## 10. Допущения
+- `<assumption>`
+- `<assumption>`
 
-- _TBD_
+## 17. Final Agreed Understanding
 
----
-
-## 11. Критерии успеха
-
-| Критерий               | Как измеряется              |
-|------------------------|-----------------------------|
-| _TBD_                  | _TBD_                       |
-
----
-
-## 12. Итоговое видение задачи
-
-> Краткое, цельное, непротиворечивое описание задачи после всех уточнений.
-
-_TBD — заполняется агентом в конце фазы снятия задачи_
-
----
-
-## Статус фазы снятия задачи
-
-- [ ] Цель уточнена
-- [ ] Ценность подтверждена
-- [ ] Ограничения зафиксированы
-- [ ] Риски выявлены
-- [ ] Варианты предложены
-- [ ] Открытые вопросы закрыты
-- [ ] Итоговое видение сформировано
-- [ ] Готово к переходу в фазу фиксации задачи
+- Problem statement:
+- Outcome statement:
+- Scope statement:
+- Success statement:

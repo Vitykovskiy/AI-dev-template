@@ -1,61 +1,43 @@
-# 09 — Integrations
-
-Список интеграций, переменных окружения и токенов.
-
----
+# Integrations
 
 ## GitHub Project
 
-| Параметр          | Значение                                              |
-|-------------------|-------------------------------------------------------|
-| URL               | **_ВПИСАТЬ СЮДА URL GITHUB PROJECT_**                 |
-| Тип               | Board (Kanban)                                        |
-| Статусы           | Backlog / In progress / Closed                        |
+- URL: `<paste GitHub Project URL here>`
+- Board type: `Kanban`
+- Required statuses present: `yes/no`
+- Required fields present: `Status`, `Priority`, `Area`
 
----
+## Environment Variables
 
-## Переменные окружения
+| Variable | Required | Purpose | Status |
+| --- | --- | --- | --- |
+| `QDRANT_HOST` | Optional | Vector DB host | Not set |
+| `QDRANT_PORT` | Optional | Vector DB port | Not set |
+| `QDRANT_API_KEY` | Optional | Qdrant API protection | Not set |
+| `EMBEDDING_PROVIDER` | Optional | Embedding mode selector | Not set |
+| `OPENAI_API_KEY` | Optional | OpenAI embeddings | Not set |
+| `OPENAI_EMBEDDING_MODEL` | Optional | OpenAI embedding model | Not set |
+| `EMBEDDING_API_URL` | Optional | Hosted embedding endpoint | Not set |
+| `EMBEDDING_API_KEY` | Optional | Hosted embedding auth | Not set |
+| `EMBEDDING_MODEL` | Optional | Hosted embedding model id | Not set |
+| `LOCAL_EMBEDDING_ENDPOINT` | Optional | Local embedding endpoint | Not set |
+| `LOCAL_EMBEDDING_MODEL` | Optional | Local model name | Not set |
 
-Полный список переменных — в `.env.example`.
+## Tokens And Secrets
 
-| Переменная              | Обязательная | Описание                              |
-|-------------------------|--------------|---------------------------------------|
-| `GITHUB_TOKEN`          | Да           | GitHub Personal Access Token          |
-| `GITHUB_REPO`           | Да           | owner/repo-name                       |
-| `GITHUB_PROJECT_URL`    | Да           | URL GitHub Project                    |
-| `QDRANT_HOST`           | Нет          | Хост Qdrant (только при использовании Vector DB) |
-| `QDRANT_PORT`           | Нет          | Порт Qdrant                           |
-| `QDRANT_API_KEY`        | Нет          | API ключ Qdrant                       |
-| `OPENAI_API_KEY`        | Нет          | OpenAI API ключ (если выбран OpenAI)  |
-| `EMBEDDING_MODEL`       | Нет          | Название embedding модели             |
-| `EMBEDDING_PROVIDER`    | Нет          | Провайдер эмбеддингов                 |
-| `VECTOR_COLLECTION_NAME`| Нет          | Название коллекции в Qdrant           |
+| Secret | Where It Lives | Purpose | Status |
+| --- | --- | --- | --- |
+| `gh` auth token | GitHub CLI auth store | Issues and Project automation | Unknown |
+| Embedding provider key | `.env` or external secret manager | Optional vector DB embeddings | Not set |
 
----
+## Integration Status
 
-## Токены и секреты
+- GitHub repository access: `Unknown`
+- GitHub Project access: `Unknown`
+- Vector DB: `Disabled by default`
 
-| Токен              | Где хранится  | Права                                   |
-|--------------------|---------------|-----------------------------------------|
-| GitHub PAT         | `.env`        | `repo`, `read:org`, `project`           |
-| OpenAI API Key     | `.env`        | Billing access                          |
-| Qdrant API Key     | `.env`        | Read/Write                              |
+## Setup Notes
 
----
-
-## Статус интеграций
-
-| Интеграция         | Статус        | Примечания                              |
-|--------------------|---------------|-----------------------------------------|
-| GitHub Issues      | _TBD_         | Проверяется через environment check     |
-| GitHub Project     | _TBD_         | URL вписать выше                        |
-| Vector DB (Qdrant) | Не подключена | Подключается по согласию пользователя   |
-
----
-
-## Примечания по настройке
-
-1. Создайте GitHub Personal Access Token с правами: `repo`, `read:org`, `project`.
-2. Вписайте его в `.env` как `GITHUB_TOKEN`.
-3. Вписайте URL GitHub Project в поле выше и в `.env` как `GITHUB_PROJECT_URL`.
-4. Запустите `bash scripts/check-environment.sh` для проверки.
+- Update this file as integrations are connected.
+- Do not store production secrets in committed files.
+- If the project uses a separate secret manager, document the reference location here.

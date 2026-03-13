@@ -1,92 +1,108 @@
 #!/usr/bin/env bash
-# check-environment.sh — Проверка готовности среды для работы агента
-# Запуск: bash scripts/check-environment.sh
 
-set -euo pipefail
+set -u
 
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+STATUS=0
 
-ok()   { echo -e "${GREEN}[OK]${NC} $1"; }
-fail() { echo -e "${RED}[FAIL]${NC} $1"; ERRORS=$((ERRORS + 1)); }
-warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
+report_ok() {
+  printf '[ok] %s\n' "$1"
+}
 
-ERRORS=0
+report_warn() {
+  printf '[warn] %s\n' "$1"
+}
 
-echo ""
-echo "======================================"
-echo "  Environment Check"
-echo "======================================"
-echo ""
+report_fail() {
+  printf '[fail] %s\n' "$1"
+  STATUS=1
+}
 
-# 1. git config
-if git config user.name &>/dev/null && git config user.email &>/dev/null; then
-  ok "git config: user.name=$(git config user.name), user.email=$(git config user.email)"
-else
-  fail "git config не настроен. Выполните: git config --global user.name 'Name' && git config --global user.email 'email'"
-fi
-
-# 2. git remote
-if git remote get-url origin &>/dev/null; then
-  ok "git remote origin: $(git remote get-url origin)"
-else
-  fail "git remote origin не настроен. Выполните: git remote add origin <url>"
-fi
-
-# 3. gh auth
-if gh auth status &>/dev/null; then
-  ok "gh auth: аутентификация активна"
-  gh auth status 2>&1 | grep -E "Logged in|Token scopes" | while read -r line; do
-    echo "         $line"
-  done
-else
-  fail "gh auth: не аутентифицирован. Выполните: gh auth login"
-fi
-
-# 4. Check GITHUB_TOKEN in .env
-if [ -f ".env" ]; then
-  if grep -q "^GITHUB_TOKEN=" .env && ! grep -q "^GITHUB_TOKEN=your_github" .env; then
-    ok ".env: GITHUB_TOKEN задан"
+require_file() {
+  local file="$1"
+  if [[ -f "$ROOT_DIR/$file" ]]; then
+    report_ok "found $file"
   else
-    warn ".env: GITHUB_TOKEN не заполнен или содержит placeholder"
+    report_fail "missing required file: $file"
   fi
+}
 
-  if grep -q "^GITHUB_REPO=" .env && ! grep -q "^GITHUB_REPO=owner/repo" .env; then
-    ok ".env: GITHUB_REPO задан"
+printf 'Environment check for %s\n' "$ROOT_DIR"
+
+if command -v git >/dev/null 2>&1; then
+  report_ok "git is installed"
+else
+  report_fail "git is not installed"
+fi
+
+if git -C "$ROOT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  report_ok "repository is a git work tree"
+else
+  report_fail "directory is not a git repository"
+fi
+
+remote_name="$(git -C "$ROOT_DIR" remote 2>/dev/null | head -n 1)"
+if [[ -n "$remote_name" ]]; then
+  report_ok "git remote detected: $remote_name"
+else
+  report_fail "no git remote configured"
+fi
+
+git_user_name="$(git -C "$ROOT_DIR" config --get user.name || true)"
+git_user_email="$(git -C "$ROOT_DIR" config --get user.email || true)"
+
+if [[ -n "$git_user_name" ]]; then
+  report_ok "git user.name is set"
+else
+  report_warn "git user.name is not set in this repository"
+fi
+
+if [[ -n "$git_user_email" ]]; then
+  report_ok "git user.email is set"
+else
+  report_warn "git user.email is not set in this repository"
+fi
+
+if command -v gh >/dev/null 2>&1; then
+  report_ok "gh CLI is installed"
+  if gh auth status >/dev/null 2>&1; then
+    report_ok "gh auth status succeeded"
   else
-    warn ".env: GITHUB_REPO не заполнен"
+    report_fail "gh is installed but not authenticated"
   fi
 else
-  warn ".env не найден. Создайте его из .env.example"
+  report_fail "gh CLI is not installed"
 fi
 
-# 5. Check gh repo access
-REPO=$(git remote get-url origin 2>/dev/null | sed 's/.*github.com[:/]//' | sed 's/\.git$//' || echo "")
-if [ -n "$REPO" ]; then
-  if gh repo view "$REPO" &>/dev/null; then
-    ok "Доступ к репозиторию ${REPO}: есть"
+if command -v gh >/dev/null 2>&1; then
+  if gh repo view --json nameWithOwner >/dev/null 2>&1; then
+    report_ok "gh can access the current repository"
   else
-    fail "Нет доступа к репозиторию ${REPO}. Проверьте права токена."
+    report_fail "gh cannot access the current repository"
   fi
 fi
 
-# 6. Check GITHUB_PROJECT_URL in docs
-if grep -q "ВПИСАТЬ СЮДА URL" docs/09-integrations.md 2>/dev/null; then
-  warn "docs/09-integrations.md: URL GitHub Project не вписан"
+require_file "AGENTS.md"
+require_file "README.md"
+require_file ".env.example"
+require_file "docker-compose.vector-db.yml"
+require_file "docs/00-project-overview.md"
+require_file "docs/07-workflow.md"
+require_file "docs/08-vector-db.md"
+require_file "scripts/bootstrap.sh"
+require_file "scripts/setup-labels.sh"
+
+if grep -Fq '<paste GitHub Project URL here>' "$ROOT_DIR/docs/09-integrations.md"; then
+  report_warn "GitHub Project URL is still a placeholder in docs/09-integrations.md"
 else
-  ok "docs/09-integrations.md: URL GitHub Project задан"
+  report_ok "GitHub Project URL is documented"
 fi
 
-echo ""
-echo "======================================"
-
-if [ "$ERRORS" -eq 0 ]; then
-  echo -e "${GREEN}Окружение полностью готово к работе агента.${NC}"
+printf '\nSummary: '
+if [[ "$STATUS" -eq 0 ]]; then
+  printf 'environment is ready for agent-driven project setup.\n'
 else
-  echo -e "${RED}Найдено проблем: ${ERRORS}${NC}"
-  echo "Исправьте проблемы выше, затем передайте агенту бизнес-задачу."
+  printf 'fix the failed checks before relying on full automation.\n'
 fi
 
-echo ""
+exit "$STATUS"

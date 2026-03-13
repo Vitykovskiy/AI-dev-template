@@ -1,29 +1,12 @@
-# tasks/
+# Tasks Directory
 
-Эта папка предназначена для **временных рабочих черновиков**.
+The canonical backlog lives in GitHub Issues and GitHub Project.
 
----
+Use this directory only for temporary local notes, rough drafts, or working scratch files.
 
-## Важно
+Rules:
 
-**Канонический backlog находится в GitHub Issues и GitHub Project.**
-
-- Создание задач — в GitHub Issues.
-- Статусы задач — в GitHub Project.
-- Финальные решения — в `docs/`.
-
-Локальные файлы в `tasks/` допустимы только как временные черновики в процессе работы.
-
-**Финальные решения и статусы должны быть отражены в GitHub и `docs/`, а не здесь.**
-
----
-
-## Структура черновиков (опционально)
-
-```
-tasks/
-  active/       # текущие рабочие черновики
-  archive/      # завершённые черновики (можно удалять)
-```
-
-Черновики не коммитятся как источник правды. После завершения задачи — сохранить результат в GitHub и `docs/`, черновик можно удалить.
+- Final task definitions must live in GitHub issues.
+- Final status must live in GitHub Project.
+- Final project decisions must live in `docs/`.
+- Do not treat files in `tasks/` as the durable backlog.

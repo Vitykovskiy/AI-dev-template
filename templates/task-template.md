@@ -1,47 +1,22 @@
-# Task: [Название задачи]
+# Task Template
 
-> Используется для создания Issue типа Task в GitHub.
+## What To Do
 
----
+Describe the concrete work item.
 
-## Что сделать
+## Why
 
-> Конкретное описание — что именно нужно сделать.
+State the reason this task exists and which Epic or requirement it supports.
 
-_TBD_
+## Expected Result
 
----
+Describe the artifact, behavior, or outcome that must exist when the task is complete.
 
-## Зачем
+## Dependencies
 
-> Какую цель преследует эта задача? Связь с Epic / бизнес-ценностью.
+- `<dependency>`
 
-_TBD_
+## Completion Criteria
 
----
-
-## Ожидаемый результат
-
-> Что именно будет существовать / работать по завершении?
-
-_TBD_
-
----
-
-## Зависимости
-
-- Depends on: #N
-- Blocks: #N
-
----
-
-## Критерии завершения (Definition of Done)
-
-- [ ] _TBD_
-- [ ] Документация обновлена (если нужно)
-- [ ] Issue закрыт, статус в Project обновлен
-
----
-
-**Labels:** `type: task`, `area: <area>`, `priority: <high/medium/low>`
-**Epic:** #N
+- `<criterion>`
+- `<criterion>`

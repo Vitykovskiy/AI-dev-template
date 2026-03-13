@@ -1,71 +1,51 @@
 #!/usr/bin/env bash
-# bootstrap.sh — Первичная проверка окружения для AI-dev-template
-# Запуск: bash scripts/bootstrap.sh
 
-set -euo pipefail
+set -u
 
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-ok()   { echo -e "${GREEN}[OK]${NC} $1"; }
-fail() { echo -e "${RED}[FAIL]${NC} $1"; }
-warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
+print_line() {
+  printf '%s\n' "$1"
+}
 
-echo ""
-echo "======================================"
-echo "  AI-dev-template Bootstrap Check"
-echo "======================================"
-echo ""
+check_command() {
+  local name="$1"
+  if command -v "$name" >/dev/null 2>&1; then
+    print_line "[ok] $name is available"
+    return 0
+  fi
 
-ERRORS=0
+  print_line "[missing] $name is not installed or not in PATH"
+  return 1
+}
 
-# 1. Check git
-if command -v git &>/dev/null; then
-  ok "git установлен ($(git --version))"
+print_line "Bootstrap check for AI Dev Template"
+print_line "Repository: $ROOT_DIR"
+
+missing=0
+
+check_command git || missing=1
+check_command gh || missing=1
+
+if git -C "$ROOT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  print_line "[ok] repository is a git work tree"
 else
-  fail "git не найден. Установите git: https://git-scm.com/"
-  ERRORS=$((ERRORS + 1))
+  print_line "[missing] repository is not a valid git work tree"
+  missing=1
 fi
 
-# 2. Check gh CLI
-if command -v gh &>/dev/null; then
-  ok "gh CLI установлен ($(gh --version | head -1))"
-else
-  fail "gh CLI не найден. Установите: https://cli.github.com/"
-  ERRORS=$((ERRORS + 1))
+print_line ""
+print_line "Next steps:"
+print_line "1. Copy .env.example to .env if optional vector DB may be used."
+print_line "2. Run bash scripts/check-environment.sh for a full readiness report."
+print_line "3. Create a GitHub Project manually if it does not exist yet."
+print_line "4. Give the agent the GitHub Project URL and the business task."
+
+if [[ "$missing" -ne 0 ]]; then
+  print_line ""
+  print_line "Bootstrap finished with missing prerequisites."
+  exit 1
 fi
 
-# 3. Check .env exists
-if [ -f ".env" ]; then
-  ok ".env существует"
-else
-  warn ".env не найден. Скопируйте .env.example в .env и заполните переменные."
-fi
-
-# 4. Check docker (optional)
-if command -v docker &>/dev/null; then
-  ok "docker установлен (опционально, для Vector DB)"
-else
-  warn "docker не найден (нужен только при использовании Vector DB)"
-fi
-
-echo ""
-echo "======================================"
-
-if [ "$ERRORS" -eq 0 ]; then
-  echo -e "${GREEN}Окружение готово.${NC}"
-  echo ""
-  echo "Следующие шаги:"
-  echo "  1. Скопируйте .env.example в .env и заполните GITHUB_TOKEN и GITHUB_REPO"
-  echo "  2. Создайте GitHub Project вручную"
-  echo "  3. Впишите URL GitHub Project в docs/09-integrations.md"
-  echo "  4. Запустите: bash scripts/check-environment.sh"
-  echo "  5. Передайте агенту ссылку на GitHub Project и бизнес-задачу"
-else
-  echo -e "${RED}Найдено ошибок: ${ERRORS}${NC}"
-  echo "Исправьте ошибки выше перед продолжением."
-fi
-
-echo ""
+print_line ""
+print_line "Bootstrap finished. Continue with bash scripts/check-environment.sh."

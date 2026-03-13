@@ -1,48 +1,46 @@
 name: Task
-description: Техническая задача
+description: Create an atomic delivery task.
 title: "[Task] "
-labels: ["type: task"]
+labels:
+  - "type: task"
 body:
   - type: textarea
-    id: what
+    id: what_to_do
     attributes:
-      label: Что сделать
-      description: Конкретное описание задачи
-      placeholder: Что именно нужно сделать...
+      label: What to do
+      description: What specific work must be performed?
+      placeholder: Describe the task.
     validations:
       required: true
-
   - type: textarea
     id: why
     attributes:
-      label: Зачем
-      description: Связь с Epic / бизнес-целью
-      placeholder: Это нужно для того, чтобы...
+      label: Why
+      description: Why is this task needed?
+      placeholder: Describe why the task matters.
     validations:
       required: true
-
   - type: textarea
     id: result
     attributes:
-      label: Ожидаемый результат
-      description: Что будет существовать по завершении?
-      placeholder: По завершении будет...
+      label: Expected result
+      description: What should exist when the task is done?
+      placeholder: Describe the expected result.
     validations:
       required: true
-
   - type: textarea
     id: dependencies
     attributes:
-      label: Зависимости
-      placeholder: "Depends on: #N"
-
+      label: Dependencies
+      description: Which dependencies or preceding tasks exist?
+      placeholder: List dependencies or write None.
+    validations:
+      required: false
   - type: textarea
-    id: done_criteria
+    id: completion_criteria
     attributes:
-      label: Критерии завершения
-      placeholder: |
-        - [ ] ...
-        - [ ] Документация обновлена
-        - [ ] Issue закрыт
+      label: Completion criteria
+      description: Which conditions must be met before closing the task?
+      placeholder: List completion criteria.
     validations:
       required: true

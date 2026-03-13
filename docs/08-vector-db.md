@@ -1,96 +1,71 @@
-# 08 — Vector DB
+# Vector DB
 
-> Заполняется агентом после получения согласия пользователя на использование Vector DB.
-> Если Vector DB не используется — заполняется раздел "Решение не использовать".
+## Current Position
 
----
+Default status: `Not enabled`
 
-## Статус
+Vector DB is optional and must not be activated automatically.
 
-- [ ] Vector DB не нужна (заполните раздел ниже)
-- [ ] Vector DB используется (заполните полный раздел ниже)
+## When It Is Not Needed
 
----
+Vector DB is usually unnecessary when:
 
-## Решение не использовать Vector DB
+- project knowledge is small and can be handled by repository search;
+- no semantic retrieval or document grounding use case exists;
+- data freshness requirements do not justify indexing complexity;
+- cost or operational overhead outweighs retrieval benefit.
 
-**Причина:**
-_TBD — агент заполняет обоснование_
+## When It May Be Needed
 
----
+Consider vector DB only after business task intake is complete and the use case is documented.
 
-## Решение использовать Vector DB
+Potential use cases:
 
-### Use Cases
+- semantic search across product or domain documents;
+- retrieval augmentation for long internal knowledge bases;
+- similarity search over support tickets, specifications, or records.
 
-<!-- Зачем нужна Vector DB в этом проекте? -->
-- _TBD_
+## If Enabled, Record The Following
 
-### Какие данные индексируются
+- Business use case:
+- Data to index:
+- Canonical source of truth:
+- Embedding provider:
+- Embedding model:
+- Chunking strategy:
+- Indexing and sync policy:
+- Retrieval policy:
+- Cost considerations:
+- Risks:
 
-| Тип данных          | Источник          | Формат         |
-|---------------------|-------------------|----------------|
-| _TBD_               | _TBD_             | _TBD_          |
+## Supported Embedding Modes
 
-### Canonical Source of Truth
+- OpenAI
+- Another hosted provider
+- Local embedding model
+- No embedding provider because vector DB is not used
 
-Данные берутся из: _TBD_
+## Required Configuration
 
-### Embedding Provider / Model
+Populate `.env` as applicable:
 
-| Параметр           | Значение                    |
-|--------------------|-----------------------------|
-| Провайдер          | _TBD (OpenAI / Cohere / Ollama / ...)_ |
-| Модель             | _TBD_                       |
-| Размерность        | _TBD_                       |
+- `QDRANT_HOST`
+- `QDRANT_PORT`
+- `QDRANT_API_KEY`
+- `EMBEDDING_PROVIDER`
+- `OPENAI_API_KEY`
+- `OPENAI_EMBEDDING_MODEL`
+- `EMBEDDING_API_URL`
+- `EMBEDDING_API_KEY`
+- `EMBEDDING_MODEL`
+- `LOCAL_EMBEDDING_ENDPOINT`
+- `LOCAL_EMBEDDING_MODEL`
 
-### Chunking Strategy
+## Activation Rule
 
-| Параметр           | Значение                    |
-|--------------------|-----------------------------|
-| Chunk size         | _TBD_                       |
-| Overlap            | _TBD_                       |
-| Стратегия          | _TBD (fixed / semantic / ...)_ |
+The agent may start `docker-compose.vector-db.yml` only after:
 
-### Indexing / Sync Policy
-
-- Первичная индексация: _TBD_
-- Обновление: _TBD_
-- Удаление: _TBD_
-
-### Retrieval Policy
-
-- Top-K: _TBD_
-- Score threshold: _TBD_
-- Фильтрация: _TBD_
-
-### Риски
-
-| Риск                          | Влияние | Митигация         |
-|-------------------------------|---------|-------------------|
-| Drift между векторами и данными | Medium | _TBD_            |
-| Стоимость эмбеддингов         | Medium  | _TBD_             |
-
-### Стоимость
-
-- Провайдер: _TBD_
-- Примерная стоимость: _TBD_
-
-### Required Configuration
-
-Заполните в `.env`:
-
-```bash
-QDRANT_HOST=localhost
-QDRANT_PORT=6333
-QDRANT_API_KEY=          # опционально
-OPENAI_API_KEY=          # если используется OpenAI
-EMBEDDING_MODEL=         # название модели
-EMBEDDING_PROVIDER=      # openai / cohere / ollama
-VECTOR_COLLECTION_NAME=  # название коллекции
-```
-
-Запуск:
-```bash
-docker compose -f docker-compose.vector-db.yml up -d
-```
+1. the user agrees to use vector DB;
+2. the embedding provider or model is chosen;
+3. the decision is documented here;
+4. required `.env` values are filled.

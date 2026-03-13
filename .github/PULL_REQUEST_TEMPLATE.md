@@ -1,52 +1,23 @@
-## Что сделано
+# What Was Done
 
-<!-- Краткое описание изменений. Что реализовано или исправлено? -->
+Describe the implemented changes.
 
--
+# Why
 
----
+Explain the business or technical reason for this PR.
 
-## Зачем
+# Related Issues
 
-<!-- Почему эти изменения нужны? Связь с бизнес-целью / Epic. -->
+List related issues, Epics, or task links.
 
--
+# Documentation Changes
 
----
+Describe which docs were updated and why.
 
-## Связанные issues
+# Risks / Limitations
 
-<!-- Используйте ключевые слова: Closes #N, Fixes #N, Related to #N -->
+List rollout risks, known limitations, or open follow-up items.
 
-- Closes #
+# How To Verify
 
----
-
-## Изменения в документации
-
-<!-- Какие файлы docs/ обновлены? Если не обновлены — почему? -->
-
-- [ ] `docs/` обновлены (укажите файлы)
-- [ ] Документация не требует обновления (обоснование:)
-
----
-
-## Риски / Ограничения
-
-<!-- Известные риски этого PR. Что может пойти не так? -->
-
--
-
----
-
-## Как проверить
-
-<!-- Пошаговая инструкция для проверки изменений -->
-
-1.
-2.
-3.
-
----
-
-<!-- PR создан агентом в рамках workflow AI-dev-template -->
+Provide the verification steps used for this change.

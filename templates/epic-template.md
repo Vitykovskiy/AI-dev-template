@@ -1,63 +1,27 @@
-# Epic: [Название Epic]
+# Epic Template
 
-> Используется для создания Issue типа Epic в GitHub.
+## Goal
 
----
+Describe the strategic outcome this Epic exists to achieve.
 
-## Цель
+## Business Value
 
-> Что должно быть достигнуто в рамках этого Epic?
+Explain why this Epic matters to the business or users.
 
-_TBD_
+## Scope
 
----
+- Included:
+- Excluded:
 
-## Бизнес-ценность
+## Completion Criteria
 
-> Какую ценность создает этот Epic?
+- `<criterion>`
+- `<criterion>`
 
-_TBD_
+## Dependencies
 
----
+- `<dependency>`
 
-## Границы
+## Risks
 
-### Что входит
-- _TBD_
-
-### Что НЕ входит
-- _TBD_
-
----
-
-## Критерии завершения
-
-- [ ] _TBD_
-- [ ] _TBD_
-
----
-
-## Зависимости
-
-| Зависимость        | Тип           | Issue / Ссылка  |
-|--------------------|---------------|-----------------|
-| _TBD_              | Blocks / Needs| _#N_            |
-
----
-
-## Риски
-
-| Риск                   | Влияние | Митигация         |
-|------------------------|---------|-------------------|
-| _TBD_                  | High    | _TBD_             |
-
----
-
-## Подзадачи
-
-- [ ] #N — _Название задачи_
-- [ ] #N — _Название задачи_
-
----
-
-**Labels:** `type: epic`, `priority: <high/medium/low>`, `area: <area>`
+- `<risk>`

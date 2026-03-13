@@ -1,108 +1,115 @@
-# AI-dev-template
+# AI Dev Template
 
-Переиспользуемый шаблон репозитория для разработки новых проектов с консистентным AI-driven workflow.
+Template repository for projects where an AI agent runs a consistent discovery, planning, delivery, and documentation workflow.
 
----
+## Purpose
 
-## Назначение шаблона
+This template gives every new project the same operating model:
 
-Шаблон обеспечивает предсказуемый, повторяемый процесс разработки, в котором AI-агент выступает системным аналитиком, project manager'ом, tech lead'ом и исполнителем. Любая новая сессия агента должна продолжать работу ровно с того места, где остановилась предыдущая.
+- the repository is the source of truth for goals, requirements, architecture, decisions, workflow, integrations, and vector DB configuration;
+- GitHub Issues and GitHub Project are the source of truth for backlog, task status, and current execution;
+- the agent must complete business task intake before planning implementation;
+- important state must be persisted to repository artifacts and GitHub, not left in transient session context.
 
----
+## What The Agent Automates
 
-## Что автоматизирует агент
+- Checks `git`, remotes, `gh`, authentication, and basic repository readiness.
+- Reports missing prerequisites instead of silently working around them.
+- Runs structured business task intake one topic block at a time.
+- Documents the task, project scope, architecture, decisions, and workflow.
+- Proposes a tech stack and records official best practices before implementation.
+- Creates and maintains labels, Epic issues, task issues, and the GitHub Project board.
+- Keeps documentation and delivery state synchronized.
+- Offers vector DB only after task intake and environment alignment are complete.
+- Starts the optional vector DB stack after explicit user approval and `.env` setup.
 
-- Проверяет git / git remote / gh CLI / токен / базовые настройки.
-- Сообщает, чего не хватает для продолжения работы.
-- Качественно снимает бизнес-задачу: уточняет цель, ограничения, риски, варианты.
-- Создает и обновляет документацию проекта в `docs/`.
-- Определяет стек и фиксирует best practices.
-- Создает GitHub labels.
-- Создает Epic и подзадачи в GitHub Issues.
-- Ведет GitHub Project: двигает карточки, актуализирует статусы.
-- По согласию пользователя запускает `docker-compose.vector-db.yml`.
+## What The Human Does Manually
 
----
+Required manual steps:
 
-## Что человек делает вручную
+1. Create a new GitHub repository from this template.
+2. Clone the new repository locally.
+3. Give the agent access to the repository workspace.
+4. Create a GitHub Project manually.
+5. Share the GitHub Project URL with the agent.
+6. Share the business task in natural language.
+7. If the agent later proposes vector DB and you agree, fill secrets into `.env` based on agent instructions.
 
-### Обязательные ручные шаги
+The human does not need to create issues, labels, or move project cards manually.
 
-1. Создать новый репозиторий из этого шаблона на GitHub.
-2. Клонировать репозиторий локально.
-3. Передать агенту доступ к репозиторию (убедиться, что агент имеет нужные права).
-4. Создать GitHub Project вручную (тип: Board / Kanban).
-5. Передать агенту ссылку на GitHub Project.
-6. Передать бизнес-задачу на естественном языке.
-7. Если агент предложил использовать Vector DB и вы согласились — заполнить секреты в `.env` по инструкции агента.
-
----
-
-## Пошаговая инициализация нового проекта
+## New Project Initialization
 
 ```bash
-# Шаг 1. Клонируйте репозиторий
 git clone https://github.com/<org>/<repo>.git
 cd <repo>
-
-# Шаг 2. Проверьте окружение
 bash scripts/bootstrap.sh
-
-# Шаг 3. Передайте агенту ссылку на GitHub Project и бизнес-задачу
-# Агент сам проверит окружение, снимет задачу и начнет работу
 ```
 
----
+Then provide the agent with:
+
+1. The repository context.
+2. The GitHub Project URL.
+3. The business task.
 
 ## GitHub Project
 
-### Формат
+Use a simple kanban board.
 
-GitHub Project использует простой Kanban-процесс.
+Required statuses:
 
-**Статусы:**
+- `Backlog`
+- `In progress`
+- `Closed`
 
-| Статус      | Описание                         |
-|-------------|----------------------------------|
-| `Backlog`   | Задача зафиксирована, не взята   |
-| `In progress` | Задача взята в работу          |
-| `Closed`    | Задача завершена                 |
+Required fields:
 
-**Обязательные поля:**
 - `Status`
 - `Priority`
 - `Area`
 
-### Кто управляет задачами
+Operating rules:
 
-- **Labels создает агент** — не нужно создавать вручную.
-- **Issues создает агент** — не нужно создавать вручную.
-- **Карточки двигает агент** — не нужно двигать вручную.
-- Человек не обязан вручную создавать задачи.
+- Labels are created by the agent.
+- Issues are created by the agent.
+- Project cards are moved by the agent.
+- The human does not need to manually decompose work into tasks.
 
-**URL GitHub Project** вписывается в `docs/09-integrations.md`.
+Store the actual GitHub Project URL in `docs/09-integrations.md`.
 
----
+## Status Lifecycle
 
-## Опциональное подключение Vector DB
+- `Backlog`: task is captured and ready for prioritization.
+- `In progress`: task is actively being executed.
+- `Closed`: task is implemented, documented, and reflected in GitHub state.
 
-Vector DB подключается только по согласию пользователя.
+## Optional Vector DB
 
-Процесс:
-1. Агент предложит Vector DB, если это оправдано задачей.
-2. Вы соглашаетесь или отказываетесь.
-3. Если согласились — агент уточнит провайдера эмбеддингов.
-4. Агент сообщит, какие переменные нужно заполнить в `.env`.
-5. Агент запустит `docker-compose.vector-db.yml`.
+Vector DB is optional infrastructure, not a default part of project setup.
 
-Compose-файл уже лежит в шаблоне. Агент его не пересоздает.
+The agent may propose it only after:
 
----
+1. business task intake is finished;
+2. environment readiness is checked;
+3. the use case justifies semantic retrieval or indexing.
 
-## Ограничения и допущения
+If you agree:
 
-- GitHub Copilot не поддерживается и не используется.
-- Агент не хранит значимое состояние только во временном контексте.
-- Источник правды по задачам — GitHub Issues + GitHub Project.
-- Источник правды по архитектуре и решениям — `docs/`.
-- Локальные черновики в `tasks/` — временные, не канонические.
+1. the agent asks which embedding provider or model to use;
+2. the decision is recorded in `docs/08-vector-db.md`;
+3. you create `.env` from `.env.example` and fill it;
+4. the agent starts `docker-compose.vector-db.yml`.
+
+The template supports multiple embedding strategies:
+
+- OpenAI;
+- another hosted embedding provider;
+- a local embedding model;
+- no vector DB at all.
+
+## Limitations And Assumptions
+
+- This template assumes GitHub Issues, GitHub Project, and `gh` CLI are the delivery backbone.
+- The template does not support GitHub Copilot instructions and intentionally excludes `.github/copilot-instructions.md`.
+- Vector DB compose is provided up front, but it must not be enabled without explicit user agreement.
+- `tasks/` may hold temporary local notes, but final state must be reflected in docs and GitHub.
+- Shell scripts are written for `bash`; `.gitattributes` pins LF for shell-sensitive files to prevent cross-platform EOL breakage.

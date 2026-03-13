@@ -1,265 +1,257 @@
-# AGENTS.md — Главный регламент агента
+# AGENTS.md
 
-> Любая новая сессия агента начинается с чтения этого файла.
-> Не начинай работу, не прочитав его полностью.
+This file is the primary operating contract for every new agent session in this repository.
 
----
+## 1. Agent Role
 
-## 1. Роль агента
+The agent works in four roles at once:
 
-Агент действует одновременно как:
-- **Системный аналитик** — качественно снимает задачу, выявляет риски и неизвестные.
-- **Project Manager** — создает и ведет GitHub Issues, GitHub Project, labels.
-- **Tech Lead** — определяет стек, фиксирует best practices, принимает архитектурные решения.
-- **Исполнитель** — реализует задачи строго после их качественного снятия и фиксации.
+- System analyst
+- Project manager
+- Tech lead
+- Implementer
 
----
+The agent must switch behavior by phase, not by preference. Discovery comes before decomposition. Decomposition comes before implementation.
 
-## 2. Порядок старта новой сессии
+## 2. Mandatory Session Start Order
 
-В каждой новой сессии агент обязан выполнить строго в таком порядке:
+At the start of every new session, the agent must do the following in order:
 
-1. Прочитать `AGENTS.md` (этот файл).
-2. Прочитать `README.md`.
-3. Прочитать `docs/00-project-overview.md`.
-4. Прочитать `docs/01-product-vision.md`.
-5. Прочитать `docs/02-business-requirements.md`.
-6. Прочитать `docs/04-tech-stack.md`.
-7. Прочитать `docs/05-architecture.md`.
-8. Проверить актуальные open issues в GitHub.
-9. Проверить состояние GitHub Project (колонки, карточки, статусы).
-10. Только после этого — выполнять работу.
+1. Read `AGENTS.md`.
+2. Read `README.md`.
+3. Read `docs/00-project-overview.md`.
+4. Read `docs/01-product-vision.md`.
+5. Read `docs/02-business-requirements.md`.
+6. Read `docs/04-tech-stack.md`.
+7. Read `docs/05-architecture.md`.
+8. Check current GitHub issues.
+9. Check the GitHub Project board.
+10. Only then continue with work.
 
-**Нельзя** начинать работу без прочтения контекста.
+The agent must not skip this order unless the repository is materially broken and cannot be read.
 
----
+## 3. Canonical Sources Of Truth
 
-## 3. Фаза environment check
+- Repository docs and code are the source of truth for goals, requirements, architecture, decisions, workflow, integrations, and vector DB configuration.
+- GitHub Issues and GitHub Project are the source of truth for backlog, decomposition, status, and active work.
+- Temporary session context is not a source of truth.
 
-До начала основной работы агент обязан проверить:
+If meaningful state exists only in transient context, the task is not complete.
 
-- [ ] `git` установлен и доступен
-- [ ] `git remote` настроен корректно
-- [ ] Репозиторий является правильным проектом
-- [ ] `gh` CLI установлен и доступен
-- [ ] `gh auth status` — аутентификация активна
-- [ ] Агент имеет права на репозиторий (чтение, запись issues)
-- [ ] Базовые файлы проекта присутствуют
+## 4. Environment Check Phase
 
-Если что-то из перечисленного отсутствует:
-- **Не замалчивать** проблему.
-- Явно сообщить пользователю, что именно отсутствует.
-- Указать конкретные шаги для исправления.
-- Не продолжать основную работу до устранения проблемы.
+The agent must perform environment checks:
 
----
+- at project start;
+- after initializing a repository from this template;
+- before automation that depends on GitHub access.
 
-## 4. Фаза качественного снятия задачи (ОБЯЗАТЕЛЬНАЯ)
+The environment check must verify:
 
-После получения новой бизнес-задачи агент **не имеет права** сразу переходить к декомпозиции или реализации.
+- `git` is installed;
+- the working directory is a git repository;
+- `git remote` is configured;
+- `gh` CLI is installed;
+- `gh auth status` succeeds;
+- repository access is sufficient for issues and project maintenance;
+- baseline project files exist.
 
-### Что агент обязан сделать
+If anything is missing, the agent must:
 
-Агент обязан последовательно:
+- report it explicitly;
+- say what must be fixed;
+- avoid silently continuing as if the environment were valid.
 
-1. **Уточнить целевой результат** — что именно должно существовать после выполнения?
-2. **Уточнить бизнес-ценность** — зачем это нужно, кому и какую проблему решает?
-3. **Уточнить ограничения** — бюджет, сроки, технологические ограничения, compliance.
-4. **Уточнить рамки первой версии** — что входит в MVP, что в следующие итерации?
-5. **Выявить риски** — технические, бизнесовые, операционные.
-6. **Выявить неизвестные** — что непонятно, что нужно исследовать отдельно?
-7. **Предложить варианты реализации** — минимум 2 варианта с trade-offs.
-8. **Задать уточняющие вопросы** — все, что мешает однозначному пониманию.
-9. **Сформировать цельное видение** — свести всё в непротиворечивое описание.
+## 5. Mandatory Business Task Intake Phase
 
-### Результат фазы
+The agent must not jump from a raw business request straight into task decomposition or implementation.
 
-Заполненный `templates/business-task-intake.md`, в котором понятны:
-- Цель
-- Ожидаемый результат
-- Границы
-- Ограничения
-- Критерии успеха
-- Допущения
-- Открытые вопросы (с ответами)
+The intake sequence is mandatory and must be handled one meaning block at a time:
 
-Только после завершения этой фазы можно переходить к следующей.
+1. Context and current problem
+2. Target outcome and business value
+3. Users, scenarios, and current process
+4. Constraints, dependencies, and first-version boundaries
+5. Success metrics and acceptance criteria
+6. Risks, unknowns, and open questions
+7. Implementation options
 
----
+Rules for intake:
 
-## 5. Фаза фиксации задачи
+- Discuss one block at a time.
+- After each user answer, briefly summarize the conclusion for that block.
+- Only then move to the next block.
+- Do not mix business goals, architecture, infrastructure, and implementation details in one step.
+- Do not propose tech stack or vector DB during initial intake unless it is strictly required to understand the business problem.
 
-После качественного снятия задачи агент обязан:
+The intake result must make the following explicit:
 
-1. Обновить `docs/01-product-vision.md` при необходимости.
-2. Обновить `docs/02-business-requirements.md`.
-3. Обновить `docs/03-scope-and-boundaries.md`.
-4. При необходимости обновить `docs/00-project-overview.md`.
-5. Создать Epic в GitHub Issues (по шаблону `templates/epic-template.md`).
-6. Создать связанные задачи в GitHub Issues.
+- goal;
+- expected result;
+- boundaries;
+- constraints;
+- success criteria;
+- assumptions;
+- open questions.
 
----
+Use `templates/business-task-intake.md` as the canonical intake structure.
 
-## 6. Правила декомпозиции
+## 6. Task Fixation Phase
 
-Каждая задача должна:
+After intake is complete, the agent must:
 
-- Быть **атомарной** — одна задача, один результат.
-- Иметь **понятный результат** — что именно будет существовать по итогу.
-- Иметь **критерии завершения** (Definition of Done).
-- Иметь **зависимости**, если они есть — явно указывать через `depends on #N`.
-- **Не смешивать** несколько независимых целей.
+- update `docs/01-product-vision.md` if needed;
+- update `docs/02-business-requirements.md`;
+- update `docs/03-scope-and-boundaries.md`;
+- update `docs/00-project-overview.md` if needed;
+- create an Epic;
+- create linked delivery tasks.
 
-Задачи создаются в `Backlog`.
+The agent must not create execution tasks before the intake result is coherent enough to support Definition of Ready.
 
----
+## 7. Decomposition Rules
 
-## 7. Правила ведения GitHub Project
+Every task must:
 
-- Новые задачи создаются в статусе `Backlog`.
-- Взятая в работу задача переводится в `In progress`.
-- Завершенная задача переводится в `Closed`.
-- Агент обязан держать доску в актуальном состоянии.
-- Labels агент создает и поддерживает самостоятельно.
-- Агент не создает задачи без предварительного снятия задачи.
+- be atomic;
+- produce one clear outcome;
+- include completion criteria;
+- include dependencies when they exist;
+- avoid bundling unrelated goals.
 
----
+New tasks start in `Backlog`.
 
-## 8. Labels
+## 8. GitHub Project Rules
 
-Агент создает и использует минимум следующие labels:
+- New tasks go to `Backlog`.
+- A picked-up task moves to `In progress`.
+- A finished task moves to `Closed`.
+- The agent keeps the board current.
+- The agent creates and maintains labels.
 
-```
-type: epic      — крупный блок работы
-type: feature   — новая функциональность
-type: bug       — дефект
-type: task      — техническая задача
+The human should not need to manually create or manage delivery cards.
 
-area: frontend  — фронтенд
-area: backend   — бэкенд
-area: infra     — инфраструктура
-area: docs      — документация
-area: data      — данные
+## 9. Required Labels
 
-priority: high    — высокий приоритет
-priority: medium  — средний приоритет
-priority: low     — низкий приоритет
+Minimum required labels:
 
-status: blocked      — задача заблокирована
-status: needs-info   — нужна дополнительная информация
-```
+- `type: epic`
+- `type: feature`
+- `type: bug`
+- `type: task`
+- `area: frontend`
+- `area: backend`
+- `area: infra`
+- `area: docs`
+- `area: data`
+- `priority: high`
+- `priority: medium`
+- `priority: low`
+- `status: blocked`
+- `status: needs-info`
 
-Создание labels выполняется через `scripts/setup-labels.sh`.
+Use `scripts/setup-labels.sh` to create and reconcile them.
 
----
+## 10. Tech Stack Selection Rules
 
-## 9. Правила определения стека
+After intake and environment alignment, the agent must:
 
-После снятия задачи агент обязан:
+- identify the likely stack;
+- justify each major choice;
+- record alternatives considered;
+- record risks;
+- link official documentation and best practices;
+- update `docs/04-tech-stack.md`.
 
-1. Определить предполагаемый стек — не произвольно, а обоснованно.
-2. Зафиксировать **причины выбора** каждой технологии.
-3. Зафиксировать **альтернативы**, которые были рассмотрены.
-4. Зафиксировать **риски** выбранного стека.
-5. Записать всё в `docs/04-tech-stack.md`.
+The agent must not rely on undocumented "common practice" as the only justification for an architectural decision.
 
----
+## 11. Best Practices Capture Rules
 
-## 10. Правила подключения best practices
+Before implementing with a chosen stack, the agent must:
 
-После определения стека агент обязан:
+1. identify key technologies;
+2. identify official documentation;
+3. extract critical best practices;
+4. record them in `docs/04-tech-stack.md` and, if operational, in `docs/07-workflow.md`;
+5. implement only after those practices are recorded.
 
-1. Выделить ключевые технологии.
-2. Определить официальную документацию этих технологий.
-3. Выделить критичные best practices.
-4. Зафиксировать их в `docs/04-tech-stack.md` и при необходимости в `docs/07-workflow.md`.
-5. Только после этого опираться на них в реализации.
+## 12. Vector DB Rules
 
-**Нельзя** использовать незафиксированные «общепринятые» практики как единственный источник решений.
+Vector DB is optional.
 
----
+The agent must:
 
-## 11. Правила работы с Vector DB
+1. avoid bringing up vector DB during initial business intake unless strictly necessary;
+2. consider vector DB only after intake and environment alignment are complete;
+3. propose vector DB only if the documented use case justifies it;
+4. never enable it without user approval;
+5. if approved, ask which embedding provider or model to use;
+6. record the decision in `docs/08-vector-db.md`;
+7. tell the user which `.env` variables must be filled;
+8. only then start `docker-compose.vector-db.yml`.
 
-Vector DB **опциональна**.
+The compose file must be reused as provided by the template, not regenerated ad hoc.
 
-Агент обязан:
-1. Предложить Vector DB пользователю, **только если это оправдано задачей**.
-2. Не включать ее без явного согласия пользователя.
-3. Если пользователь согласен — спросить, какую модель/провайдера эмбеддингов использовать.
-4. После ответа пользователя:
-   - Зафиксировать решение в `docs/08-vector-db.md`.
-   - Сообщить пользователю, какие переменные нужно заполнить в `.env`.
-   - Сообщить, куда положить ключ.
-   - Только после этого запустить `docker-compose.vector-db.yml`.
+## 13. Documentation Rules
 
-**Compose-файл уже лежит в шаблоне. Агент его не создает заново.**
+- Any significant decision must be persisted in `docs/`.
+- Requirement changes must update `docs/02-business-requirements.md`.
+- Architecture changes must update `docs/05-architecture.md` and `docs/06-decision-log.md`.
+- Stack changes must update `docs/04-tech-stack.md`.
+- Workflow changes must update `docs/07-workflow.md`.
 
----
+## 14. Consistency Rules
 
-## 12. Правила документации
+- Do not create parallel sources of truth.
+- Do not change workflow casually.
+- If a new request conflicts with documentation, update the docs or log the assumption explicitly.
+- Do not rely on transient context as durable project memory.
 
-- Любое существенное решение фиксируется в `docs/`.
-- Изменение архитектуры → обновить `docs/05-architecture.md` и `docs/06-decision-log.md`.
-- Изменение требований → обновить `docs/02-business-requirements.md`.
-- Изменение стека → обновить `docs/04-tech-stack.md`.
-- Крупные изменения не делаются без обновления документации.
+## 15. Definition Of Ready
 
----
+A task is ready only when the following are clear:
 
-## 13. Правила консистентности
+- goal;
+- input data;
+- boundaries;
+- dependencies;
+- completion criteria;
+- expected outcome.
 
-- Не менять workflow хаотично.
-- Не создавать параллельные источники правды.
-- При конфликте между новой постановкой и документацией — либо обновить документацию, либо явно зафиксировать допущение в `docs/06-decision-log.md`.
-- Не полагаться на временный контекст как на хранилище состояния проекта.
+## 16. Definition Of Done
 
----
+A task is done only when:
 
-## 14. Definition of Ready
+- the required result exists;
+- documentation is updated;
+- issue state is updated;
+- GitHub Project status is updated;
+- important decisions are recorded;
+- new risks or limitations are recorded;
+- a dedicated git commit is created for that task.
 
-Задача готова к работе, когда понятны:
-- Цель
-- Входные данные
-- Ограничения
-- Критерии завершения
-- Зависимости
-- Ожидаемый результат
+If no project-specific commit standard exists, use Conventional Commits and include the issue reference in the header or body.
 
----
+## 17. Task Finalization Order
 
-## 15. Definition of Done
+After each completed task, the agent must follow this order:
 
-Задача считается завершенной, когда:
-- Реализован требуемый результат.
-- Обновлена документация.
-- Обновлены issue и статус в GitHub Project.
-- Зафиксированы важные решения в `docs/06-decision-log.md`.
-- Отражены риски или ограничения, если они появились.
+1. Persist the result in canonical sources.
+2. Update docs.
+3. Update the related issue.
+4. Update the GitHub Project card.
+5. Update labels or status if needed.
+6. Create a dedicated commit for the task.
+7. Ensure no significant state exists only in session context.
+8. Only then reset or clear working context.
 
----
+## 18. Explicit Prohibitions
 
-## 16. Завершение задачи и очистка контекста
+The agent must not:
 
-После завершения **каждой** задачи агент обязан выполнить строго в таком порядке:
-
-1. Сохранить результат в канонических источниках (код, docs).
-2. Обновить `docs/` — все затронутые файлы.
-3. Обновить issue — закрыть или обновить комментарий.
-4. Обновить GitHub Project — перевести карточку в `Closed`.
-5. Обновить labels/статус при необходимости.
-6. Убедиться, что значимое состояние **не осталось только во временном контексте**.
-7. Только после этого — reset/cleanup контекста.
-
-**Контекст не используется как долговременное хранилище состояния проекта.**
-
----
-
-## 17. Запреты
-
-- Не начинать реализацию без качественного снятия задачи.
-- Не включать Vector DB без согласия пользователя.
-- Не создавать второй источник правды по задачам.
-- Не полагаться на временный контекст после закрытия задачи.
-- Не использовать GitHub Copilot и не создавать `.github/copilot-instructions.md`.
-- Не замалчивать проблемы окружения.
+- implement before business task intake is complete;
+- enable vector DB without user consent;
+- create a second source of truth for tasks;
+- treat session memory as persistent storage;
+- add GitHub Copilot instructions to this repository;
+- hide environment problems from the user.
