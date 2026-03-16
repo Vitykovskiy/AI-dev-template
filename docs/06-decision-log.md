@@ -10,6 +10,6 @@ Use ADR-lite entries. Add new decisions to the top.
 
 ## 2026-03-16 - Add configurable workflow policy
 
-- Decision: Introduce `.ai-dev-template.config.json` as the workflow policy file for language, execution mode, PR policy, artifact persistence, and RAG eligibility.
+- Decision: Introduce `.ai-dev-template.config.json` as the workflow policy file for language, execution mode, PR policy, artifact persistence, and RAG workflow mode.
 - Reason: The template must support different collaboration models without hardcoding one fixed operating mode.
 - Consequences: Agent behavior, docs, and setup scripts must honor the configuration before project execution starts.

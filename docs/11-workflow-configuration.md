@@ -13,13 +13,13 @@ Use it to decide how the agent should operate before project execution starts.
 - Human approval checkpoints for high-risk changes
 - PR, review, and merge policy
 - Whether AI-generated artifacts are persisted to the repository
-- Whether optional RAG / vector DB usage may be considered
+- How RAG is used in the development workflow
 - Required and recommended GitHub token scopes
 
 ## Execution Modes
 
 - `autonomous`: the agent may continue through the normal lifecycle without pausing on every stage, except for configured guardrails.
-- `hybrid`: the agent is mostly autonomous, but must stop for configured high-risk checkpoints.
+- `hybrid`: the agent is mostly autonomous, but must stop at configured human checkpoints.
 - `staged`: the agent must pause for explicit confirmation between major stages.
 
 ## Guardrails
@@ -40,7 +40,11 @@ If `pull_requests.enabled` is `false`, PR review and merge policy fields become 
 
 If `pull_requests.enabled` is `true`, the repository should treat the following as policy:
 
-- when PRs are created
+- PRs are created only in the scope of a task, not for arbitrary unrelated changes
+- a task branch is created for the task
+- one or more commits may be created in that task branch
+- the PR is opened when that task is ready for review or merge
+- which tasks require a PR
 - whether drafts are used first
 - whether review is mandatory
 - who reviews
@@ -49,6 +53,21 @@ If `pull_requests.enabled` is `true`, the repository should treat the following 
 - required approvals
 - required green checks
 - whether self-merge by the agent is allowed
+
+`pull_requests.creation_mode` meanings:
+
+- `for_every_task`: every task uses its own branch and its own PR
+- `for_significant_tasks`: only tasks that are significant under repository policy use a PR
+- `manual_per_task`: whether a task uses a PR is decided explicitly for that task
+
+Significant tasks are tasks that meet at least one of the following:
+
+- change application or infrastructure code
+- change system behavior
+- affect architecture, API, security, migrations, or external integrations
+- require review under repository policy
+
+Non-significant tasks are usually limited to documentation, text edits, or other small low-risk housekeeping changes that do not change system behavior.
 
 ## Artifact Persistence
 
@@ -72,11 +91,13 @@ Default local-only paths are listed in `.gitignore`.
 
 ## RAG / Vector DB Policy
 
-Use `rag.mode` to define whether retrieval support is:
+Use `rag.mode` to define how RAG participates in the repository development workflow:
 
-- `off`
-- `optional`
-- `required`
+- `off`: do not use RAG in this repository
+- `on_demand`: work without RAG by default, but allow enabling it later if direct context becomes insufficient
+- `from_start`: prepare the development workflow to use RAG from the start
+
+This policy is about agent workflow, not product architecture.
 
 Even when RAG is allowed, vector DB remains optional infrastructure and still requires explicit user approval before activation.
 

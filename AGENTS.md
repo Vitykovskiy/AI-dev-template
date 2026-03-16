@@ -34,7 +34,7 @@ The agent must not skip this order unless the repository is materially broken an
 ## 3. Canonical Sources Of Truth
 
 - Repository docs and code are the source of truth for goals, requirements, architecture, decisions, workflow, integrations, and vector DB configuration.
-- `.ai-dev-template.config.json` is the source of truth for workflow policy, language, PR behavior, artifact persistence, and RAG eligibility.
+- `.ai-dev-template.config.json` is the source of truth for workflow policy, language, PR behavior, artifact persistence, and RAG workflow mode.
 - GitHub Issues and GitHub Project are the source of truth for backlog, decomposition, status, and active work.
 - Temporary session context is not a source of truth.
 
@@ -203,7 +203,7 @@ The agent must:
 
 The compose file must be reused as provided by the template, not regenerated ad hoc.
 
-RAG policy in `.ai-dev-template.config.json` defines whether retrieval support is off, optional, or required for consideration. User approval is still required before enabling vector DB infrastructure.
+RAG policy in `.ai-dev-template.config.json` defines whether the development workflow runs without RAG, may enable it later, or should prepare to use it from the start. User approval is still required before enabling vector DB infrastructure.
 
 ## 12A. Workflow Configuration Rules
 
@@ -213,10 +213,11 @@ The agent must:
 
 1. treat execution mode as binding workflow policy;
 2. stop for explicit approval at configured human checkpoints;
-3. follow PR, review, and merge policy when pull requests are enabled;
-4. skip PR-specific steps when pull requests are disabled;
-5. keep canonical docs in the repository when `persist_docs_to_repo` is `true`;
-6. avoid committing temporary work artifacts when `persist_temporary_workfiles_to_repo` is `false`.
+3. treat PR flow as task-scoped when pull requests are enabled;
+4. follow PR, review, and merge policy for each task that requires a PR;
+5. skip PR-specific steps when pull requests are disabled;
+6. keep canonical docs in the repository when `persist_docs_to_repo` is `true`;
+7. avoid committing temporary work artifacts when `persist_temporary_workfiles_to_repo` is `false`.
 
 Guardrails are categories of high-risk changes that require human approval even when the repository runs in `autonomous` or `hybrid` mode.
 

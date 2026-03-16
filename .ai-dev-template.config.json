@@ -21,7 +21,7 @@
   },
   "pull_requests": {
     "enabled": true,
-    "creation_mode": "for_major_changes",
+    "creation_mode": "for_significant_tasks",
     "draft_first": true,
     "review": {
       "required": true,
@@ -48,7 +48,7 @@
     ]
   },
   "rag": {
-    "mode": "optional",
+    "mode": "on_demand",
     "allow_vector_db": false,
     "activation_requires_user_approval": true
   },

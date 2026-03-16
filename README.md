@@ -101,10 +101,10 @@ The configuration controls:
 
 - docs / issue / PR / comment language;
 - execution mode: `autonomous`, `hybrid`, `staged`;
-- high-risk approval checkpoints;
-- PR, review, and merge policy;
+- human approval checkpoints;
+- task-scoped PR, review, and merge policy;
 - whether temporary AI work artifacts stay local or are persisted;
-- whether RAG may be considered.
+- how RAG is used in the development workflow.
 
 See `docs/11-workflow-configuration.md` for the detailed meaning of each section.
 

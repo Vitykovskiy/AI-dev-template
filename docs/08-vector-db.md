@@ -4,26 +4,26 @@
 
 Default status: `Not enabled`
 
-Vector DB is optional and must not be activated automatically.
+Vector DB is optional development infrastructure for the agent workflow and must not be activated automatically.
 
 ## When It Is Not Needed
 
 Vector DB is usually unnecessary when:
 
 - project knowledge is small and can be handled by repository search;
-- no semantic retrieval or document grounding use case exists;
+- the agent can work from repository files and direct context without retrieval;
 - data freshness requirements do not justify indexing complexity;
 - cost or operational overhead outweighs retrieval benefit.
 
 ## When It May Be Needed
 
-Consider vector DB only after business task intake is complete and the use case is documented.
+Consider vector DB only after business task intake is complete and the development workflow use case is documented.
 
 Potential use cases:
 
-- semantic search across product or domain documents;
-- retrieval augmentation for long internal knowledge bases;
-- similarity search over support tickets, specifications, or records.
+- semantic search across repository documentation and working materials;
+- retrieval augmentation for large internal knowledge bases used during development;
+- context reduction when direct prompt context becomes too expensive or too small.
 
 ## If Enabled, Record The Following
 
@@ -69,3 +69,9 @@ The agent may start `docker-compose.vector-db.yml` only after:
 2. the embedding provider or model is chosen;
 3. the decision is documented here;
 4. required `.env` values are filled.
+
+If `rag.mode` is `off`, the agent must not propose vector DB for normal repository work.
+
+If `rag.mode` is `on_demand`, the agent may propose it later when context size, token cost, or repository scale justifies retrieval.
+
+If `rag.mode` is `from_start`, the repository should prepare RAG as part of the development workflow from the beginning, but user approval is still required before infrastructure is started.

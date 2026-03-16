@@ -33,7 +33,7 @@ Describe the business objective the project exists to achieve. Keep this section
 - `docs/05-architecture.md`: system structure and data flow
 - `docs/06-decision-log.md`: ADR-lite decision history
 - `docs/07-workflow.md`: operating workflow for the agent
-- `docs/08-vector-db.md`: optional semantic retrieval decision
+- `docs/08-vector-db.md`: optional RAG and vector DB workflow decision
 - `docs/09-integrations.md`: GitHub Project URL, env vars, tokens
 - `docs/10-glossary.md`: agreed vocabulary
 - `docs/11-workflow-configuration.md`: workflow policy and configuration meanings

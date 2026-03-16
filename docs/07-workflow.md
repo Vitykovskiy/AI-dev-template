@@ -62,22 +62,46 @@ Interaction rules:
 ## Execution Modes
 
 - `autonomous`: the agent may continue without stage-by-stage approval except for configured guardrails.
-- `hybrid`: the agent continues normally, but must stop on configured high-risk checkpoints.
+- `hybrid`: the agent continues normally, but must stop at configured human checkpoints.
 - `staged`: the agent must stop for explicit approval between major stages.
 
 ## Pull Request And Review Flow
 
 Apply this section only when pull requests are enabled in `.ai-dev-template.config.json`.
 
+PR flow is task-scoped.
+
+That means:
+
+1. the agent picks a task;
+2. creates or updates the branch for that task;
+3. makes one or more commits for that task;
+4. opens the PR when the task is ready according to policy.
+
 Recommended lifecycle:
 
-1. create or update the branch;
+1. create or update the task branch;
 2. open a draft PR first if configured;
 3. run required checks and update docs;
 4. request review according to policy;
 5. read PR comments and review summaries;
 6. apply accepted feedback;
 7. merge only when the configured approvals and checks are satisfied.
+
+`pull_requests.creation_mode` meanings:
+
+- `for_every_task`: use a PR for every task
+- `for_significant_tasks`: use a PR only for tasks that are significant enough to require one
+- `manual_per_task`: decide task by task whether a PR is needed
+
+Significant tasks are tasks that:
+
+- change application or infrastructure code
+- change system behavior
+- affect architecture, API, security, migrations, or external integrations
+- require review under repository policy
+
+Documentation-only tasks, text fixes, and small low-risk housekeeping changes are usually not significant unless the repository defines otherwise.
 
 If pull requests are disabled, completion is tracked through repository state, docs, issues, and commits instead.
 
