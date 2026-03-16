@@ -62,6 +62,12 @@ Then provide the agent with:
 
 Before active delivery starts, review and update `.ai-dev-template.config.json`.
 
+If you want a faster setup flow, use the configurator:
+
+- [AI Dev Template Configurator](https://vitykovskiy.github.io/AI-dev-template-configurator/)
+
+The configurator helps you choose workflow language, execution mode, PR policy, artifact persistence, and RAG mode, then generates a ready `.ai-dev-template.config.json` for the repository root.
+
 ## GitHub Project
 
 Use a simple kanban board.
