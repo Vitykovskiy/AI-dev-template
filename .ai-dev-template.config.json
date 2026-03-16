@@ -22,7 +22,7 @@
   "pull_requests": {
     "enabled": true,
     "creation_mode": "for_significant_tasks",
-    "draft_first": true,
+    "draft_first": false,
     "review": {
       "required": true,
       "reviewers": "human",
