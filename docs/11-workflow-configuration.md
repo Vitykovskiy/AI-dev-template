@@ -49,7 +49,8 @@ If `pull_requests.enabled` is `true`, the repository should treat the following 
 - whether review is mandatory
 - who reviews
 - whether the agent must read and process PR comments
-- merge strategy
+- whether task commits are squashed before merge
+- branch integration method: `merge` or `rebase`
 - required approvals
 - required green checks
 - whether self-merge by the agent is allowed
