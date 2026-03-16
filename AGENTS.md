@@ -19,20 +19,22 @@ At the start of every new session, the agent must do the following in order:
 
 1. Read `AGENTS.md`.
 2. Read `README.md`.
-3. Read `docs/00-project-overview.md`.
-4. Read `docs/01-product-vision.md`.
-5. Read `docs/02-business-requirements.md`.
-6. Read `docs/04-tech-stack.md`.
-7. Read `docs/05-architecture.md`.
-8. Check current GitHub issues.
-9. Check the GitHub Project board.
-10. Only then continue with work.
+3. Read `.ai-dev-template.config.json`.
+4. Read `docs/00-project-overview.md`.
+5. Read `docs/01-product-vision.md`.
+6. Read `docs/02-business-requirements.md`.
+7. Read `docs/04-tech-stack.md`.
+8. Read `docs/05-architecture.md`.
+9. Check current GitHub issues.
+10. Check the GitHub Project board.
+11. Only then continue with work.
 
 The agent must not skip this order unless the repository is materially broken and cannot be read.
 
 ## 3. Canonical Sources Of Truth
 
 - Repository docs and code are the source of truth for goals, requirements, architecture, decisions, workflow, integrations, and vector DB configuration.
+- `.ai-dev-template.config.json` is the source of truth for workflow policy, language, PR behavior, artifact persistence, and RAG eligibility.
 - GitHub Issues and GitHub Project are the source of truth for backlog, decomposition, status, and active work.
 - Temporary session context is not a source of truth.
 
@@ -55,6 +57,12 @@ The environment check must verify:
 - `gh auth status` succeeds;
 - repository access is sufficient for issues and project maintenance;
 - baseline project files exist.
+
+The agent should use `scripts/check-environment.sh` as the default environment check when available.
+
+The agent should use `scripts/check-github-permissions.sh` to validate token scopes when `gh` is available.
+
+If a script cannot be executed or does not cover a required check, the agent must perform the missing checks manually.
 
 If anything is missing, the agent must:
 
@@ -83,6 +91,7 @@ Rules for intake:
 - Only then move to the next block.
 - Do not mix business goals, architecture, infrastructure, and implementation details in one step.
 - Do not propose tech stack or vector DB during initial intake unless it is strictly required to understand the business problem.
+- Follow the configured execution mode in `.ai-dev-template.config.json` when deciding whether to pause for human confirmation.
 
 The intake result must make the following explicit:
 
@@ -165,6 +174,8 @@ After intake and environment alignment, the agent must:
 
 The agent must not rely on undocumented "common practice" as the only justification for an architectural decision.
 
+Language for docs, issues, PR text, and agent comments must follow `.ai-dev-template.config.json`.
+
 ## 11. Best Practices Capture Rules
 
 Before implementing with a chosen stack, the agent must:
@@ -192,6 +203,23 @@ The agent must:
 
 The compose file must be reused as provided by the template, not regenerated ad hoc.
 
+RAG policy in `.ai-dev-template.config.json` defines whether retrieval support is off, optional, or required for consideration. User approval is still required before enabling vector DB infrastructure.
+
+## 12A. Workflow Configuration Rules
+
+The agent must follow `.ai-dev-template.config.json`.
+
+The agent must:
+
+1. treat execution mode as binding workflow policy;
+2. stop for explicit approval at configured human checkpoints;
+3. follow PR, review, and merge policy when pull requests are enabled;
+4. skip PR-specific steps when pull requests are disabled;
+5. keep canonical docs in the repository when `persist_docs_to_repo` is `true`;
+6. avoid committing temporary work artifacts when `persist_temporary_workfiles_to_repo` is `false`.
+
+Guardrails are categories of high-risk changes that require human approval even when the repository runs in `autonomous` or `hybrid` mode.
+
 ## 13. Documentation Rules
 
 - Any significant decision must be persisted in `docs/`.
@@ -199,6 +227,7 @@ The compose file must be reused as provided by the template, not regenerated ad 
 - Architecture changes must update `docs/05-architecture.md` and `docs/06-decision-log.md`.
 - Stack changes must update `docs/04-tech-stack.md`.
 - Workflow changes must update `docs/07-workflow.md`.
+- Workflow policy changes must update `.ai-dev-template.config.json` and `docs/11-workflow-configuration.md` when the meaning changes.
 
 ## 14. Consistency Rules
 
@@ -230,6 +259,8 @@ A task is done only when:
 - new risks or limitations are recorded;
 - a dedicated git commit is created for that task.
 
+If pull requests are enabled in `.ai-dev-template.config.json`, task completion also requires compliance with the configured PR, review, and merge policy.
+
 If no project-specific commit standard exists, use Conventional Commits and include the issue reference in the header or body.
 
 ## 17. Task Finalization Order
@@ -251,6 +282,8 @@ The agent must not:
 
 - implement before business task intake is complete;
 - enable vector DB without user consent;
+- ignore configured guardrails or required human checkpoints;
+- apply a PR or merge workflow that conflicts with `.ai-dev-template.config.json`;
 - create a second source of truth for tasks;
 - treat session memory as persistent storage;
 - add GitHub Copilot instructions to this repository;

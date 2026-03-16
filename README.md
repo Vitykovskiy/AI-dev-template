@@ -7,6 +7,7 @@ Template repository for projects where an AI agent runs a consistent discovery, 
 This template gives every new project the same operating model:
 
 - the repository is the source of truth for goals, requirements, architecture, decisions, workflow, integrations, and vector DB configuration;
+- `.ai-dev-template.config.json` is the source of truth for workflow language, execution mode, PR policy, artifact persistence, and RAG policy;
 - GitHub Issues and GitHub Project are the source of truth for backlog, task status, and current execution;
 - the agent must complete business task intake before planning implementation;
 - important state must be persisted to repository artifacts and GitHub, not left in transient session context.
@@ -20,6 +21,7 @@ This template gives every new project the same operating model:
 - Proposes a tech stack and records official best practices before implementation.
 - Creates and maintains labels, Epic issues, task issues, and the GitHub Project board.
 - Keeps documentation and delivery state synchronized.
+- Adapts its workflow according to `.ai-dev-template.config.json`.
 - Offers vector DB only after task intake and environment alignment are complete.
 - Starts the optional vector DB stack after explicit user approval and `.env` setup.
 
@@ -45,11 +47,20 @@ cd <repo>
 bash scripts/bootstrap.sh
 ```
 
+Recommended next commands:
+
+```bash
+bash scripts/check-environment.sh
+bash scripts/check-github-permissions.sh
+```
+
 Then provide the agent with:
 
 1. The repository context.
 2. The GitHub Project URL.
 3. The business task.
+
+Before active delivery starts, review and update `.ai-dev-template.config.json`.
 
 ## GitHub Project
 
@@ -82,6 +93,21 @@ Store the actual GitHub Project URL in `docs/09-integrations.md`.
 - `In progress`: task is actively being executed.
 - `Closed`: task is implemented, documented, and reflected in GitHub state.
 
+## Workflow Configuration
+
+Workflow policy is configured in `.ai-dev-template.config.json`.
+
+The configuration controls:
+
+- docs / issue / PR / comment language;
+- execution mode: `autonomous`, `hybrid`, `staged`;
+- high-risk approval checkpoints;
+- PR, review, and merge policy;
+- whether temporary AI work artifacts stay local or are persisted;
+- whether RAG may be considered.
+
+See `docs/11-workflow-configuration.md` for the detailed meaning of each section.
+
 ## Optional Vector DB
 
 Vector DB is optional infrastructure, not a default part of project setup.
@@ -112,4 +138,5 @@ The template supports multiple embedding strategies:
 - The template does not support GitHub Copilot instructions and intentionally excludes `.github/copilot-instructions.md`.
 - Vector DB compose is provided up front, but it must not be enabled without explicit user agreement.
 - `tasks/` may hold temporary local notes, but final state must be reflected in docs and GitHub.
+- Labels remain canonically English in the default template configuration.
 - Shell scripts are written for `bash`; `.gitattributes` pins LF for shell-sensitive files to prevent cross-platform EOL breakage.

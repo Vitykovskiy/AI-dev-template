@@ -4,6 +4,7 @@ set -u
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STATUS=0
+GH_BIN=""
 
 report_ok() {
   printf '[ok] %s\n' "$1"
@@ -16,6 +17,20 @@ report_warn() {
 report_fail() {
   printf '[fail] %s\n' "$1"
   STATUS=1
+}
+
+detect_gh() {
+  if command -v gh >/dev/null 2>&1; then
+    GH_BIN="gh"
+    return 0
+  fi
+
+  if command -v gh.exe >/dev/null 2>&1; then
+    GH_BIN="gh.exe"
+    return 0
+  fi
+
+  return 1
 }
 
 require_file() {
@@ -63,9 +78,9 @@ else
   report_warn "git user.email is not set in this repository"
 fi
 
-if command -v gh >/dev/null 2>&1; then
+if detect_gh; then
   report_ok "gh CLI is installed"
-  if gh auth status >/dev/null 2>&1; then
+  if "$GH_BIN" auth status >/dev/null 2>&1; then
     report_ok "gh auth status succeeded"
   else
     report_fail "gh is installed but not authenticated"
@@ -74,8 +89,8 @@ else
   report_fail "gh CLI is not installed"
 fi
 
-if command -v gh >/dev/null 2>&1; then
-  if gh repo view --json nameWithOwner >/dev/null 2>&1; then
+if [[ -n "$GH_BIN" ]]; then
+  if "$GH_BIN" repo view --json nameWithOwner >/dev/null 2>&1; then
     report_ok "gh can access the current repository"
   else
     report_fail "gh cannot access the current repository"
@@ -84,12 +99,15 @@ fi
 
 require_file "AGENTS.md"
 require_file "README.md"
+require_file ".ai-dev-template.config.json"
 require_file ".env.example"
 require_file "docker-compose.vector-db.yml"
 require_file "docs/00-project-overview.md"
 require_file "docs/07-workflow.md"
 require_file "docs/08-vector-db.md"
+require_file "docs/11-workflow-configuration.md"
 require_file "scripts/bootstrap.sh"
+require_file "scripts/check-github-permissions.sh"
 require_file "scripts/setup-labels.sh"
 
 if grep -Fq '<paste GitHub Project URL here>' "$ROOT_DIR/docs/09-integrations.md"; then

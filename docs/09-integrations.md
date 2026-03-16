@@ -30,6 +30,24 @@
 | `gh` auth token | GitHub CLI auth store | Issues and Project automation | Unknown |
 | Embedding provider key | `.env` or external secret manager | Optional vector DB embeddings | Not set |
 
+## GitHub Token Scope Baseline
+
+Required scopes:
+
+- `repo`
+- `project`
+
+Recommended scopes:
+
+- `read:org`
+- `workflow`
+
+Validation note:
+
+- token scopes are necessary but not sufficient;
+- repository membership, project write access, and branch protection rules must still be validated separately;
+- use `bash scripts/check-github-permissions.sh` to inspect the current `gh` token baseline.
+
 ## Integration Status
 
 - GitHub repository access: `Unknown`

@@ -23,3 +23,8 @@ node_modules/
 
 # Local task scratch files
 tasks/*.local.*
+
+# Local agent work artifacts
+.agent-work/
+.ai-local/
+.ai-dev-template.local.json

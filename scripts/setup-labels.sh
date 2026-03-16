@@ -2,12 +2,28 @@
 
 set -u
 
-if ! command -v gh >/dev/null 2>&1; then
+GH_BIN=""
+
+detect_gh() {
+  if command -v gh >/dev/null 2>&1; then
+    GH_BIN="gh"
+    return 0
+  fi
+
+  if command -v gh.exe >/dev/null 2>&1; then
+    GH_BIN="gh.exe"
+    return 0
+  fi
+
+  return 1
+}
+
+if ! detect_gh; then
   printf '[fail] gh CLI is required to manage labels.\n'
   exit 1
 fi
 
-if ! gh auth status >/dev/null 2>&1; then
+if ! "$GH_BIN" auth status >/dev/null 2>&1; then
   printf '[fail] gh CLI is not authenticated.\n'
   exit 1
 fi
@@ -15,8 +31,8 @@ fi
 REPO="${1:-}"
 
 if [[ -z "$REPO" ]]; then
-  if gh repo view --json nameWithOwner >/dev/null 2>&1; then
-    REPO="$(gh repo view --json nameWithOwner --jq .nameWithOwner)"
+  if "$GH_BIN" repo view --json nameWithOwner >/dev/null 2>&1; then
+    REPO="$("$GH_BIN" repo view --json nameWithOwner --jq .nameWithOwner)"
   else
     printf '[fail] unable to detect repository. Pass owner/repo explicitly.\n'
     exit 1
@@ -28,12 +44,12 @@ ensure_label() {
   local color="$2"
   local description="$3"
 
-  if gh label create "$name" --repo "$REPO" --color "$color" --description "$description" >/dev/null 2>&1; then
+  if "$GH_BIN" label create "$name" --repo "$REPO" --color "$color" --description "$description" >/dev/null 2>&1; then
     printf '[ok] created label: %s\n' "$name"
     return 0
   fi
 
-  if gh label edit "$name" --repo "$REPO" --color "$color" --description "$description" >/dev/null 2>&1; then
+  if "$GH_BIN" label edit "$name" --repo "$REPO" --color "$color" --description "$description" >/dev/null 2>&1; then
     printf '[ok] updated label: %s\n' "$name"
     return 0
   fi

@@ -3,13 +3,27 @@
 ## Agent Working Cycle
 
 1. Read mandatory context in the order defined by `AGENTS.md`.
-2. Run environment check.
-3. Perform business task intake.
-4. Persist intake results into docs.
-5. Create Epic and tasks in GitHub.
-6. Align stack and best practices.
-7. Execute tasks one by one.
-8. Finalize each task with persistence before context reset.
+2. Load workflow policy from `.ai-dev-template.config.json`.
+3. Run environment check.
+4. Perform business task intake.
+5. Persist intake results into docs.
+6. Create Epic and tasks in GitHub.
+7. Align stack and best practices.
+8. Execute tasks one by one.
+9. Finalize each task with persistence before context reset.
+
+## Workflow Policy Inputs
+
+The repository workflow is controlled by `.ai-dev-template.config.json`.
+
+Minimum policy areas:
+
+- language for docs, issues, PR text, and comments
+- execution mode
+- human approval checkpoints
+- PR / review / merge policy
+- artifact persistence policy
+- RAG policy
 
 ## Task Intake Phase
 
@@ -29,6 +43,7 @@ Interaction rules:
 - Short summary after each block
 - No decomposition before intake is coherent
 - No vector DB discussion during primary intake unless strictly needed
+- If execution mode is `staged`, pause after intake before moving into task creation
 
 ## Decomposition Rules
 
@@ -43,6 +58,40 @@ Interaction rules:
 - New task: `Backlog`
 - Active task: `In progress`
 - Completed task: `Closed`
+
+## Execution Modes
+
+- `autonomous`: the agent may continue without stage-by-stage approval except for configured guardrails.
+- `hybrid`: the agent continues normally, but must stop on configured high-risk checkpoints.
+- `staged`: the agent must stop for explicit approval between major stages.
+
+## Pull Request And Review Flow
+
+Apply this section only when pull requests are enabled in `.ai-dev-template.config.json`.
+
+Recommended lifecycle:
+
+1. create or update the branch;
+2. open a draft PR first if configured;
+3. run required checks and update docs;
+4. request review according to policy;
+5. read PR comments and review summaries;
+6. apply accepted feedback;
+7. merge only when the configured approvals and checks are satisfied.
+
+If pull requests are disabled, completion is tracked through repository state, docs, issues, and commits instead.
+
+## Guardrails
+
+Guardrails are the configured categories of changes that require human approval even in non-staged workflows.
+
+Typical examples:
+
+- architecture changes
+- infrastructure changes
+- schema migrations
+- external integrations
+- security-sensitive changes
 
 ## Documentation Update Rules
 
@@ -62,6 +111,8 @@ Before the agent clears context after a task, it must:
 4. update labels or status if needed;
 5. create a dedicated commit;
 6. verify that important state is not trapped in transient context.
+
+If pull requests are enabled, the agent must also ensure that PR review comments were processed according to policy before considering the task complete.
 
 ## Known Limitations / Assumptions
 

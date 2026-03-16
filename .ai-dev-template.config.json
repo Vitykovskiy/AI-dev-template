@@ -1,0 +1,65 @@
+{
+  "config_version": 1,
+  "language": {
+    "documentation": "en",
+    "issues": "en",
+    "pull_requests": "en",
+    "comments": "en",
+    "labels": "en"
+  },
+  "workflow": {
+    "execution_mode": "hybrid",
+    "human_checkpoints": [
+      "architecture_changes",
+      "infra_changes",
+      "schema_migrations",
+      "external_integrations",
+      "security_sensitive_changes"
+    ],
+    "issue_tracking": "github_issues",
+    "project_tracking": "github_project"
+  },
+  "pull_requests": {
+    "enabled": true,
+    "creation_mode": "for_major_changes",
+    "draft_first": true,
+    "review": {
+      "required": true,
+      "reviewers": "human",
+      "agent_must_read_comments": true,
+      "agent_must_reply_to_comments": true,
+      "agent_must_apply_accepted_feedback": true
+    },
+    "merge": {
+      "strategy": "squash",
+      "min_approvals": 1,
+      "require_green_checks": true,
+      "allow_agent_self_merge": false
+    }
+  },
+  "artifacts": {
+    "persist_docs_to_repo": true,
+    "persist_agent_contract_to_repo": true,
+    "persist_temporary_workfiles_to_repo": false,
+    "local_artifact_paths": [
+      ".agent-work/",
+      ".ai-local/",
+      "tasks/*.local.*"
+    ]
+  },
+  "rag": {
+    "mode": "optional",
+    "allow_vector_db": false,
+    "activation_requires_user_approval": true
+  },
+  "github": {
+    "required_token_scopes": [
+      "repo",
+      "project"
+    ],
+    "recommended_token_scopes": [
+      "read:org",
+      "workflow"
+    ]
+  }
+}

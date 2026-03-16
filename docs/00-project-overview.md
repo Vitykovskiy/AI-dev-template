@@ -36,18 +36,20 @@ Describe the business objective the project exists to achieve. Keep this section
 - `docs/08-vector-db.md`: optional semantic retrieval decision
 - `docs/09-integrations.md`: GitHub Project URL, env vars, tokens
 - `docs/10-glossary.md`: agreed vocabulary
+- `docs/11-workflow-configuration.md`: workflow policy and configuration meanings
 
 ## Required Agent Reading Order
 
 1. `AGENTS.md`
 2. `README.md`
-3. `docs/00-project-overview.md`
-4. `docs/01-product-vision.md`
-5. `docs/02-business-requirements.md`
-6. `docs/04-tech-stack.md`
-7. `docs/05-architecture.md`
-8. Current GitHub issues
-9. Current GitHub Project board
+3. `.ai-dev-template.config.json`
+4. `docs/00-project-overview.md`
+5. `docs/01-product-vision.md`
+6. `docs/02-business-requirements.md`
+7. `docs/04-tech-stack.md`
+8. `docs/05-architecture.md`
+9. Current GitHub issues
+10. Current GitHub Project board
 
 ## Notes
 
