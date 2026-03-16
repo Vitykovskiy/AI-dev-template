@@ -49,9 +49,7 @@
     ]
   },
   "rag": {
-    "mode": "on_demand",
-    "allow_vector_db": false,
-    "activation_requires_user_approval": true
+    "mode": "on_demand"
   },
   "github": {
     "required_token_scopes": [
