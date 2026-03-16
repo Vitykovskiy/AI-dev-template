@@ -20,7 +20,7 @@ Use it to decide how the agent should operate before project execution starts.
 
 - `autonomous`: the agent may continue through the normal lifecycle without pausing on every stage, except for configured guardrails.
 - `hybrid`: the agent is mostly autonomous, but must stop at configured human checkpoints.
-- `staged`: the agent must pause for explicit confirmation between major stages.
+- `staged`: the agent must pause between work stages and also stop at configured human checkpoints.
 
 ## Guardrails
 

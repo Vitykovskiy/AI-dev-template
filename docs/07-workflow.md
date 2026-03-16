@@ -63,7 +63,7 @@ Interaction rules:
 
 - `autonomous`: the agent may continue without stage-by-stage approval except for configured guardrails.
 - `hybrid`: the agent continues normally, but must stop at configured human checkpoints.
-- `staged`: the agent must stop for explicit approval between major stages.
+- `staged`: the agent must stop between work stages and also stop at configured human checkpoints.
 
 ## Pull Request And Review Flow
 
