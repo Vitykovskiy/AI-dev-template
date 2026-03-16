@@ -66,7 +66,7 @@ If you want a faster setup flow, use the configurator:
 
 - [AI Dev Template Configurator](https://vitykovskiy.github.io/AI-dev-template-configurator/)
 
-The configurator helps you choose workflow language, execution mode, PR policy, artifact persistence, and RAG mode, then generates a ready `.ai-dev-template.config.json` for the repository root.
+The configurator helps you choose workflow language for docs, issues, PRs, comments, and commits, plus execution mode, PR policy, artifact persistence, and RAG mode, then generates a ready `.ai-dev-template.config.json` for the repository root.
 
 ## GitHub Project
 
@@ -105,7 +105,7 @@ Workflow policy is configured in `.ai-dev-template.config.json`.
 
 The configuration controls:
 
-- docs / issue / PR / comment language;
+- docs / issue / PR / comment / commit language;
 - execution mode: `autonomous`, `hybrid`, `staged`;
 - human approval checkpoints;
 - task-scoped PR, review, and merge policy;

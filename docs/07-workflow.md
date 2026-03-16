@@ -18,7 +18,7 @@ The repository workflow is controlled by `.ai-dev-template.config.json`.
 
 Minimum policy areas:
 
-- language for docs, issues, PR text, and comments
+- language for docs, issues, PR text, comments, and commit messages
 - execution mode
 - human approval checkpoints
 - PR / review / merge policy

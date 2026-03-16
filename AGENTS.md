@@ -175,7 +175,7 @@ After intake and environment alignment, the agent must:
 
 The agent must not rely on undocumented "common practice" as the only justification for an architectural decision.
 
-Language for docs, issues, PR text, and agent comments must follow `.ai-dev-template.config.json`.
+Language for docs, issues, PR text, agent comments, and commit messages must follow `.ai-dev-template.config.json`.
 
 ## 11. Best Practices Capture Rules
 
@@ -263,7 +263,7 @@ A task is done only when:
 
 If pull requests are enabled in `.ai-dev-template.config.json`, task completion also requires compliance with the configured PR, review, and merge policy.
 
-If no project-specific commit standard exists, use Conventional Commits and include the issue reference in the header or body.
+If no project-specific commit standard exists, use Conventional Commits and include the issue reference in the header or body. The commit message language must still follow `.ai-dev-template.config.json`.
 
 ## 17. Task Finalization Order
 

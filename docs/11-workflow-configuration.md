@@ -8,7 +8,7 @@ Use it to decide how the agent should operate before project execution starts.
 
 ## Current Configuration Areas
 
-- Language for docs, issues, PR text, and comments
+- Language for docs, issues, PR text, comments, and commit messages
 - Execution mode: `autonomous`, `hybrid`, or `staged`
 - Human approval checkpoints for high-risk changes
 - PR, review, and merge policy

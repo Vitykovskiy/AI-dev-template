@@ -5,6 +5,7 @@
     "issues": "en",
     "pull_requests": "en",
     "comments": "en",
+    "commits": "en",
     "labels": "en"
   },
   "workflow": {
