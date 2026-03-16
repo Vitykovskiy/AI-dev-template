@@ -25,9 +25,10 @@ At the start of every new session, the agent must do the following in order:
 6. Read `docs/02-business-requirements.md`.
 7. Read `docs/04-tech-stack.md`.
 8. Read `docs/05-architecture.md`.
-9. Check current GitHub issues.
-10. Check the GitHub Project board.
-11. Only then continue with work.
+9. Run environment check for repository and GitHub access.
+10. Check current GitHub issues.
+11. Check the GitHub Project board.
+12. Only then continue with work.
 
 The agent must not skip this order unless the repository is materially broken and cannot be read.
 
@@ -219,7 +220,7 @@ The agent must:
 6. keep canonical docs in the repository when `persist_docs_to_repo` is `true`;
 7. avoid committing temporary work artifacts when `persist_temporary_workfiles_to_repo` is `false`.
 
-Guardrails are categories of high-risk changes that require human approval even when the repository runs in `autonomous` or `hybrid` mode.
+Human checkpoints are categories of high-risk changes that require human approval even when the repository runs in `autonomous` or `hybrid` mode.
 
 ## 13. Documentation Rules
 
@@ -283,7 +284,7 @@ The agent must not:
 
 - implement before business task intake is complete;
 - enable vector DB without user consent;
-- ignore configured guardrails or required human checkpoints;
+- ignore configured human checkpoints;
 - apply a PR or merge workflow that conflicts with `.ai-dev-template.config.json`;
 - create a second source of truth for tasks;
 - treat session memory as persistent storage;

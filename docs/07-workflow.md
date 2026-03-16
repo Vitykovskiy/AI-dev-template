@@ -61,7 +61,7 @@ Interaction rules:
 
 ## Execution Modes
 
-- `autonomous`: the agent may continue without stage-by-stage approval except for configured guardrails.
+- `autonomous`: the agent may continue without stage-by-stage approval unless it reaches a configured human checkpoint.
 - `hybrid`: the agent continues normally, but must stop at configured human checkpoints.
 - `staged`: the agent must stop between work stages and also stop at configured human checkpoints.
 
@@ -105,9 +105,9 @@ Documentation-only tasks, text fixes, and small low-risk housekeeping changes ar
 
 If pull requests are disabled, completion is tracked through repository state, docs, issues, and commits instead.
 
-## Guardrails
+## Human Checkpoints
 
-Guardrails are the configured categories of changes that require human approval even in non-staged workflows.
+Human checkpoints are the configured categories of changes that require human approval even in non-staged workflows.
 
 Typical examples:
 

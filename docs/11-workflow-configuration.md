@@ -18,15 +18,15 @@ Use it to decide how the agent should operate before project execution starts.
 
 ## Execution Modes
 
-- `autonomous`: the agent may continue through the normal lifecycle without pausing on every stage, except for configured guardrails.
+- `autonomous`: the agent may continue through the normal lifecycle without pausing on every stage unless it reaches a configured human checkpoint.
 - `hybrid`: the agent is mostly autonomous, but must stop at configured human checkpoints.
 - `staged`: the agent must pause between work stages and also stop at configured human checkpoints.
 
-## Guardrails
+## Human Checkpoints
 
-Guardrails are change categories that still require explicit human approval even when the execution mode is not fully staged.
+Human checkpoints are change categories that still require explicit human approval even when the execution mode is not fully staged.
 
-Typical guardrails:
+Typical human checkpoints:
 
 - architecture changes
 - infrastructure changes
