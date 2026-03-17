@@ -54,6 +54,8 @@ bash scripts/check-environment.sh
 bash scripts/check-github-permissions.sh
 ```
 
+Note: `scripts/check-github-permissions.sh` reads GitHub scope requirements from `.ai-dev-template.config.json` and currently expects `python` to be available.
+
 Then provide the agent with:
 
 1. The repository context.

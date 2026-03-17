@@ -105,18 +105,30 @@ Recommended lifecycle:
 
 1. classify the task and confirm whether PR flow is required;
 2. create or update the task branch;
-3. open a draft PR first if configured;
-4. run required checks and update docs;
-5. request review according to policy;
-6. read PR comments and review summaries;
-7. apply accepted feedback;
-8. merge only when the configured approvals and checks are satisfied.
+3. make the branch ready for PR creation;
+4. open a draft PR first if configured before the broader review and merge cycle;
+5. run required checks and update docs;
+6. request review according to policy;
+7. read PR comments and review summaries;
+8. apply accepted feedback;
+9. merge only when the configured approvals and checks are satisfied.
+
+Operational review and merge interpretation:
+
+- if review is required, the task is not merge-ready before review policy is satisfied;
+- if reviewer type is `human`, human review is required;
+- if reviewer type is `ai`, the agent must perform the review step itself and record the review result in the PR;
+- if reviewer type is `both`, both the agent review step and human review are required, and the agent review result must be recorded in the PR;
+- if comment-reading or reply handling is enabled, the agent must process PR comments before concluding review handling;
+- if accepted feedback must be applied, the agent must not leave accepted review feedback unresolved;
+- if green checks are required, the PR is not merge-ready while required checks are failing or missing;
+- if self-merge by the agent is disabled, the agent must stop before merge and wait for an allowed actor.
 
 `pull_requests.creation_mode` meanings:
 
 - `for_every_task`: use a PR for every task
 - `for_significant_tasks`: use a PR only for tasks that are significant enough to require one
-- `manual_per_task`: decide task by task whether a PR is needed
+- `manual_per_task`: use a PR only after an explicit human decision for that task
 
 Significant tasks are tasks that:
 

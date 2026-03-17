@@ -50,6 +50,12 @@ else
   report_fail "git is not installed"
 fi
 
+if command -v python >/dev/null 2>&1 || command -v python3 >/dev/null 2>&1; then
+  report_ok "python is installed"
+else
+  report_warn "python is not installed; scripts/check-github-permissions.sh may not work"
+fi
+
 if git -C "$ROOT_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   report_ok "repository is a git work tree"
 else

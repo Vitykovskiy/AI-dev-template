@@ -2,10 +2,13 @@
 
 set -u
 
-required_scopes=("repo" "project")
-recommended_scopes=("read:org" "workflow")
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG_PATH="$ROOT_DIR/.ai-dev-template.config.json"
+required_scopes=()
+recommended_scopes=()
 status=0
 GH_BIN=""
+PYTHON_BIN=""
 
 report_ok() {
   printf '[ok] %s\n' "$1"
@@ -34,10 +37,51 @@ detect_gh() {
   return 1
 }
 
+detect_python() {
+  if command -v python >/dev/null 2>&1; then
+    PYTHON_BIN="python"
+    return 0
+  fi
+
+  if command -v python3 >/dev/null 2>&1; then
+    PYTHON_BIN="python3"
+    return 0
+  fi
+
+  return 1
+}
+
+load_scopes_from_config() {
+  if [[ ! -f "$CONFIG_PATH" ]]; then
+    report_fail "missing config file: .ai-dev-template.config.json"
+    exit 1
+  fi
+
+  if ! detect_python; then
+    report_fail "python is required to read GitHub scope settings from .ai-dev-template.config.json"
+    exit 1
+  fi
+
+  mapfile -t required_scopes < <(
+    "$PYTHON_BIN" -c "import json, pathlib; data=json.loads(pathlib.Path(r'$CONFIG_PATH').read_text(encoding='utf-8')); print(*data['github']['required_token_scopes'], sep='\n')" 2>/dev/null
+  )
+
+  mapfile -t recommended_scopes < <(
+    "$PYTHON_BIN" -c "import json, pathlib; data=json.loads(pathlib.Path(r'$CONFIG_PATH').read_text(encoding='utf-8')); print(*data['github']['recommended_token_scopes'], sep='\n')" 2>/dev/null
+  )
+
+  if [[ "${#required_scopes[@]}" -eq 0 ]]; then
+    report_fail "unable to load required scopes from .ai-dev-template.config.json"
+    exit 1
+  fi
+}
+
 if ! detect_gh; then
   report_fail "gh CLI is not installed"
   exit 1
 fi
+
+load_scopes_from_config
 
 auth_output="$("$GH_BIN" auth status 2>&1)" || {
   report_fail "gh auth status failed"

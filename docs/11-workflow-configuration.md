@@ -12,7 +12,7 @@ Use it to decide how the agent should operate before project execution starts.
 - Execution mode: `autonomous`, `hybrid`, or `staged`
 - Human approval checkpoints for high-risk changes
 - PR, review, and merge policy
-- Whether AI-generated artifacts are persisted to the repository
+- Whether temporary AI work artifacts stay local or are persisted
 - How RAG is used in the development workflow
 - Required and recommended GitHub token scopes
 
@@ -57,6 +57,8 @@ If `pull_requests.enabled` is `true`, the repository should treat the following 
 - required green checks
 - whether self-merge by the agent is allowed
 
+These are not descriptive preferences. They are expected workflow rules for the agent.
+
 Before the first implementation commit for a task, the agent must:
 
 1. classify the task as PR-required or not;
@@ -71,7 +73,7 @@ If the agent decides that a task does not require a PR, it must state that decis
 
 - `for_every_task`: every task uses its own branch and its own PR
 - `for_significant_tasks`: only tasks that are significant under repository policy use a PR
-- `manual_per_task`: whether a task uses a PR is decided explicitly for that task
+- `manual_per_task`: whether a task uses a PR is decided explicitly by a human for that task
 
 Significant tasks are tasks that meet at least one of the following:
 
@@ -86,13 +88,13 @@ Non-significant tasks are usually limited to documentation, text edits, or other
 
 Repository-persisted artifacts should remain the source of truth for reusable team knowledge.
 
-Recommended to keep in the repository:
+Always keep in the repository:
 
 - `docs/`
 - `AGENTS.md`
 - architectural and operational decisions
 
-Recommended to keep local only:
+Configurable local-only policy applies only to temporary work artifacts such as:
 
 - scratch notes
 - temporary task breakdown drafts
@@ -100,7 +102,7 @@ Recommended to keep local only:
 - agent work logs
 - experimental or intermediate generation files
 
-Default local-only paths are listed in `.gitignore`.
+If `persist_temporary_workfiles_to_repo` is `false`, these temporary artifacts should remain local and follow the default local-only paths listed in `.gitignore`.
 
 ## RAG / Vector DB Policy
 

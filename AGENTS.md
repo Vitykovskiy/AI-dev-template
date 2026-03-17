@@ -298,7 +298,7 @@ The agent must:
 5. state the delivery mode for the task before the first implementation commit;
 6. follow PR, review, and merge policy for each task that requires a PR;
 7. skip PR-specific steps when pull requests are disabled;
-8. keep canonical docs in the repository when `persist_docs_to_repo` is `true`;
+8. keep canonical docs and `AGENTS.md` in the repository as mandatory sources of truth;
 9. avoid committing temporary work artifacts when `persist_temporary_workfiles_to_repo` is `false`.
 
 Human checkpoints are categories of high-risk changes that require human approval even when the repository runs in `autonomous` or `hybrid` mode.
@@ -309,10 +309,29 @@ For such tasks, the required path is:
 
 1. classify the task as PR-required;
 2. create or switch to a task branch;
-3. open a draft PR if policy requires it;
-4. only then make implementation commits.
+3. make the branch ready for PR creation;
+4. open a draft PR if policy requires it before the broader review and merge cycle;
+5. continue implementation within that task branch and PR scope.
 
 If the agent determines that a task does not require a PR, it must say so explicitly before the first implementation commit and justify that decision against repository policy.
+
+If a task uses PR flow, the agent must apply the configured review and merge policy as follows:
+
+- if `pull_requests.review.required` is `true`, do not treat the task as merge-ready before review requirements are satisfied;
+- if `pull_requests.review.reviewers` is `human`, require human review and do not treat agent self-review as sufficient;
+- if `pull_requests.review.reviewers` is `ai`, perform agent review as the required review path and record the result in the PR as a review summary or review comment;
+- if `pull_requests.review.reviewers` is `both`, require both the agent review step and human review, and record the agent review result in the PR as a review summary or review comment;
+- if `pull_requests.review.agent_must_read_comments` is `true`, read PR comments and review summaries before concluding review handling;
+- if `pull_requests.review.agent_must_reply_to_comments` is `true`, reply where repository workflow expects a direct answer;
+- if `pull_requests.review.agent_must_apply_accepted_feedback` is `true`, apply accepted review feedback before considering the PR ready;
+- if `pull_requests.merge.squash_commits` is `true`, treat task commits as intended to be squashed before merge;
+- if `pull_requests.merge.integration_method` is `merge`, preserve branch integration through a merge commit;
+- if `pull_requests.merge.integration_method` is `rebase`, preserve branch integration through rebase;
+- if `pull_requests.merge.require_green_checks` is `true`, do not treat the PR as merge-ready while required checks are failing or missing;
+- if `pull_requests.merge.min_approvals` is greater than zero, do not treat the PR as merge-ready before that approval threshold is met;
+- if `pull_requests.merge.allow_agent_self_merge` is `false`, the agent must not merge the PR itself.
+
+If `pull_requests.creation_mode` is `manual_per_task`, the agent must not decide silently. It must ask for or reference an explicit human decision before treating the task as PR-free.
 
 ## 13. Documentation Rules
 
