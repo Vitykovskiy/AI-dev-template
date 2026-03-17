@@ -56,6 +56,14 @@ bash scripts/check-github-permissions.sh
 
 Note: `scripts/check-github-permissions.sh` reads GitHub scope requirements from `.ai-dev-template.config.json` and currently expects `python` to be available.
 
+After filling in `.ai-dev-template.config.json`, run the init script to strip all configuration-conditional sections from the template files. This reduces context size and removes instructions that do not apply to this project:
+
+```bash
+python scripts/init.py
+```
+
+The script processes `AGENTS.md`, `docs/07-workflow.md`, `docs/08-vector-db.md`, and the session start checklist. It also removes files that are unused under the chosen configuration. Run it once, then commit the result.
+
 Then provide the agent with:
 
 1. The repository context.

@@ -9,14 +9,7 @@
     "labels": "en"
   },
   "workflow": {
-    "execution_mode": "hybrid",
-    "human_checkpoints": [
-      "architecture_changes",
-      "infra_changes",
-      "schema_migrations",
-      "external_integrations",
-      "security_sensitive_changes"
-    ],
+    "execution_mode": "autonomous",
     "issue_tracking": "github_issues",
     "project_tracking": "github_project"
   },

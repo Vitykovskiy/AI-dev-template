@@ -9,8 +9,7 @@ Use it to decide how the agent should operate before project execution starts.
 ## Current Configuration Areas
 
 - Language for docs, issues, PR text, comments, and commit messages
-- Execution mode: `autonomous`, `hybrid`, or `staged`
-- Human approval checkpoints for high-risk changes
+- Execution mode: `autonomous` or `staged`
 - PR, review, and merge policy
 - Whether temporary AI work artifacts stay local or are persisted
 - How RAG is used in the development workflow
@@ -20,21 +19,8 @@ If repository language is Russian, repository artifacts should be written in cle
 
 ## Execution Modes
 
-- `autonomous`: the agent may continue through the normal lifecycle without pausing on every stage unless it reaches a configured human checkpoint.
-- `hybrid`: the agent is mostly autonomous, but must stop at configured human checkpoints.
-- `staged`: the agent must pause between work stages and also stop at configured human checkpoints.
-
-## Human Checkpoints
-
-Human checkpoints are change categories that still require explicit human approval even when the execution mode is not fully staged.
-
-Typical human checkpoints:
-
-- architecture changes
-- infrastructure changes
-- schema migrations
-- external integrations
-- security-sensitive changes
+- `autonomous`: the agent continues through the full lifecycle without pausing between stages.
+- `staged`: the agent pauses between every work stage and waits for explicit human confirmation before continuing.
 
 ## Pull Request Policy
 

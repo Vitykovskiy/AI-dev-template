@@ -10,27 +10,33 @@ This checklist is an observable action — show it to the user at the start of e
 | Setting | Value from config | Consequence |
 |---|---|---|
 | Documentation language | __ | All docs, issues, PR text, commits must use this language |
-| Execution mode | __ | autonomous = no stage gates / hybrid = stop at checkpoints / staged = stop between every stage |
-| Human checkpoints | __ | List every active category — these block implementation without user approval |
+| Execution mode | __ | autonomous = no stage gates / staged = stop between every stage and wait for confirmation |
 | Artifact persistence | __ | local-only = do not commit `.agent-work/`, `.ai-local/`, `tasks/*.local.*` to repo |
-| PR enabled | __ | yes/no |
+<!-- IF:pull_requests.enabled=true -->
+| PR enabled | yes | — |
 | PR creation mode | __ | for_every_task / for_significant_tasks / manual_per_task |
 | Agent self-merge | __ | allowed / NOT allowed |
-| Agent configures branch protection | __ | yes / no — if yes, agent must configure main branch protection via GitHub API before implementation starts |
+<!-- IF:pull_requests.merge.agent_configure_branch_protection=true -->
+| Agent configures branch protection | yes | agent must configure main branch protection via GitHub API before implementation starts |
+<!-- END IF -->
+<!-- END IF -->
+<!-- IF:pull_requests.enabled=false -->
+| PR enabled | no | deliver via direct commits |
+<!-- END IF -->
 
 ---
 
 ## RAG Checkpoint
 
-RAG mode from config: __
-
-| Mode | Status |
-|---|---|
-| `off` | RAG gate inactive. No action required. |
-| `on_demand` | RAG gate inactive now. May revisit later if context grows. |
-| `from_start` | **RAG gate ACTIVE.** Step 14 of the session start order is a mandatory blocking checkpoint. Do not skip it. The activation decision is made at step 14 (after intake), not here. |
-
-Gate status this session: __ (active / inactive)
+<!-- IF:rag.mode=off -->
+RAG is disabled. No action required.
+<!-- END IF -->
+<!-- IF:rag.mode=on_demand -->
+RAG mode: `on_demand` — gate inactive now. May revisit later if context size justifies it.
+<!-- END IF -->
+<!-- IF:rag.mode=from_start -->
+RAG mode: `from_start` — **gate ACTIVE.** The RAG activation step is a mandatory blocking checkpoint in the session start order. Do not skip it. The activation decision is made after intake, not here.
+<!-- END IF -->
 
 ---
 

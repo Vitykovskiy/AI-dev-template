@@ -29,9 +29,14 @@ At the start of every new session, the agent must do the following in order:
 10. Run environment check for repository and GitHub access.
 11. Check current GitHub issues.
 12. Check the GitHub Project board.
-13. Perform business task intake. If `execution_mode` is `staged`, pause after intake and confirm with the user before continuing to step 14.
-14. RAG activation checkpoint: if `rag.mode` is `from_start`, explicitly raise and resolve the RAG question before continuing. This step is mandatory and blocks progression to step 15. Record the outcome in `docs/08-vector-db.md`.
-15. Only then continue with work.
+13. Perform business task intake.
+<!-- IF:workflow.execution_mode=staged -->
+14. Pause after intake and confirm with the user before continuing.
+<!-- END IF -->
+<!-- IF:rag.mode=from_start -->
+14. RAG activation checkpoint: explicitly raise and resolve the RAG activation question before continuing. Cover: whether RAG is justified for this workflow, whether vector DB should be activated now or deferred, which embedding provider or model would be used, and which `.env` values are required. Record the outcome in `docs/08-vector-db.md`. This step blocks progression to the next step.
+<!-- END IF -->
+14. Only then continue with work.
 
 The agent must not skip this order unless the repository is materially broken and cannot be read.
 
@@ -262,82 +267,144 @@ If `docs/05-architecture.md` does not contain enough structure information to lo
 
 ## 12. Vector DB Rules
 
-Vector DB is optional.
+<!-- IF:rag.mode=off -->
+Vector DB is disabled (`rag.mode = off`). Do not propose or enable vector database infrastructure.
+<!-- END IF -->
+
+<!-- IF:rag.mode=on_demand -->
+Vector DB is optional and off by default.
 
 The agent must:
 
-1. avoid bringing up vector DB during initial business intake unless strictly necessary;
-2. consider vector DB only after intake and environment alignment are complete;
-3. propose vector DB only if the documented use case justifies it;
-4. never enable it without user approval;
-5. if approved, ask which embedding provider or model to use;
-6. record the decision in `docs/08-vector-db.md`;
-7. tell the user which `.env` variables must be filled;
-8. only then start `docker-compose.vector-db.yml`.
+1. Never bring up vector DB during initial intake.
+2. Consider proposing it only after intake and environment alignment are complete, if context size, token cost, or repository scale justifies retrieval.
+3. Never enable it without user approval.
+4. If approved: ask which embedding provider or model to use, record the decision in `docs/08-vector-db.md`, tell the user which `.env` variables to fill, then start `docker-compose.vector-db.yml`.
 
 The compose file must be reused as provided by the template, not regenerated ad hoc.
+<!-- END IF -->
 
-RAG policy in `.ai-dev-template.config.json` defines whether the development workflow runs without RAG, may enable it later, or should prepare to use it from the start. User approval is still required before enabling vector DB infrastructure.
+<!-- IF:rag.mode=from_start -->
+RAG is a first-class part of this workflow (`rag.mode = from_start`).
 
-If `rag.mode` is `from_start`, the agent must not silently defer the RAG decision.
+The agent must:
 
-After intake and environment alignment are complete, but before active implementation starts, the agent must explicitly raise the RAG activation question and cover:
+1. Not raise vector DB during initial business intake unless strictly necessary.
+2. After intake and environment alignment are complete, explicitly raise the RAG activation question before active implementation starts.
+3. Cover: whether RAG is justified for this workflow, whether vector DB should be activated now or deferred, which embedding provider or model would be used, and which `.env` values are required.
+4. Never enable vector DB without user approval.
+5. If approved: record the decision in `docs/08-vector-db.md`, tell the user which `.env` values to fill, then start `docker-compose.vector-db.yml`.
+6. Record the outcome in `docs/08-vector-db.md` even if activation is deferred.
 
-1. whether RAG is justified for the repository workflow;
-2. whether vector DB should be activated now or deferred;
-3. which embedding provider or model would be used if activated;
-4. which `.env` values would be required.
-
-The agent must then record the outcome in `docs/08-vector-db.md`, even when the decision is to defer activation.
+The compose file must be reused as provided by the template, not regenerated ad hoc.
+<!-- END IF -->
 
 ## 12A. Workflow Configuration Rules
 
 The agent must follow `.ai-dev-template.config.json`.
 
-The agent must:
+**Execution mode: `{{workflow.execution_mode}}`**
 
-1. treat execution mode as binding workflow policy;
-2. stop for explicit approval at configured human checkpoints;
-3. treat PR flow as task-scoped when pull requests are enabled;
-4. classify each task as PR-required or not before implementation starts;
-5. state the delivery mode for the task before the first implementation commit;
-6. follow PR, review, and merge policy for each task that requires a PR;
-7. skip PR-specific steps when pull requests are disabled;
-8. keep canonical docs and `AGENTS.md` in the repository as mandatory sources of truth;
-9. avoid committing temporary work artifacts when `persist_temporary_workfiles_to_repo` is `false`.
+<!-- IF:workflow.execution_mode=autonomous -->
+Continue through the lifecycle without pausing between stages.
+<!-- END IF -->
+<!-- IF:workflow.execution_mode=staged -->
+Stop between every work stage and wait for explicit human confirmation before continuing.
+<!-- END IF -->
 
-Human checkpoints are categories of high-risk changes that require human approval even when the repository runs in `autonomous` or `hybrid` mode.
+Avoid committing temporary work artifacts when `persist_temporary_workfiles_to_repo` is `false`.
 
-If `pull_requests.enabled` is `true` and the task is significant under repository policy, the agent must not commit or push implementation work directly to `main`.
+Keep canonical docs and `AGENTS.md` in the repository as mandatory sources of truth.
 
-For such tasks, the required path is:
+<!-- IF:pull_requests.enabled=false -->
+**Pull requests are disabled.** Deliver tasks through direct commits. Track task completion through repository state, docs, issues, and commits.
+<!-- END IF -->
 
-1. classify the task as PR-required;
-2. create or switch to a task branch;
-3. make the branch ready for PR creation;
-4. open a draft PR if policy requires it before the broader review and merge cycle;
-5. continue implementation within that task branch and PR scope.
+<!-- IF:pull_requests.enabled=true -->
+**Pull requests are enabled.** PR flow is task-scoped.
 
-If the agent determines that a task does not require a PR, it must say so explicitly before the first implementation commit and justify that decision against repository policy.
+Before the first implementation commit for each task:
 
-If a task uses PR flow, the agent must apply the configured review and merge policy as follows:
+1. Classify the task as PR-required or not under repository policy.
+2. State the delivery mode explicitly before the first implementation commit.
+3. If PR-required: create or switch to a task branch. Do not push implementation commits directly to `main`.
+4. If not PR-required: state that explicitly and justify against repository policy.
 
-- if `pull_requests.review.required` is `true`, do not treat the task as merge-ready before review requirements are satisfied;
-- if `pull_requests.review.reviewers` is `human`, require human review and do not treat agent self-review as sufficient;
-- if `pull_requests.review.reviewers` is `ai`, perform agent review as the required review path and record the result in the PR as a review summary or review comment;
-- if `pull_requests.review.reviewers` is `both`, require both the agent review step and human review, and record the agent review result in the PR as a review summary or review comment;
-- if `pull_requests.review.agent_must_read_comments` is `true`, read PR comments and review summaries before concluding review handling;
-- if `pull_requests.review.agent_must_reply_to_comments` is `true`, reply where repository workflow expects a direct answer;
-- if `pull_requests.review.agent_must_apply_accepted_feedback` is `true`, apply accepted review feedback before considering the PR ready;
-- if `pull_requests.merge.squash_commits` is `true`, treat task commits as intended to be squashed before merge;
-- if `pull_requests.merge.integration_method` is `merge`, preserve branch integration through a merge commit;
-- if `pull_requests.merge.integration_method` is `rebase`, preserve branch integration through rebase;
-- if `pull_requests.merge.require_green_checks` is `true`, do not treat the PR as merge-ready while required checks are failing or missing;
-- if `pull_requests.merge.min_approvals` is greater than zero, do not treat the PR as merge-ready before that approval threshold is met;
-- if `pull_requests.merge.allow_agent_self_merge` is `false`, the agent must not merge the PR itself;
-- if `pull_requests.merge.agent_configure_branch_protection` is `true`, the agent must configure branch protection on the main branch via the GitHub API before starting any implementation work. The required rules are: require pull requests before merging, set minimum approvals to match `pull_requests.merge.min_approvals`, and disable bypassing protection. This requires the token user to have admin access to the repository.
+**PR creation mode: `{{pull_requests.creation_mode}}`**
 
-If `pull_requests.creation_mode` is `manual_per_task`, the agent must not decide silently. It must ask for or reference an explicit human decision before treating the task as PR-free.
+<!-- IF:pull_requests.creation_mode=for_every_task -->
+Every task uses its own branch and PR.
+<!-- END IF -->
+<!-- IF:pull_requests.creation_mode=for_significant_tasks -->
+Only significant tasks require a PR. Significant tasks are those that change application or infrastructure code, change system behavior, or affect architecture, API, security, migrations, or external integrations. Documentation-only tasks and small housekeeping changes are not significant unless the repository defines otherwise.
+<!-- END IF -->
+<!-- IF:pull_requests.creation_mode=manual_per_task -->
+Whether a task requires a PR is decided explicitly by a human for each task. Do not decide silently — ask for or reference an explicit human decision before treating any task as PR-free.
+<!-- END IF -->
+
+<!-- IF:pull_requests.draft_first=true -->
+Open a draft PR first before the broader review and merge cycle.
+<!-- END IF -->
+
+**Review policy:**
+
+<!-- IF:pull_requests.review.required=false -->
+Review is not required. The PR may be merged when all other merge conditions are satisfied.
+<!-- END IF -->
+<!-- IF:pull_requests.review.required=true -->
+Review is required. Do not treat the task as merge-ready before review requirements are satisfied.
+<!-- END IF -->
+
+<!-- IF:pull_requests.review.reviewers=human -->
+Human review is required. Agent self-review is not sufficient.
+<!-- END IF -->
+<!-- IF:pull_requests.review.reviewers=ai -->
+Agent review is the required review path. Record the review result in the PR as a review summary or comment before merge.
+<!-- END IF -->
+<!-- IF:pull_requests.review.reviewers=both -->
+Both agent review and human review are required. Record the agent review result in the PR before human review begins.
+<!-- END IF -->
+
+<!-- IF:pull_requests.review.agent_must_read_comments=true -->
+Read all PR comments and review summaries before concluding review handling.
+<!-- END IF -->
+<!-- IF:pull_requests.review.agent_must_reply_to_comments=true -->
+Reply to PR comments where the workflow expects a direct answer.
+<!-- END IF -->
+<!-- IF:pull_requests.review.agent_must_apply_accepted_feedback=true -->
+Apply accepted review feedback before considering the PR ready for merge.
+<!-- END IF -->
+
+**Merge policy:**
+
+<!-- IF:pull_requests.merge.squash_commits=true -->
+Task commits are squashed before merge.
+<!-- END IF -->
+<!-- IF:pull_requests.merge.squash_commits=false -->
+Task commits are preserved individually on merge.
+<!-- END IF -->
+<!-- IF:pull_requests.merge.integration_method=merge -->
+Branch integration uses a merge commit.
+<!-- END IF -->
+<!-- IF:pull_requests.merge.integration_method=rebase -->
+Branch integration uses rebase.
+<!-- END IF -->
+<!-- IF:pull_requests.merge.require_green_checks=true -->
+Do not treat the PR as merge-ready while required checks are failing or missing.
+<!-- END IF -->
+<!-- IF:pull_requests.merge.min_approvals!=0 -->
+At least `{{pull_requests.merge.min_approvals}}` approval(s) required before merge.
+<!-- END IF -->
+<!-- IF:pull_requests.merge.allow_agent_self_merge=false -->
+The agent must not merge the PR. Stop before merge and wait for an authorized actor.
+<!-- END IF -->
+<!-- IF:pull_requests.merge.allow_agent_self_merge=true -->
+The agent may merge the PR when all configured conditions are satisfied.
+<!-- END IF -->
+<!-- IF:pull_requests.merge.agent_configure_branch_protection=true -->
+Before starting any implementation work, configure branch protection on the main branch via the GitHub API. Required rules: require pull requests before merging, set minimum approvals to match `pull_requests.merge.min_approvals`, disable bypassing protection. This requires admin access on the repository.
+<!-- END IF -->
+<!-- END IF -->
 
 ## 13. Documentation Rules
 
@@ -378,7 +445,9 @@ A task is done only when:
 - new risks or limitations are recorded;
 - a dedicated git commit is created for that task.
 
-If pull requests are enabled in `.ai-dev-template.config.json`, task completion also requires compliance with the configured PR, review, and merge policy.
+<!-- IF:pull_requests.enabled=true -->
+Task completion also requires compliance with the configured PR, review, and merge policy.
+<!-- END IF -->
 
 If no project-specific commit standard exists, use Conventional Commits and include the issue reference in the header or body. The commit message language must still follow `.ai-dev-template.config.json`.
 
@@ -401,7 +470,6 @@ The agent must not:
 
 - implement before business task intake is complete;
 - enable vector DB without user consent;
-- ignore configured human checkpoints;
 - apply a PR or merge workflow that conflicts with `.ai-dev-template.config.json`;
 - create a second source of truth for tasks;
 - treat session memory as persistent storage;
