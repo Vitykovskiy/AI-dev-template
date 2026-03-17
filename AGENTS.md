@@ -177,6 +177,22 @@ The agent must not rely on undocumented "common practice" as the only justificat
 
 Language for docs, issues, PR text, agent comments, and commit messages must follow `.ai-dev-template.config.json`.
 
+If repository language is Russian, the agent must write repository artifacts in clear Russian.
+
+English terms are allowed only when at least one of the following is true:
+
+- there is no accurate and commonly used Russian equivalent;
+- the English term is more precise than the Russian translation;
+- the English term is the established team or ecosystem term and is clearer in context.
+
+The agent must not mix Russian text with avoidable English fragments.
+
+The agent must prefer plain, reviewable wording over jargon.
+
+Task descriptions, completion criteria, issue text, PR text, and commit messages must be understandable without translating mixed-language phrasing.
+
+When an English technical term is used in Russian text, it must be intentional and necessary, not a placeholder for vague wording.
+
 ## 10A. External And Shared Library Rules
 
 When working with an external library, framework, SDK, or internal shared library, the agent must not rely on memory, guesses, or "typical API" assumptions.
@@ -267,12 +283,25 @@ The agent must:
 1. treat execution mode as binding workflow policy;
 2. stop for explicit approval at configured human checkpoints;
 3. treat PR flow as task-scoped when pull requests are enabled;
-4. follow PR, review, and merge policy for each task that requires a PR;
-5. skip PR-specific steps when pull requests are disabled;
-6. keep canonical docs in the repository when `persist_docs_to_repo` is `true`;
-7. avoid committing temporary work artifacts when `persist_temporary_workfiles_to_repo` is `false`.
+4. classify each task as PR-required or not before implementation starts;
+5. state the delivery mode for the task before the first implementation commit;
+6. follow PR, review, and merge policy for each task that requires a PR;
+7. skip PR-specific steps when pull requests are disabled;
+8. keep canonical docs in the repository when `persist_docs_to_repo` is `true`;
+9. avoid committing temporary work artifacts when `persist_temporary_workfiles_to_repo` is `false`.
 
 Human checkpoints are categories of high-risk changes that require human approval even when the repository runs in `autonomous` or `hybrid` mode.
+
+If `pull_requests.enabled` is `true` and the task is significant under repository policy, the agent must not commit or push implementation work directly to `main`.
+
+For such tasks, the required path is:
+
+1. classify the task as PR-required;
+2. create or switch to a task branch;
+3. open a draft PR if policy requires it;
+4. only then make implementation commits.
+
+If the agent determines that a task does not require a PR, it must say so explicitly before the first implementation commit and justify that decision against repository policy.
 
 ## 13. Documentation Rules
 

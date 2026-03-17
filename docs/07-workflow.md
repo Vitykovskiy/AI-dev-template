@@ -26,6 +26,8 @@ Minimum policy areas:
 - artifact persistence policy
 - RAG policy
 
+If repository language is Russian, repository artifacts should be written in clear Russian and should not contain avoidable mixed-language wording.
+
 ## Task Intake Phase
 
 Mandatory intake sequence:
@@ -83,6 +85,13 @@ Apply this section only when pull requests are enabled in `.ai-dev-template.conf
 
 PR flow is task-scoped.
 
+Before the first implementation commit for a task, the agent must:
+
+1. classify the task as PR-required or not;
+2. choose the delivery mode for that task;
+3. verify that the current branch matches repository policy;
+4. only then continue with implementation commits.
+
 That means:
 
 1. the agent picks a task;
@@ -92,13 +101,14 @@ That means:
 
 Recommended lifecycle:
 
-1. create or update the task branch;
-2. open a draft PR first if configured;
-3. run required checks and update docs;
-4. request review according to policy;
-5. read PR comments and review summaries;
-6. apply accepted feedback;
-7. merge only when the configured approvals and checks are satisfied.
+1. classify the task and confirm whether PR flow is required;
+2. create or update the task branch;
+3. open a draft PR first if configured;
+4. run required checks and update docs;
+5. request review according to policy;
+6. read PR comments and review summaries;
+7. apply accepted feedback;
+8. merge only when the configured approvals and checks are satisfied.
 
 `pull_requests.creation_mode` meanings:
 
@@ -114,6 +124,10 @@ Significant tasks are tasks that:
 - require review under repository policy
 
 Documentation-only tasks, text fixes, and small low-risk housekeeping changes are usually not significant unless the repository defines otherwise.
+
+If `pull_requests.enabled` is `true` and the task is significant, implementation commits must not go directly to `main`.
+
+If the agent chooses to work without a PR for a task, it must state that decision explicitly before the first implementation commit and justify it against repository policy.
 
 If pull requests are disabled, completion is tracked through repository state, docs, issues, and commits instead.
 

@@ -16,6 +16,8 @@ Use it to decide how the agent should operate before project execution starts.
 - How RAG is used in the development workflow
 - Required and recommended GitHub token scopes
 
+If repository language is Russian, repository artifacts should be written in clear Russian and should not contain avoidable mixed-language wording.
+
 ## Execution Modes
 
 - `autonomous`: the agent may continue through the normal lifecycle without pausing on every stage unless it reaches a configured human checkpoint.
@@ -54,6 +56,16 @@ If `pull_requests.enabled` is `true`, the repository should treat the following 
 - required approvals
 - required green checks
 - whether self-merge by the agent is allowed
+
+Before the first implementation commit for a task, the agent must:
+
+1. classify the task as PR-required or not;
+2. choose the delivery mode for that task;
+3. verify that the current branch matches repository policy.
+
+If `pull_requests.enabled` is `true` and the task is significant, implementation commits must not go directly to `main`.
+
+If the agent decides that a task does not require a PR, it must state that decision explicitly before the first implementation commit and justify it against repository policy.
 
 `pull_requests.creation_mode` meanings:
 
