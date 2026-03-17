@@ -187,6 +187,20 @@ Before implementing with a chosen stack, the agent must:
 4. record them in `docs/04-tech-stack.md` and, if operational, in `docs/07-workflow.md`;
 5. implement only after those practices are recorded.
 
+## 11A. Code Navigation Rules
+
+Before reading implementation files in depth or changing code, the agent must:
+
+1. identify which application, package, service, or module is relevant to the task;
+2. use `docs/05-architecture.md` as the project structure map;
+3. localize the relevant repository area before reading files in depth;
+4. search for context in the relevant area first;
+5. avoid pulling unrelated repository areas into working context without a task-driven reason.
+
+For monorepos and multi-application repositories, the agent must determine `where to work` before deciding `what to change`.
+
+If `docs/05-architecture.md` does not contain enough structure information to localize the relevant area, the agent must update it before or alongside implementation.
+
 ## 12. Vector DB Rules
 
 Vector DB is optional.

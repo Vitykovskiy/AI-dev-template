@@ -4,6 +4,26 @@
 
 Describe the system boundary, major actors, and key external systems.
 
+## Project Structure Map
+
+Use this file as the navigation map for the repository.
+
+Record the main applications, packages, services, and layers before implementation starts.
+
+This map should help a new session understand:
+
+- which parts of the repository exist;
+- what each part is responsible for;
+- where frontend, backend, shared, data, and infrastructure code live;
+- which entry points and boundaries matter;
+- which area should be inspected first for a given task.
+
+For monorepos, this section is mandatory.
+
+| Area | Path | Responsibility | Notes |
+| --- | --- | --- | --- |
+| `<app/package/service>` | `<path>` | `<responsibility>` | `<notes>` |
+
 ## Components
 
 | Component | Responsibility | Inputs | Outputs | Notes |
@@ -37,4 +57,6 @@ Describe the system boundary, major actors, and key external systems.
 
 ## Update Rule
 
-If implementation changes component responsibilities, data flow, or integration assumptions, update this file together with `docs/06-decision-log.md`.
+Before reading large parts of the repository or changing code, the agent should use this file to localize the relevant area first.
+
+If implementation changes project structure, component responsibilities, data flow, or integration assumptions, update this file together with `docs/06-decision-log.md`.

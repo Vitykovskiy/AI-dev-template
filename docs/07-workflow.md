@@ -9,8 +9,9 @@
 5. Persist intake results into docs.
 6. Create Epic and tasks in GitHub.
 7. Align stack and best practices.
-8. Execute tasks one by one.
-9. Finalize each task with persistence before context reset.
+8. Localize the relevant repository area using `docs/05-architecture.md`.
+9. Execute tasks one by one.
+10. Finalize each task with persistence before context reset.
 
 ## Workflow Policy Inputs
 
@@ -52,6 +53,17 @@ Interaction rules:
 - Tasks must include completion criteria.
 - Tasks must link dependencies when applicable.
 - Tasks must map cleanly to GitHub Issue state.
+
+## Code Navigation Before Changes
+
+Before reading implementation files in depth or changing code:
+
+1. determine which repository area the task belongs to;
+2. use `docs/05-architecture.md` as the structure map;
+3. search the relevant area first;
+4. avoid bringing unrelated areas into context unless they are required by the task.
+
+For monorepos, determine `where to work` before deciding `what to change`.
 
 ## Task Status Movement
 
