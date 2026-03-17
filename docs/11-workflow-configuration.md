@@ -114,6 +114,8 @@ This policy is about agent workflow, not product architecture.
 
 Even when RAG is allowed, vector DB remains optional infrastructure and still requires explicit user approval before activation.
 
+If `rag.mode` is `from_start`, the agent must explicitly raise the RAG activation decision after intake and environment alignment, but before active implementation starts. It must not silently defer that discussion.
+
 ## GitHub Token Requirements
 
 Minimum expected scopes:

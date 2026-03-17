@@ -274,6 +274,17 @@ The compose file must be reused as provided by the template, not regenerated ad 
 
 RAG policy in `.ai-dev-template.config.json` defines whether the development workflow runs without RAG, may enable it later, or should prepare to use it from the start. User approval is still required before enabling vector DB infrastructure.
 
+If `rag.mode` is `from_start`, the agent must not silently defer the RAG decision.
+
+After intake and environment alignment are complete, but before active implementation starts, the agent must explicitly raise the RAG activation question and cover:
+
+1. whether RAG is justified for the repository workflow;
+2. whether vector DB should be activated now or deferred;
+3. which embedding provider or model would be used if activated;
+4. which `.env` values would be required.
+
+The agent must then record the outcome in `docs/08-vector-db.md`, even when the decision is to defer activation.
+
 ## 12A. Workflow Configuration Rules
 
 The agent must follow `.ai-dev-template.config.json`.

@@ -48,6 +48,8 @@ Interaction rules:
 - No vector DB discussion during primary intake unless strictly needed
 - If execution mode is `staged`, pause after intake before moving into task creation
 
+If `rag.mode` is `from_start`, add a separate RAG activation checkpoint after intake and environment alignment, but before active implementation. At that checkpoint, the agent must explicitly raise whether RAG should be activated now or deferred and what provider, model, and `.env` values would be needed.
+
 ## Decomposition Rules
 
 - Tasks must be atomic.

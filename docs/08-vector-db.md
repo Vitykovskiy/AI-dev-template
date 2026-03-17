@@ -75,3 +75,14 @@ If `rag.mode` is `off`, the agent must not propose vector DB for normal reposito
 If `rag.mode` is `on_demand`, the agent may propose it later when context size, token cost, or repository scale justifies retrieval.
 
 If `rag.mode` is `from_start`, the repository should prepare RAG as part of the development workflow from the beginning, but user approval is still required before infrastructure is started.
+
+In `from_start` mode, the agent must explicitly raise the RAG activation decision after intake and environment alignment, but before active implementation starts. The agent must not silently skip this discussion.
+
+That discussion must cover:
+
+1. whether RAG is justified for the repository workflow;
+2. whether vector DB should be activated now or deferred;
+3. which embedding provider or model would be used if activated;
+4. which `.env` values would be required.
+
+The outcome must be documented here even if activation is deferred.
