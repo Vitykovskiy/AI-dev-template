@@ -20,15 +20,18 @@ At the start of every new session, the agent must do the following in order:
 1. Read `AGENTS.md`.
 2. Read `README.md`.
 3. Read `.ai-dev-template.config.json`.
-4. Read `docs/00-project-overview.md`.
-5. Read `docs/01-product-vision.md`.
-6. Read `docs/02-business-requirements.md`.
-7. Read `docs/04-tech-stack.md`.
-8. Read `docs/05-architecture.md`.
-9. Run environment check for repository and GitHub access.
-10. Check current GitHub issues.
-11. Check the GitHub Project board.
-12. Only then continue with work.
+4. Apply and acknowledge workflow policy: fill in and show `templates/session-start-checklist.md` to the user. Every field must contain an actual value from `.ai-dev-template.config.json`. Do not proceed until the checklist is complete and visible.
+5. Read `docs/00-project-overview.md`.
+6. Read `docs/01-product-vision.md`.
+7. Read `docs/02-business-requirements.md`.
+8. Read `docs/04-tech-stack.md`.
+9. Read `docs/05-architecture.md`.
+10. Run environment check for repository and GitHub access.
+11. Check current GitHub issues.
+12. Check the GitHub Project board.
+13. Perform business task intake. If `execution_mode` is `staged`, pause after intake and confirm with the user before continuing to step 14.
+14. RAG activation checkpoint: if `rag.mode` is `from_start`, explicitly raise and resolve the RAG question before continuing. This step is mandatory and blocks progression to step 15. Record the outcome in `docs/08-vector-db.md`.
+15. Only then continue with work.
 
 The agent must not skip this order unless the repository is materially broken and cannot be read.
 
@@ -107,6 +110,8 @@ The intake result must make the following explicit:
 Use `templates/business-task-intake.md` as the canonical intake structure.
 
 ## 6. Task Fixation Phase
+
+Before starting implementation on any task, the agent must fill in `templates/task-start-checklist.md`. This checklist gates the human checkpoint check, PR classification, branch creation, and delivery mode statement. No implementation commit is allowed before the checklist is complete.
 
 After intake is complete, the agent must:
 
@@ -329,7 +334,8 @@ If a task uses PR flow, the agent must apply the configured review and merge pol
 - if `pull_requests.merge.integration_method` is `rebase`, preserve branch integration through rebase;
 - if `pull_requests.merge.require_green_checks` is `true`, do not treat the PR as merge-ready while required checks are failing or missing;
 - if `pull_requests.merge.min_approvals` is greater than zero, do not treat the PR as merge-ready before that approval threshold is met;
-- if `pull_requests.merge.allow_agent_self_merge` is `false`, the agent must not merge the PR itself.
+- if `pull_requests.merge.allow_agent_self_merge` is `false`, the agent must not merge the PR itself;
+- if `pull_requests.merge.agent_configure_branch_protection` is `true`, the agent must configure branch protection on the main branch via the GitHub API before starting any implementation work. The required rules are: require pull requests before merging, set minimum approvals to match `pull_requests.merge.min_approvals`, and disable bypassing protection. This requires the token user to have admin access to the repository.
 
 If `pull_requests.creation_mode` is `manual_per_task`, the agent must not decide silently. It must ask for or reference an explicit human decision before treating the task as PR-free.
 

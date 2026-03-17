@@ -59,15 +59,7 @@ If `pull_requests.enabled` is `true`, the repository should treat the following 
 
 These are not descriptive preferences. They are expected workflow rules for the agent.
 
-Before the first implementation commit for a task, the agent must:
-
-1. classify the task as PR-required or not;
-2. choose the delivery mode for that task;
-3. verify that the current branch matches repository policy.
-
-If `pull_requests.enabled` is `true` and the task is significant, implementation commits must not go directly to `main`.
-
-If the agent decides that a task does not require a PR, it must state that decision explicitly before the first implementation commit and justify it against repository policy.
+See `AGENTS.md §12A` and `docs/07-workflow.md §Pull Request And Review Flow` for how the agent applies PR policy per task.
 
 `pull_requests.creation_mode` meanings:
 
@@ -116,7 +108,7 @@ This policy is about agent workflow, not product architecture.
 
 Even when RAG is allowed, vector DB remains optional infrastructure and still requires explicit user approval before activation.
 
-If `rag.mode` is `from_start`, the agent must explicitly raise the RAG activation decision after intake and environment alignment, but before active implementation starts. It must not silently defer that discussion.
+See `AGENTS.md §12` and `docs/07-workflow.md §Agent Working Cycle step 6` for how the agent handles the RAG activation gate.
 
 ## GitHub Token Requirements
 

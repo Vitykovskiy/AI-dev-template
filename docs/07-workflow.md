@@ -4,14 +4,16 @@
 
 1. Read mandatory context in the order defined by `AGENTS.md`.
 2. Load workflow policy from `.ai-dev-template.config.json`.
-3. Run environment check.
-4. Perform business task intake.
-5. Persist intake results into docs.
-6. Create Epic and tasks in GitHub.
-7. Align stack and best practices.
-8. Localize the relevant repository area using `docs/05-architecture.md`.
-9. Execute tasks one by one.
-10. Finalize each task with persistence before context reset.
+3. Apply and acknowledge policy: fill in and show `templates/session-start-checklist.md` to the user. Every field must contain an actual value from `.ai-dev-template.config.json`. Do not proceed until the checklist is complete and visible.
+4. Run environment check.
+5. Perform business task intake. If `execution_mode` is `staged`, pause after intake and confirm with the user before continuing to step 6.
+6. RAG activation checkpoint: if `rag.mode` is `from_start`, explicitly raise and resolve the RAG question before continuing. Cover whether RAG is justified now or should be deferred, which embedding provider or model would be used, and which `.env` values are required. Record the outcome in `docs/08-vector-db.md`. This step is mandatory and blocks progression to step 7.
+7. Persist intake results into docs.
+8. Create Epic and tasks in GitHub. If `execution_mode` is `staged`, pause after task creation and confirm with the user before continuing to step 9.
+9. Align stack and best practices.
+10. Localize the relevant repository area using `docs/05-architecture.md`.
+11. Execute tasks one by one. Before any implementation commit for each task: fill in `templates/task-start-checklist.md`. This checklist gates the human checkpoint check, PR classification, branch creation, and delivery mode statement. No implementation commit is allowed before the checklist is complete.
+12. Finalize each task with persistence before context reset.
 
 ## Workflow Policy Inputs
 
@@ -46,9 +48,6 @@ Interaction rules:
 - Short summary after each block
 - No decomposition before intake is coherent
 - No vector DB discussion during primary intake unless strictly needed
-- If execution mode is `staged`, pause after intake before moving into task creation
-
-If `rag.mode` is `from_start`, add a separate RAG activation checkpoint after intake and environment alignment, but before active implementation. At that checkpoint, the agent must explicitly raise whether RAG should be activated now or deferred and what provider, model, and `.env` values would be needed.
 
 ## Decomposition Rules
 
