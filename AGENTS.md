@@ -177,6 +177,44 @@ The agent must not rely on undocumented "common practice" as the only justificat
 
 Language for docs, issues, PR text, agent comments, and commit messages must follow `.ai-dev-template.config.json`.
 
+## 10A. External And Shared Library Rules
+
+When working with an external library, framework, SDK, or internal shared library, the agent must not rely on memory, guesses, or "typical API" assumptions.
+
+Required validation order:
+
+1. check local documentation in the repository;
+2. check existing usage examples in the codebase;
+3. check the connected official documentation source;
+4. if confirmation is still missing, mark the uncertainty explicitly and do not invent a solution.
+
+Before changing code that depends on an external or shared library, the agent must verify:
+
+- real signatures;
+- types;
+- method and option names;
+- supported options;
+- lifecycle rules and required patterns;
+- version-specific limitations.
+
+For each critical external dependency, the source of truth must be one of:
+
+- a local docs file in the repository;
+- an official documentation source available in the agent environment;
+- an existing working example in the codebase.
+
+The agent must not:
+
+- invent API;
+- use unconfirmed methods or parameters;
+- rely on outdated patterns without checking the current library version.
+
+If confirmed documentation is missing, the agent must:
+
+- not make risky blind changes;
+- leave a note about the missing source of truth;
+- prefer the safest minimal change if one exists.
+
 ## 11. Best Practices Capture Rules
 
 Before implementing with a chosen stack, the agent must:
