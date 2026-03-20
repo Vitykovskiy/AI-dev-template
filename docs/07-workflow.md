@@ -10,9 +10,6 @@
 <!-- IF:workflow.execution_mode=staged -->
 6. Pause after intake and confirm with the user before continuing.
 <!-- END IF -->
-<!-- IF:rag.mode=from_start -->
-6. RAG activation checkpoint: explicitly raise and resolve the RAG activation question before continuing. Cover: whether RAG is justified for this workflow, whether vector DB should be activated now or deferred, which embedding provider or model would be used, and which `.env` values are required. Record the outcome in `docs/08-vector-db.md`. This step blocks progression to the next step.
-<!-- END IF -->
 6. Persist intake results into docs.
 7. Create Epic and tasks in GitHub.
 <!-- IF:workflow.execution_mode=staged -->
@@ -33,7 +30,6 @@ Minimum policy areas:
 - execution mode
 - PR / review / merge policy
 - artifact persistence policy
-- RAG policy
 
 If repository language is Russian, repository artifacts should be written in clear Russian and should not contain avoidable mixed-language wording.
 
@@ -54,7 +50,6 @@ Interaction rules:
 - One semantic block at a time
 - Short summary after each block
 - No decomposition before intake is coherent
-- No vector DB discussion during primary intake unless strictly needed
 
 ## Decomposition Rules
 
@@ -193,7 +188,4 @@ The agent must also ensure that PR review comments were processed according to p
 - The template assumes the team uses GitHub Issues and GitHub Project rather than a separate backlog tool.
 - Project board field names can vary by GitHub plan; the required logical fields remain `Status`, `Priority`, and `Area`.
 - Shell automation assumes `bash` is available. On Windows, Git Bash or WSL is typically required.
-<!-- IF:rag.mode!=off -->
-- Vector DB guidance is generic by design and requires project-specific embedding decisions before activation.
-<!-- END IF -->
 - Some GitHub Project automations may still require repository-specific permissions that the agent cannot infer until environment check.

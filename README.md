@@ -6,8 +6,8 @@ Template repository for projects where an AI agent runs a consistent discovery, 
 
 This template gives every new project the same operating model:
 
-- the repository is the source of truth for goals, requirements, architecture, decisions, workflow, integrations, and vector DB configuration;
-- `.ai-dev-template.config.json` is the source of truth for workflow language, execution mode, PR policy, artifact persistence, and RAG policy;
+- the repository is the source of truth for goals, requirements, architecture, decisions, workflow, and integrations;
+- `.ai-dev-template.config.json` is the source of truth for workflow language, execution mode, PR policy, and artifact persistence;
 - GitHub Issues and GitHub Project are the source of truth for backlog, task status, and current execution;
 - the agent must complete business task intake before planning implementation;
 - important state must be persisted to repository artifacts and GitHub, not left in transient session context.
@@ -22,8 +22,6 @@ This template gives every new project the same operating model:
 - Creates and maintains labels, Epic issues, task issues, and the GitHub Project board.
 - Keeps documentation and delivery state synchronized.
 - Adapts its workflow according to `.ai-dev-template.config.json`.
-- Offers vector DB only after task intake and environment alignment are complete.
-- Starts the optional vector DB stack after explicit user approval and `.env` setup.
 
 ## What The Human Does Manually
 
@@ -35,7 +33,6 @@ Required manual steps:
 4. Create a GitHub Project manually.
 5. Share the GitHub Project URL with the agent.
 6. Share the business task in natural language.
-7. If the agent later proposes vector DB and you agree, fill secrets into `.env` based on agent instructions.
 
 The human does not need to create issues, labels, or move project cards manually.
 
@@ -62,7 +59,7 @@ After filling in `.ai-dev-template.config.json`, run the init script to strip al
 python scripts/init.py
 ```
 
-The script processes `AGENTS.md`, `docs/07-workflow.md`, `docs/08-vector-db.md`, and the session start checklist. It also removes files that are unused under the chosen configuration. Run it once, then commit the result.
+The script processes `AGENTS.md`, `docs/07-workflow.md`, and the session start checklist. It also removes files that are unused under the chosen configuration. Run it once, then commit the result.
 
 Then provide the agent with:
 
@@ -76,7 +73,7 @@ If you want a faster setup flow, use the configurator:
 
 - [AI Dev Template Configurator](https://vitykovskiy.github.io/AI-dev-template-configurator/)
 
-The configurator helps you choose workflow language for docs, issues, PRs, comments, and commits, plus execution mode, PR policy, artifact persistence, and RAG mode, then generates a ready `.ai-dev-template.config.json` for the repository root.
+The configurator helps you choose workflow language for docs, issues, PRs, comments, and commits, plus execution mode, PR policy, and artifact persistence, then generates a ready `.ai-dev-template.config.json` for the repository root.
 
 ## GitHub Project
 
@@ -119,40 +116,14 @@ The configuration controls:
 - execution mode: `autonomous`, `hybrid`, `staged`;
 - human approval checkpoints;
 - task-scoped PR, review, and merge policy;
-- whether temporary AI work artifacts stay local or are persisted;
-- how RAG is used in the development workflow.
+- whether temporary AI work artifacts stay local or are persisted.
 
 See `docs/11-workflow-configuration.md` for the detailed meaning of each section.
-
-## Optional Vector DB
-
-Vector DB is optional infrastructure, not a default part of project setup.
-
-The agent may propose it only after:
-
-1. business task intake is finished;
-2. environment readiness is checked;
-3. the use case justifies semantic retrieval or indexing.
-
-If you agree:
-
-1. the agent asks which embedding provider or model to use;
-2. the decision is recorded in `docs/08-vector-db.md`;
-3. you create `.env` from `.env.example` and fill it;
-4. the agent starts `docker-compose.vector-db.yml`.
-
-The template supports multiple embedding strategies:
-
-- OpenAI;
-- another hosted embedding provider;
-- a local embedding model;
-- no vector DB at all.
 
 ## Limitations And Assumptions
 
 - This template assumes GitHub Issues, GitHub Project, and `gh` CLI are the delivery backbone.
 - The template does not support GitHub Copilot instructions and intentionally excludes `.github/copilot-instructions.md`.
-- Vector DB compose is provided up front, but it must not be enabled without explicit user agreement.
 - `tasks/` may hold temporary local notes, but final state must be reflected in docs and GitHub.
 - Labels remain canonically English in the default template configuration.
 - Shell scripts are written for `bash`; `.gitattributes` pins LF for shell-sensitive files to prevent cross-platform EOL breakage.

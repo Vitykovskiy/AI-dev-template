@@ -12,7 +12,6 @@ Use it to decide how the agent should operate before project execution starts.
 - Execution mode: `autonomous` or `staged`
 - PR, review, and merge policy
 - Whether temporary AI work artifacts stay local or are persisted
-- How RAG is used in the development workflow
 - Required and recommended GitHub token scopes
 
 If repository language is Russian, repository artifacts should be written in clear Russian and should not contain avoidable mixed-language wording.
@@ -45,7 +44,7 @@ If `pull_requests.enabled` is `true`, the repository should treat the following 
 
 These are not descriptive preferences. They are expected workflow rules for the agent.
 
-See `AGENTS.md §12A` and `docs/07-workflow.md §Pull Request And Review Flow` for how the agent applies PR policy per task.
+See `AGENTS.md` and `docs/07-workflow.md` for how the agent applies PR policy per task.
 
 `pull_requests.creation_mode` meanings:
 
@@ -81,20 +80,6 @@ Configurable local-only policy applies only to temporary work artifacts such as:
 - experimental or intermediate generation files
 
 If `persist_temporary_workfiles_to_repo` is `false`, these temporary artifacts should remain local and follow the default local-only paths listed in `.gitignore`.
-
-## RAG / Vector DB Policy
-
-Use `rag.mode` to define how RAG participates in the repository development workflow:
-
-- `off`: do not use RAG in this repository
-- `on_demand`: work without RAG by default, but allow enabling it later if direct context becomes insufficient
-- `from_start`: prepare the development workflow to use RAG from the start
-
-This policy is about agent workflow, not product architecture.
-
-Even when RAG is allowed, vector DB remains optional infrastructure and still requires explicit user approval before activation.
-
-See `AGENTS.md §12` and `docs/07-workflow.md §Agent Working Cycle step 6` for how the agent handles the RAG activation gate.
 
 ## GitHub Token Requirements
 

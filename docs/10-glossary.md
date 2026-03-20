@@ -11,8 +11,6 @@
 - Canonical source of truth: the authoritative location where project state must be persisted.
 - Environment check: validation of local tooling, repository wiring, GitHub access, and baseline readiness.
 - Guardrail: a configured category of change that still requires explicit human approval in otherwise autonomous workflows.
-- Vector DB: database optimized for similarity search over embeddings.
-- Embedding provider: model runtime or service that converts content into vector representations.
 
 ## Working Definitions
 

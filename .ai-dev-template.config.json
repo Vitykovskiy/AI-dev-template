@@ -16,7 +16,6 @@
   "pull_requests": {
     "enabled": true,
     "creation_mode": "for_significant_tasks",
-    "draft_first": false,
     "review": {
       "required": true,
       "reviewers": "human",
@@ -31,17 +30,6 @@
       "require_green_checks": true,
       "allow_agent_self_merge": false
     }
-  },
-  "artifacts": {
-    "persist_temporary_workfiles_to_repo": false,
-    "local_artifact_paths": [
-      ".agent-work/",
-      ".ai-local/",
-      "tasks/*.local.*"
-    ]
-  },
-  "rag": {
-    "mode": "on_demand"
   },
   "github": {
     "required_token_scopes": [
