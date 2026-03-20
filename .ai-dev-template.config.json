@@ -31,6 +31,9 @@
       "allow_agent_self_merge": false
     }
   },
+  "project_map": {
+    "enabled": true
+  },
   "github": {
     "required_token_scopes": [
       "repo",
