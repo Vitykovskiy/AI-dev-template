@@ -2,10 +2,32 @@
 
 ## Project Dependencies
 
-<!-- Fill this section during tech stack definition and update when dependencies change.
-     For each key dependency record: version, initialization pattern, usage conventions, known limitations. -->
+<!-- Fill this section during Phase 2 tech stack definition and update when dependencies change.
+     For each library record:
+     - Official best practices URL
+     - Key rules most commonly violated (based on known best practices for this library)
+     - Size and decomposition limits where applicable
+     - Project conventions that differ from library defaults
+-->
 
 _Not yet filled. Complete during Phase 2 tech stack definition._
+
+<!--
+Example entry:
+
+## Vue 3
+Official best practices: https://vuejs.org/guide/best-practices/performance.html
+- Use Composition API, not Options API
+- Max component size: 300 lines — extract logic to composables, split UI to child components
+- One component = one responsibility
+- No direct API calls from components — use composables for data fetching
+
+## Pinia
+Official best practices: https://pinia.vuejs.org/cookbook/
+- Split stores by domain, not one global store
+- Business logic in actions, not in components or templates
+- Do not mutate state outside of actions
+-->
 
 ---
 

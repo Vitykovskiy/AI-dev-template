@@ -39,6 +39,14 @@ Update documentation:
 - `docs/02-business-requirements.md`
 - `docs/03-scope-and-boundaries.md`
 
+After finalizing the tech stack in `docs/04-tech-stack.md`, fill `docs/external-libraries.md` for every selected library and framework. For each dependency record:
+- the official best practices URL
+- the key rules most commonly violated in projects using this library (based on known best practices)
+- size and decomposition limits where applicable (e.g. max component lines, max function length)
+- project conventions that differ from the library defaults
+
+This step is mandatory. The agent knows the best practices for the selected stack — record them explicitly so they are enforced in every session, not recalled from memory.
+
 Update `README.md`: briefly describe what the project is, who it is for, and what is included in the first version. The README must reflect the agreed understanding of the task, not template placeholders.
 
 Create an Epic in GitHub Issues. Decompose into atomic tasks, create Issues, populate the task queue in GitHub Project.
