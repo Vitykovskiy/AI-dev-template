@@ -36,6 +36,6 @@ If `project_map.enabled = false` — skip this step.
 
 Delete this file: `instructions/phase-1-setup.md`
 
-Commit the changes (adapted `phase-3-delivery.md`, deleted `phase-1-setup.md`, and `docs/project-map.md` if created) directly to `main` following the commit rules from the project config. Phase 1 is repository initialization — it always goes to `main` regardless of the configured PR policy.
+Commit and push the changes (adapted `phase-3-delivery.md`, deleted `phase-1-setup.md`, and `docs/project-map.md` if created) directly to `main` following the commit rules from the project config. Phase 1 is repository initialization — it always commits and pushes directly to `main` regardless of the configured PR policy. This must happen before phase 3 configures branch protection, which would block direct pushes to `main`.
 
 Tell the user that setup is complete and requirements gathering will begin in the next session.

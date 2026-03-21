@@ -47,6 +47,6 @@ Create an Epic in GitHub Issues. Decompose into atomic tasks, create Issues, pop
 
 Delete this file: `instructions/phase-2-intake.md`
 
-Commit the changes (updated documentation, deleted `phase-2-intake.md`) directly to `main` following the commit rules from the project config. Phase 2 is repository initialization — it always goes to `main` regardless of the configured PR policy.
+Commit and push the changes (updated documentation, deleted `phase-2-intake.md`) directly to `main` following the commit rules from the project config. Phase 2 is repository initialization — it always commits and pushes directly to `main` regardless of the configured PR policy. This must happen before phase 3 configures branch protection, which would block direct pushes to `main`.
 
 Tell the user that requirements are recorded and development will begin in the next session.
