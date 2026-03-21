@@ -10,7 +10,7 @@ This checklist is an observable action - show it to the user at the start of eve
 | Setting | Value from config | Consequence |
 |---|---|---|
 | Documentation language | __ | All docs, issues, PR text, commits must use this language |
-| Execution mode | __ | autonomous = no stage gates / staged = stop between every stage and wait for confirmation |
+| Execution mode | __ | autonomous = continuous delivery loop: close task → immediately pick next, stop only on blocker or empty backlog / staged = stop between every stage and wait for confirmation |
 | Artifact persistence | __ | local-only = do not commit `.agent-work/`, `.ai-local/`, `tasks/*.local.*` to repo |
 <!-- IF:pull_requests.enabled=true -->
 | PR enabled | yes | - |

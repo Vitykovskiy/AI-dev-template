@@ -29,7 +29,7 @@ After reviewing project state — stop and wait for explicit human confirmation 
 **Execution mode: `{{workflow.execution_mode}}`**
 
 <!-- IF:workflow.execution_mode=autonomous -->
-Work iteratively through tasks without pausing between stages. Continue until a configured human checkpoint is reached, a blocker requires input, or the backlog is exhausted.
+Treat execution as a continuous delivery loop: after closing each task, immediately pick the next priority task from the backlog. Do not stop to report completion to the user between tasks. Stop only when a real blocker requires human input, a configured checkpoint is reached, or the backlog is exhausted.
 <!-- END IF -->
 <!-- IF:workflow.execution_mode=staged -->
 Stop after each work stage and wait for explicit human confirmation before continuing.
