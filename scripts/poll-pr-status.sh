@@ -1,7 +1,8 @@
 #!/bin/bash
 # Usage: ./scripts/poll-pr-status.sh <pr-number>
-# Polls until PR review decision is APPROVED or CHANGES_REQUESTED.
-# Intended for use when reviewer is AI — review completes in under a minute.
+# Polls until the AI reviewer (GitHub App) submits APPROVED or CHANGES_REQUESTED.
+# Uses individual reviews instead of reviewDecision — the bot has authorAssociation=NONE
+# and GitHub does not count its review toward the overall reviewDecision field.
 
 PR=$1
 
@@ -17,7 +18,12 @@ if [ -z "$PR" ]; then
 fi
 
 while true; do
-  status=$(gh pr view "$PR" --json reviewDecision -q '.reviewDecision')
+  status=$(gh pr view "$PR" --json reviews -q '
+    .reviews
+    | map(select(.state == "APPROVED" or .state == "CHANGES_REQUESTED"))
+    | last
+    | .state // ""
+  ')
   if [ "$status" = "APPROVED" ] || [ "$status" = "CHANGES_REQUESTED" ]; then
     echo "$status"
     exit 0
