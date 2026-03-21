@@ -6,7 +6,18 @@
 
 PR=$1
 
-if ! command -v gh &> /dev/null; then
+GH_CMD=""
+if command -v gh &> /dev/null; then
+  GH_CMD="gh"
+elif command -v gh.exe &> /dev/null; then
+  GH_CMD="gh.exe"
+elif where.exe gh &> /dev/null 2>&1; then
+  GH_CMD="$(where.exe gh 2>/dev/null | head -1)"
+elif [ -x "/c/Program Files/GitHub CLI/gh.exe" ]; then
+  GH_CMD="/c/Program Files/GitHub CLI/gh.exe"
+fi
+
+if [ -z "$GH_CMD" ]; then
   echo "Error: gh CLI is not installed or not in PATH." >&2
   echo "Install it from https://cli.github.com and run 'gh auth login'." >&2
   exit 1
@@ -18,7 +29,7 @@ if [ -z "$PR" ]; then
 fi
 
 while true; do
-  status=$(gh pr view "$PR" --json reviews -q '
+  status=$("$GH_CMD" pr view "$PR" --json reviews -q '
     .reviews
     | map(select(.state == "APPROVED" or .state == "CHANGES_REQUESTED"))
     | last
