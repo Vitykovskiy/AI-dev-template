@@ -79,7 +79,7 @@ For monorepos, determine `where to work` before deciding `what to change`.
 ## Execution Mode
 
 <!-- IF:workflow.execution_mode=autonomous -->
-**autonomous** — continue through the lifecycle without pausing between stages.
+**autonomous** — work iteratively through tasks without pausing between stages. Continue until a configured human checkpoint is reached, a blocker requires input, or the backlog is exhausted.
 <!-- END IF -->
 <!-- IF:workflow.execution_mode=staged -->
 **staged** — stop between every work stage and wait for explicit human confirmation before continuing.

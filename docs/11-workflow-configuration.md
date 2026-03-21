@@ -18,7 +18,7 @@ If repository language is Russian, repository artifacts should be written in cle
 
 ## Execution Modes
 
-- `autonomous`: the agent continues through the full lifecycle without pausing between stages.
+- `autonomous`: the agent works iteratively through tasks without pausing between stages. It continues until a configured human checkpoint is reached, a blocker requires input, or the backlog is exhausted.
 - `staged`: the agent pauses between every work stage and waits for explicit human confirmation before continuing.
 
 ## Pull Request Policy
