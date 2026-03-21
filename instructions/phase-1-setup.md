@@ -24,7 +24,22 @@ Edit it to match the project configuration:
 - Replace generic descriptions with concrete values (e.g. execution mode, pull request policy).
 - Do not use template placeholders — edit the file thoughtfully, as a human would.
 
-## 4. Project Map
+## 4. Localize GitHub Templates
+
+If `language.issues` is not `en` — translate the following files to the configured language:
+
+- `.github/ISSUE_TEMPLATE/bug.yml`
+- `.github/ISSUE_TEMPLATE/feature.yml`
+- `.github/ISSUE_TEMPLATE/task.yml`
+- `.github/ISSUE_TEMPLATE/epic.yml`
+
+Translate all user-visible text: `name`, `description`, field `label`, `description`, and `placeholder` values. Do not translate: YAML keys, `id` values, `labels` values (GitHub labels stay in English per config).
+
+If `language.pull_requests` is not `en` — translate `.github/PULL_REQUEST_TEMPLATE.md` to the configured language. Translate all headings and body text.
+
+If both `language.issues` and `language.pull_requests` are `en` — skip this step.
+
+## 5. Project Map
 
 If `project_map.enabled = true` in the config:
 
@@ -32,7 +47,7 @@ Create `docs/project-map.md` — a file tree with a brief description of each fo
 
 If `project_map.enabled = false` — skip this step.
 
-## 5. Complete Phase
+## 6. Complete Phase
 
 Delete this file: `instructions/phase-1-setup.md`
 
