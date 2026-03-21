@@ -1,20 +1,25 @@
 # Internal Libraries
 
-## Purpose
+## Project Shared Modules
 
-This file defines how the agent works with internal shared libraries, shared packages, and reusable modules.
+<!-- Fill this section when shared modules, packages, or reusable abstractions exist in the project.
+     For each module record: what it exports, how to initialize, contracts and types to rely on. -->
+
+_Not yet filled. Complete when shared modules are introduced._
+
+---
 
 ## Rules
 
 - Do not assume internal library API from naming alone.
-- Prefer repository docs for the shared library first.
+- Check this file first.
 - Then inspect real usage in the codebase.
 - Treat existing working consumers as stronger evidence than guesswork.
 - If the API contract is still unclear, mark uncertainty and avoid risky changes.
 
 ## Required Verification
 
-Before changing code that depends on a shared library, verify:
+Before changing code that depends on a shared module, verify:
 
 - exported types;
 - public signatures;
@@ -26,7 +31,7 @@ Before changing code that depends on a shared library, verify:
 
 Use one of the following:
 
-- local docs for the shared library;
+- the Project Shared Modules section above;
 - the library source code and its exported types;
 - an existing working example in the codebase.
 
@@ -38,3 +43,7 @@ If the internal contract is not confirmed:
 - do not use unconfirmed exports;
 - leave a note about the missing source of truth;
 - prefer the safest minimal change if possible.
+
+## Maintenance Rule
+
+When a new shared module is created or an existing one changes its public contract — update the Project Shared Modules section above before closing the task.

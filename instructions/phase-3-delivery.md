@@ -16,6 +16,8 @@ At the beginning of every new session, complete in order:
    - `docs/02-business-requirements.md`
    - `docs/04-tech-stack.md`
    - `docs/05-architecture.md`
+   - `docs/external-libraries.md`
+   - `docs/internal-libraries.md`
 4. Check open GitHub Issues.
 5. Check GitHub Project board state.
 <!-- IF:project_map.enabled=true -->
@@ -88,10 +90,12 @@ Before working with an external library, framework, SDK, or internal shared libr
 
 Required validation order:
 
-1. Check local documentation in the repository.
+1. Check `docs/external-libraries.md` or `docs/internal-libraries.md` first.
 2. Check existing usage examples in the codebase.
 3. Check the connected official documentation source.
 4. If confirmation is still missing — mark the uncertainty explicitly and do not invent a solution.
+
+When a new external dependency is added or an existing one is upgraded — update `docs/external-libraries.md` before closing the task. When a new shared module is introduced or its contract changes — update `docs/internal-libraries.md` before closing the task.
 
 ---
 

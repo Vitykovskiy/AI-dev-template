@@ -1,13 +1,18 @@
 # External Libraries
 
-## Purpose
+## Project Dependencies
 
-This file defines how the agent works with external libraries, frameworks, and SDKs.
+<!-- Fill this section during tech stack definition and update when dependencies change.
+     For each key dependency record: version, initialization pattern, usage conventions, known limitations. -->
+
+_Not yet filled. Complete during Phase 2 tech stack definition._
+
+---
 
 ## Rules
 
 - Do not rely on memory, guesses, or "typical API".
-- Check local repository docs first.
+- Check this file first.
 - Check real usage examples in the codebase next.
 - Check official documentation after that.
 - If confirmation is missing, mark uncertainty explicitly.
@@ -30,7 +35,7 @@ Before changing code, verify:
 
 Use one of the following:
 
-- local docs in this repository;
+- the Project Dependencies section above;
 - official documentation available to the agent;
 - an existing working example in the codebase.
 
@@ -41,3 +46,7 @@ If no confirmed source of truth is available:
 - do not make risky blind changes;
 - leave a note about the missing confirmation;
 - prefer the safest minimal change if possible.
+
+## Maintenance Rule
+
+When a new external dependency is added or an existing one is upgraded — update the Project Dependencies section above before closing the task.
