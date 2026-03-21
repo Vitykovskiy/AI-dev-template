@@ -143,7 +143,7 @@ Review is performed by the veni-vidi-review GitHub App, which is triggered autom
 <!-- END IF -->
 
 <!-- IF:pull_requests.review.reviewers=ai,pull_requests.merge.allow_agent_self_merge=true -->
-**AI review polling:** after opening the PR, run `scripts/poll-pr-status.sh <pr-number>` and wait for the result. The script polls individual reviews (not `reviewDecision` — the bot has `authorAssociation=NONE` so GitHub does not count its review toward that field). The script returns `APPROVED` or `CHANGES_REQUESTED`. If `APPROVED` — merge and continue with the next task. If `CHANGES_REQUESTED` — address the review feedback and push to the branch.
+**AI review gate:** after opening the PR, wait for the `ai-review-approved` required check to complete. The check is driven by `.github/workflows/ai-review-gate.yml`, which polls the GitHub App review and reports the result as a required status check. Do not use `reviewDecision` or GitHub approval count — the App has `authorAssociation=NONE` and its approval does not count toward branch protection. If the check passes — merge when all other conditions are satisfied. If the check fails — address the review feedback, push to the branch, and wait for the check to re-run.
 <!-- END IF -->
 <!-- IF:pull_requests.review.reviewers=both -->
 Both agent review and human review are required. Record the agent review result in the PR before human review begins.
@@ -172,8 +172,14 @@ Branch integration is done through rebase.
 <!-- IF:pull_requests.merge.require_green_checks=true -->
 Do not treat the PR as merge-ready while required checks are failing or missing.
 <!-- END IF -->
-<!-- IF:pull_requests.review.required=true -->
+<!-- IF:pull_requests.review.required=true,pull_requests.review.reviewers=human -->
 At least 1 approval required before merge.
+<!-- END IF -->
+<!-- IF:pull_requests.review.required=true,pull_requests.review.reviewers=both -->
+At least 1 approval required before merge.
+<!-- END IF -->
+<!-- IF:pull_requests.review.required=true,pull_requests.review.reviewers=ai -->
+The `ai-review-approved` required status check must pass before merge. Do not rely on GitHub approval count — the GitHub App's review does not count as a qualifying approval in branch protection.
 <!-- END IF -->
 <!-- IF:pull_requests.merge.allow_agent_self_merge=false -->
 The agent must not merge the PR. Stop before merge and wait for an authorized actor.
@@ -181,7 +187,17 @@ The agent must not merge the PR. Stop before merge and wait for an authorized ac
 <!-- IF:pull_requests.merge.allow_agent_self_merge=true -->
 The agent may merge the PR when all configured conditions are satisfied.
 <!-- END IF -->
-<!-- IF:pull_requests.merge.agent_configure_branch_protection=true -->
+<!-- IF:pull_requests.merge.agent_configure_branch_protection=true,pull_requests.review.reviewers=ai -->
+Before any implementation work begins:
+1. Configure branch protection on the main branch via the GitHub API. Required rules: require pull request before merging, required status checks: `ai-review-approved` (strict), minimum approvals: 0, disable bypassing protection. Requires admin access to the repository.
+2. Verify that `.github/workflows/ai-review-gate.yml` is present in the repository — this workflow implements the `ai-review-approved` check.
+<!-- END IF -->
+<!-- IF:pull_requests.merge.agent_configure_branch_protection=true,pull_requests.review.reviewers=human -->
+Before any implementation work begins:
+1. Configure branch protection on the main branch via the GitHub API. Required rules: require pull request before merging, set minimum approvals to 1, disable bypassing protection. Requires admin access to the repository.
+2. If `.github/workflows/ai-review-gate.yml` exists in the repository — delete it. It is only needed for AI review workflows.
+<!-- END IF -->
+<!-- IF:pull_requests.merge.agent_configure_branch_protection=true,pull_requests.review.reviewers=both -->
 Before any implementation work begins, configure branch protection on the main branch via the GitHub API. Required rules: require pull request before merging, set minimum approvals to 1, disable bypassing protection. Requires admin access to the repository.
 <!-- END IF -->
 

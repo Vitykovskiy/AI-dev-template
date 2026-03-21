@@ -1,0 +1,40 @@
+name: AI Review Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  ai-review-approved:
+    name: ai-review-approved
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for AI review result
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          REPO="${{ github.repository }}"
+
+          echo "Polling AI review for PR #${PR_NUMBER}..."
+
+          for i in $(seq 1 60); do
+            STATUS=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}/reviews" \
+              --jq '[.[] | select(.state == "APPROVED" or .state == "CHANGES_REQUESTED")] | last | .state // ""')
+
+            if [ "$STATUS" = "APPROVED" ]; then
+              echo "AI review: APPROVED"
+              exit 0
+            elif [ "$STATUS" = "CHANGES_REQUESTED" ]; then
+              echo "AI review: CHANGES_REQUESTED"
+              exit 1
+            fi
+
+            echo "No AI review yet. Attempt $i/60. Waiting 10s..."
+            sleep 10
+          done
+
+          echo "Timed out waiting for AI review (10 minutes)."
+          exit 1
