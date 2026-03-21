@@ -19,6 +19,12 @@ jobs:
           REPO="${{ github.repository }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
 
+          PR_STATE=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}" --jq '.state')
+          if [ "$PR_STATE" != "open" ]; then
+            echo "PR is ${PR_STATE}, skipping gate."
+            exit 0
+          fi
+
           echo "Polling AI review for PR #${PR_NUMBER} at head ${HEAD_SHA}..."
 
           for i in $(seq 1 60); do
