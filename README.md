@@ -7,7 +7,7 @@ Template repository for projects where an AI agent runs a consistent discovery, 
 This template gives every new project the same operating model:
 
 - the repository is the source of truth for goals, requirements, architecture, decisions, workflow, and integrations;
-- `.ai-dev-template.config.json` is the source of truth for workflow language, execution mode, PR policy, and artifact persistence;
+- `.ai-dev-template.config.json` is the source of truth for workflow language, execution mode, and PR policy;
 - GitHub Issues and GitHub Project are the source of truth for backlog, task status, and current execution;
 - the agent must complete business task intake before planning implementation;
 - important state must be persisted to repository artifacts and GitHub, not left in transient session context.
@@ -38,42 +38,18 @@ The human does not need to create issues, labels, or move project cards manually
 
 ## New Project Initialization
 
-```bash
-git clone https://github.com/<org>/<repo>.git
-cd <repo>
-bash scripts/bootstrap.sh
-```
+1. Create a new GitHub repository from this template.
+2. Clone the repository locally.
+3. Add `.ai-dev-template.config.json` to the repository root. Use the configurator for a guided setup:
 
-Recommended next commands:
+   - [AI Dev Template Configurator](https://vitykovskiy.github.io/AI-dev-template-configurator/)
 
-```bash
-bash scripts/check-environment.sh
-bash scripts/check-github-permissions.sh
-```
+   The configurator walks through language policy, execution mode, and PR and review policy, then generates a ready config file.
 
-Note: `scripts/check-github-permissions.sh` reads GitHub scope requirements from `.ai-dev-template.config.json` and currently expects `python` to be available.
+4. Create a GitHub Project (simple kanban board — see below).
+5. Provide the agent with the repository context, the GitHub Project URL, and the business task.
 
-After filling in `.ai-dev-template.config.json`, run the init script to strip all configuration-conditional sections from the template files. This reduces context size and removes instructions that do not apply to this project:
-
-```bash
-python scripts/init.py
-```
-
-The script processes `AGENTS.md`, `docs/07-workflow.md`, and the session start checklist. It also removes files that are unused under the chosen configuration. Run it once, then commit the result.
-
-Then provide the agent with:
-
-1. The repository context.
-2. The GitHub Project URL.
-3. The business task.
-
-Before active delivery starts, review and update `.ai-dev-template.config.json`.
-
-If you want a faster setup flow, use the configurator:
-
-- [AI Dev Template Configurator](https://vitykovskiy.github.io/AI-dev-template-configurator/)
-
-The configurator helps you choose workflow language for docs, issues, PRs, comments, and commits, plus execution mode, PR policy, and artifact persistence, then generates a ready `.ai-dev-template.config.json` for the repository root.
+The agent handles the rest during Phase 1 (environment check, instructions adaptation, project map) and Phase 2 (business task intake).
 
 ## GitHub Project
 
@@ -113,10 +89,9 @@ Workflow policy is configured in `.ai-dev-template.config.json`.
 The configuration controls:
 
 - docs / issue / PR / comment / commit language;
-- execution mode: `autonomous`, `hybrid`, `staged`;
+- execution mode: `autonomous`, `staged`;
 - human approval checkpoints;
-- task-scoped PR, review, and merge policy;
-- whether temporary AI work artifacts stay local or are persisted.
+- task-scoped PR, review, and merge policy.
 
 See `docs/11-workflow-configuration.md` for the detailed meaning of each section.
 
