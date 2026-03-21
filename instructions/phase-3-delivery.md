@@ -139,25 +139,21 @@ Review is required. Do not treat the task as merge-ready before review requireme
 Human review is required. Agent self-review does not satisfy this.
 <!-- END IF -->
 <!-- IF:pull_requests.review.reviewers=ai -->
-Agent review is the required review path. Record the review result in the PR as a summary or comment before merging.
+Review is performed by the veni-vidi-review GitHub App, which is triggered automatically on PR open. Wait for the external review result before merging.
 <!-- END IF -->
 
-<!-- IF:pull_requests.review.reviewers=ai,pull_requests.merge.min_approvals=1,pull_requests.merge.allow_agent_self_merge=true -->
-**AI review polling:** after submitting the review, run `scripts/poll-pr-status.sh <pr-number>` and wait for the result. The script returns `APPROVED` or `CHANGES_REQUESTED`. If `APPROVED` — merge and continue with the next task. If `CHANGES_REQUESTED` — address the review feedback and push to the branch.
+<!-- IF:pull_requests.review.reviewers=ai,pull_requests.merge.allow_agent_self_merge=true -->
+**AI review polling:** after opening the PR, run `scripts/poll-pr-status.sh <pr-number>` and wait for the result. The script returns `APPROVED` or `CHANGES_REQUESTED`. If `APPROVED` — merge and continue with the next task. If `CHANGES_REQUESTED` — address the review feedback and push to the branch.
 <!-- END IF -->
 <!-- IF:pull_requests.review.reviewers=both -->
 Both agent review and human review are required. Record the agent review result in the PR before human review begins.
 <!-- END IF -->
 
-<!-- IF:pull_requests.review.agent_must_read_comments=true -->
 Read all PR comments and review summaries before concluding review handling.
-<!-- END IF -->
-<!-- IF:pull_requests.review.agent_must_reply_to_comments=true -->
+
 Reply to PR comments where the workflow expects a direct answer.
-<!-- END IF -->
-<!-- IF:pull_requests.review.agent_must_apply_accepted_feedback=true -->
+
 Apply accepted review feedback before considering the PR ready for merge.
-<!-- END IF -->
 
 **Merge policy:**
 
@@ -176,8 +172,8 @@ Branch integration is done through rebase.
 <!-- IF:pull_requests.merge.require_green_checks=true -->
 Do not treat the PR as merge-ready while required checks are failing or missing.
 <!-- END IF -->
-<!-- IF:pull_requests.merge.min_approvals!=0 -->
-At least `{{pull_requests.merge.min_approvals}}` approval(s) required before merge.
+<!-- IF:pull_requests.review.required=true -->
+At least 1 approval required before merge.
 <!-- END IF -->
 <!-- IF:pull_requests.merge.allow_agent_self_merge=false -->
 The agent must not merge the PR. Stop before merge and wait for an authorized actor.
@@ -186,7 +182,7 @@ The agent must not merge the PR. Stop before merge and wait for an authorized ac
 The agent may merge the PR when all configured conditions are satisfied.
 <!-- END IF -->
 <!-- IF:pull_requests.merge.agent_configure_branch_protection=true -->
-Before any implementation work begins, configure branch protection on the main branch via the GitHub API. Required rules: require pull request before merging, set minimum approvals per `pull_requests.merge.min_approvals`, disable bypassing protection. Requires admin access to the repository.
+Before any implementation work begins, configure branch protection on the main branch via the GitHub API. Required rules: require pull request before merging, set minimum approvals to 1, disable bypassing protection. Requires admin access to the repository.
 <!-- END IF -->
 
 <!-- END IF -->
