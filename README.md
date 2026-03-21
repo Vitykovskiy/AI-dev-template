@@ -46,8 +46,14 @@ The human does not need to create issues, labels, or move project cards manually
 
    The configurator walks through language policy, execution mode, and PR and review policy, then generates a ready config file.
 
-4. Create a GitHub Project (simple kanban board — see below).
-5. Provide the agent with the repository context, the GitHub Project URL, and the business task.
+4. Create required labels by running:
+
+   ```bash
+   bash scripts/bootstrap-github-labels.sh
+   ```
+
+5. Create a GitHub Project (simple kanban board — see below).
+6. Provide the agent with the repository context, the GitHub Project URL, and the business task.
 
 The agent handles the rest during Phase 1 (environment check, instructions adaptation, project map) and Phase 2 (business task intake).
 

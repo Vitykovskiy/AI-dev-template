@@ -15,7 +15,13 @@ Verify that the following are available and working:
 
 If anything is missing — report exactly what is wrong and what needs to be fixed. Do not continue until the problem is resolved.
 
-## 3. Adapt Delivery Instructions
+## 3. Bootstrap GitHub Labels
+
+Run `scripts/bootstrap-github-labels.sh` to create the required labels in the repository. The script is safe to re-run — existing labels are skipped.
+
+If the script was already run by the human during repository setup — verify the labels exist and skip this step.
+
+## 4. Adapt Delivery Instructions
 
 Read `instructions/phase-3-delivery.md`.
 
@@ -24,7 +30,7 @@ Edit it to match the project configuration:
 - Replace generic descriptions with concrete values (e.g. execution mode, pull request policy).
 - Do not use template placeholders — edit the file thoughtfully, as a human would.
 
-## 4. Localize Templates
+## 5. Localize Templates
 
 If `language.documentation` is not `en` — translate all files in `templates/` to the configured language. Translate all headings, labels, and body text.
 
@@ -41,7 +47,7 @@ If `language.pull_requests` is not `en` — translate `.github/PULL_REQUEST_TEMP
 
 If `language.documentation`, `language.issues`, and `language.pull_requests` are all `en` — skip this step.
 
-## 5. Project Map
+## 6. Project Map
 
 If `project_map.enabled = true` in the config:
 
@@ -49,7 +55,7 @@ Create `docs/project-map.md` — a file tree with a brief description of each fo
 
 If `project_map.enabled = false` — skip this step.
 
-## 6. Complete Phase
+## 7. Complete Phase
 
 Delete this file: `instructions/phase-1-setup.md`
 
