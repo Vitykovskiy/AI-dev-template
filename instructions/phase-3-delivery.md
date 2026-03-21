@@ -141,6 +141,10 @@ Human review is required. Agent self-review does not satisfy this.
 <!-- IF:pull_requests.review.reviewers=ai -->
 Agent review is the required review path. Record the review result in the PR as a summary or comment before merging.
 <!-- END IF -->
+
+<!-- IF:pull_requests.review.reviewers=ai,pull_requests.merge.min_approvals=1,pull_requests.merge.allow_agent_self_merge=true -->
+**AI review polling:** after submitting the review, run `scripts/poll-pr-status.sh <pr-number>` and wait for the result. The script returns `APPROVED` or `CHANGES_REQUESTED`. If `APPROVED` — merge and continue with the next task. If `CHANGES_REQUESTED` — address the review feedback and push to the branch.
+<!-- END IF -->
 <!-- IF:pull_requests.review.reviewers=both -->
 Both agent review and human review are required. Record the agent review result in the PR before human review begins.
 <!-- END IF -->
