@@ -1,13 +1,13 @@
 # AGENTS.md
 
-Прочитай этот файл первым в каждой новой сессии.
+Read this file first at the start of every new session.
 
-## Текущий этап
+## Current Phase
 
-Проверь какие файлы существуют в `instructions/`:
+Check which files exist in `instructions/`:
 
-- Если есть `instructions/phase-1-setup.md` — ты на этапе 1. Прочитай только его. Стоп.
-- Иначе если есть `instructions/phase-2-intake.md` — ты на этапе 2. Прочитай только его. Стоп.
-- Иначе — ты на этапе 3. Прочитай `instructions/phase-3-delivery.md`.
+- If `instructions/phase-1-setup.md` exists — you are in phase 1. Read only that file. Stop.
+- Else if `instructions/phase-2-intake.md` exists — you are in phase 2. Read only that file. Stop.
+- Otherwise — you are in phase 3. Read `instructions/phase-3-delivery.md`.
 
-Не читай файлы этапов, которые не соответствуют текущему этапу.
+Do not read phase files that do not match the current phase.

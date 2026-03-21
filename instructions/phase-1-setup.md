@@ -1,41 +1,41 @@
-# Этап 1 — Настройка
+# Phase 1 — Setup
 
-Ты на первом этапе. Выполни следующие шаги по порядку.
+You are in phase 1. Complete the following steps in order.
 
-## 1. Прочитай конфигурацию
+## 1. Read Configuration
 
-Прочитай `.ai-dev-template.config.json`. Зафиксируй значения всех параметров.
+Read `.ai-dev-template.config.json`. Record the values of all settings.
 
-## 2. Проверь окружение
+## 2. Check Environment
 
-Проверь наличие и доступность:
-- git — установлен и текущая папка является репозиторием
-- gh — установлен и авторизован (`gh auth status`)
-- доступ к репозиторию на GitHub (push, issues, projects)
+Verify that the following are available and working:
+- git — installed and current directory is a repository
+- gh — installed and authenticated (`gh auth status`)
+- repository access on GitHub (push, issues, projects)
 
-Если что-то не готово — сообщи пользователю что именно и что нужно сделать. Не продолжай до устранения проблемы.
+If anything is missing — report exactly what is wrong and what needs to be fixed. Do not continue until the problem is resolved.
 
-## 3. Адаптируй инструкции для этапа разработки
+## 3. Adapt Delivery Instructions
 
-Прочитай `instructions/phase-3-delivery.md`.
+Read `instructions/phase-3-delivery.md`.
 
-Отредактируй его под конфигурацию проекта:
-- Убери разделы и инструкции, которые неактуальны при текущих настройках конфига.
-- Подставь конкретные значения вместо обобщённых описаний (например, режим выполнения, политику pull request).
-- Не используй шаблонные маркеры — редактируй файл как человек, осмысленно.
+Edit it to match the project configuration:
+- Remove sections and instructions that do not apply given the current config settings.
+- Replace generic descriptions with concrete values (e.g. execution mode, pull request policy).
+- Do not use template placeholders — edit the file thoughtfully, as a human would.
 
-## 4. Карта проекта
+## 4. Project Map
 
-Если в конфиге `project_map.enabled = true`:
+If `project_map.enabled = true` in the config:
 
-Создай файл `docs/project-map.md` — дерево файловой структуры с кратким описанием назначения каждой папки и ключевого файла. Цель: любой агент в новой сессии должен понять структуру проекта без сканирования файловой системы.
+Create `docs/project-map.md` — a file tree with a brief description of each folder's purpose and each key file. Goal: any agent starting a new session should understand the project structure without scanning the filesystem.
 
-Если `project_map.enabled = false` — пропусти этот шаг.
+If `project_map.enabled = false` — skip this step.
 
-## 5. Завершение этапа
+## 5. Complete Phase
 
-Удали этот файл: `instructions/phase-1-setup.md`
+Delete this file: `instructions/phase-1-setup.md`
 
-Сделай коммит изменений (адаптированный `phase-3-delivery.md`, удалённый `phase-1-setup.md`, и `docs/project-map.md` если был создан) в соответствии с правилами коммитов проекта из конфига.
+Commit the changes (adapted `phase-3-delivery.md`, deleted `phase-1-setup.md`, and `docs/project-map.md` if created) following the commit rules from the project config.
 
-Сообщи пользователю что настройка завершена и в следующей сессии начнётся сбор требований.
+Tell the user that setup is complete and requirements gathering will begin in the next session.

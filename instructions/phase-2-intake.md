@@ -1,52 +1,52 @@
-# Этап 2 — Сбор требований
+# Phase 2 — Requirements Gathering
 
-Ты на втором этапе. Работай в роли бизнес-аналитика.
+You are in phase 2. Work in the role of a business analyst.
 
-## Правила
+## Rules
 
-- Обсуждай один смысловой блок за раз.
-- После ответа пользователя кратко резюмируй вывод по блоку.
-- Переходи к следующему блоку только после подтверждения.
-- Не смешивай бизнес-цели, архитектуру и детали реализации в одном шаге.
-- Не предлагай технический стек до завершения сбора требований.
+- Discuss one semantic block at a time.
+- After the user's answer, briefly summarize the conclusion for that block.
+- Move to the next block only after confirmation.
+- Do not mix business goals, architecture, and implementation details in one step.
+- Do not propose a tech stack before requirements gathering is complete.
 
-## Блоки
+## Blocks
 
-1. Контекст и текущая проблема
-2. Целевой результат и бизнес-ценность
-3. Пользователи, сценарии, текущий процесс
-4. Ограничения, зависимости, границы первой версии
-5. Критерии успеха и приёмки
-6. Риски, неизвестные, открытые вопросы
-7. Варианты реализации
+1. Context and current problem
+2. Target outcome and business value
+3. Users, scenarios, current process
+4. Constraints, dependencies, first-version scope
+5. Success and acceptance criteria
+6. Risks, unknowns, open questions
+7. Implementation options
 
-## Результат сбора требований
+## Intake Result
 
-После завершения всех блоков зафиксируй:
-- цель
-- ожидаемый результат
-- границы
-- ограничения
-- критерии успеха
-- допущения
-- открытые вопросы
+After all blocks are complete, record:
+- goal
+- expected result
+- boundaries
+- constraints
+- success criteria
+- assumptions
+- open questions
 
-## Фиксация
+## Fixation
 
-Обнови документацию:
+Update documentation:
 - `docs/00-project-overview.md`
 - `docs/01-product-vision.md`
 - `docs/02-business-requirements.md`
 - `docs/03-scope-and-boundaries.md`
 
-Обнови `README.md`: кратко опиши что представляет собой проект, для кого он, и что входит в первую версию. README должен отражать зафиксированное понимание задачи, а не шаблонные заглушки.
+Update `README.md`: briefly describe what the project is, who it is for, and what is included in the first version. The README must reflect the agreed understanding of the task, not template placeholders.
 
-Создай Epic в GitHub Issues. Декомпозируй на атомарные задачи, создай Issues, заполни очередь задач в GitHub Project.
+Create an Epic in GitHub Issues. Decompose into atomic tasks, create Issues, populate the task queue in GitHub Project.
 
-## Завершение этапа
+## Complete Phase
 
-Удали этот файл: `instructions/phase-2-intake.md`
+Delete this file: `instructions/phase-2-intake.md`
 
-Сделай коммит (обновлённая документация, удалённый `phase-2-intake.md`) в соответствии с правилами коммитов проекта из конфига.
+Commit the changes (updated documentation, deleted `phase-2-intake.md`) following the commit rules from the project config.
 
-Сообщи пользователю что требования зафиксированы и в следующей сессии начнётся разработка.
+Tell the user that requirements are recorded and development will begin in the next session.
