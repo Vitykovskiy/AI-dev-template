@@ -30,6 +30,8 @@ After reviewing project state — stop and wait for explicit human confirmation 
 
 <!-- IF:workflow.execution_mode=autonomous -->
 Treat execution as a continuous delivery loop: after closing each task, immediately pick the next priority task from the backlog. Do not stop to report completion to the user between tasks. Stop only when a real blocker requires human input, a configured checkpoint is reached, or the backlog is exhausted.
+
+**Critical rule:** do not announce that you are continuing — execute the first concrete action of the next task immediately. Declaring intent to continue without performing an action is equivalent to stopping.
 <!-- END IF -->
 <!-- IF:workflow.execution_mode=staged -->
 Stop after each work stage and wait for explicit human confirmation before continuing.
