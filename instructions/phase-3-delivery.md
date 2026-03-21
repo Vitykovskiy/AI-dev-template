@@ -261,6 +261,13 @@ Task completion also requires compliance with the configured PR, review, and mer
 
 If no project-specific commit standard exists, use Conventional Commits and include the issue reference in the header or body. The commit message language must follow `.ai-dev-template.config.json`.
 
+**Commit message quality rule:** the subject line must describe what changed from the product perspective, not how it was implemented technically. The subject line is the changelog. Write it so a non-technical stakeholder can understand what was delivered.
+
+- Good: `feat: корзина с поддержкой модификаторов товаров (#4)`
+- Bad: `feat: реализовать модель каталога и допов (#4)`
+- Good: `fix: заказ больше не теряется при пустом слоте (#7)`
+- Bad: `fix: исправить NPE в CartService при null pickup slot (#7)`
+
 ---
 
 ## Task Finalization Order
