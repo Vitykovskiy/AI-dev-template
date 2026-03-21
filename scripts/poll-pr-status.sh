@@ -5,6 +5,12 @@
 
 PR=$1
 
+if ! command -v gh &> /dev/null; then
+  echo "Error: gh CLI is not installed or not in PATH." >&2
+  echo "Install it from https://cli.github.com and run 'gh auth login'." >&2
+  exit 1
+fi
+
 if [ -z "$PR" ]; then
   echo "Usage: $0 <pr-number>" >&2
   exit 1
