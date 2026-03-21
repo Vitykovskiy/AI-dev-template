@@ -24,7 +24,9 @@ Edit it to match the project configuration:
 - Replace generic descriptions with concrete values (e.g. execution mode, pull request policy).
 - Do not use template placeholders — edit the file thoughtfully, as a human would.
 
-## 4. Localize GitHub Templates
+## 4. Localize Templates
+
+If `language.documentation` is not `en` — translate all files in `templates/` to the configured language. Translate all headings, labels, and body text.
 
 If `language.issues` is not `en` — translate the following files to the configured language:
 
@@ -37,7 +39,7 @@ Translate all user-visible text: `name`, `description`, field `label`, `descript
 
 If `language.pull_requests` is not `en` — translate `.github/PULL_REQUEST_TEMPLATE.md` to the configured language. Translate all headings and body text.
 
-If both `language.issues` and `language.pull_requests` are `en` — skip this step.
+If `language.documentation`, `language.issues`, and `language.pull_requests` are all `en` — skip this step.
 
 ## 5. Project Map
 
