@@ -143,7 +143,7 @@ Review is performed by the veni-vidi-review GitHub App, which is triggered autom
 <!-- END IF -->
 
 <!-- IF:pull_requests.review.reviewers=ai,pull_requests.merge.allow_agent_self_merge=true -->
-**AI review polling:** after opening the PR, run `scripts/poll-pr-status.sh <pr-number>` and wait for the result. The script returns `APPROVED` or `CHANGES_REQUESTED`. If `APPROVED` — merge and continue with the next task. If `CHANGES_REQUESTED` — address the review feedback and push to the branch.
+**AI review polling:** after opening the PR, run `scripts/poll-pr-status.sh <pr-number>` and wait for the result. The script polls individual reviews (not `reviewDecision` — the bot has `authorAssociation=NONE` so GitHub does not count its review toward that field). The script returns `APPROVED` or `CHANGES_REQUESTED`. If `APPROVED` — merge and continue with the next task. If `CHANGES_REQUESTED` — address the review feedback and push to the branch.
 <!-- END IF -->
 <!-- IF:pull_requests.review.reviewers=both -->
 Both agent review and human review are required. Record the agent review result in the PR before human review begins.
