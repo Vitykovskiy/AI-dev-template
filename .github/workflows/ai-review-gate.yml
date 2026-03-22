@@ -6,10 +6,18 @@ on:
   pull_request_review:
     types: [submitted]
 
+concurrency:
+  group: ai-review-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   ai-review-approved:
     name: ai-review-approved
     runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' ||
+      github.event.review.user.login == 'veni-vidi-review[bot]' ||
+      github.event.review.user.login == 'veni-vidi-review'
     steps:
       - name: Wait for AI review result
         env:
