@@ -21,7 +21,34 @@ Run `scripts/bootstrap-github-labels.sh` to create the required labels in the re
 
 If the script was already run by the human during repository setup — verify the labels exist and skip this step.
 
-## 4. Adapt Delivery Instructions
+## 4. Bootstrap GitHub Project
+
+Check whether a GitHub Project board is already linked to this repository:
+
+```
+gh project list --owner <owner>
+```
+
+If a project linked to this repository already exists — skip creation.
+
+If no project exists — create one and link it to the repository:
+
+```
+gh project create --owner <owner> --title "<repository name>" --format json
+gh project link <project-number> --owner <owner> --repo <owner>/<repo>
+```
+
+After creation, set the correct status options on the project's `Status` field so they match the delivery workflow:
+
+- `Backlog`
+- `In Progress`
+- `Done`
+
+Use `gh project field-list <project-number> --owner <owner>` to inspect existing fields before making changes.
+
+The `project` scope is required for this step. If the token does not have it — stop and report the missing scope.
+
+## 5. Adapt Delivery Instructions
 
 Read `instructions/phase-3-delivery.md`.
 
@@ -30,7 +57,7 @@ Edit it to match the project configuration:
 - Replace generic descriptions with concrete values (e.g. execution mode, pull request policy).
 - Do not use template placeholders — edit the file thoughtfully, as a human would.
 
-## 5. Localize Templates
+## 6. Localize Templates
 
 If `language.documentation` is not `en` — translate all files in `templates/` to the configured language. Translate all headings, labels, and body text.
 
@@ -47,7 +74,7 @@ If `language.pull_requests` is not `en` — translate `.github/PULL_REQUEST_TEMP
 
 If `language.documentation`, `language.issues`, and `language.pull_requests` are all `en` — skip this step.
 
-## 6. Project Map
+## 7. Project Map
 
 If `project_map.enabled = true` in the config:
 
@@ -55,7 +82,7 @@ Create `docs/project-map.md` — a file tree with a brief description of each fo
 
 If `project_map.enabled = false` — skip this step.
 
-## 7. Create Code Style Document
+## 8. Create Code Style Document
 
 Create `docs/08-code-style.md` based on the tech stack chosen for this project.
 
@@ -69,7 +96,7 @@ Fill in the size limits table with concrete numbers appropriate for the stack. E
 
 Leave the Naming, Accepted Patterns, Forbidden Patterns, and Notes sections as stubs — they will be filled in as the project evolves. Do not invent conventions that have not been established yet.
 
-## 8. Complete Phase
+## 9. Complete Phase
 
 Delete this file: `instructions/phase-1-setup.md`
 
