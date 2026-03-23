@@ -149,7 +149,18 @@ Review is performed by the veni-vidi-review GitHub App, which is triggered autom
 <!-- END IF -->
 
 <!-- IF:pull_requests.review.reviewers=ai,pull_requests.merge.allow_agent_self_merge=true -->
-**AI review gate:** after opening the PR, wait for the `ai-review-approved` required check to complete. The check is driven by `.github/workflows/ai-review-gate.yml`, which polls the GitHub App review and reports the result as a required status check. Do not use `reviewDecision` or GitHub approval count — the App has `authorAssociation=NONE` and its approval does not count toward branch protection. If the check passes — merge when all other conditions are satisfied. If the check fails — address the review feedback, push to the branch, and wait for the check to re-run.
+**AI review gate:** after opening the PR or pushing a new commit, follow this exact sequence:
+
+1. Record the current `head sha` immediately after the push.
+2. Identify the GitHub Actions run for `.github/workflows/ai-review-gate.yml` that is associated with that `head sha`. Use `gh run list --workflow=ai-review-gate.yml --branch=<branch>` and match by `headSha`.
+3. Wait for that specific run to reach a terminal state. Terminal states are: `success`, `failure`, `timed_out`. The states `in_progress`, `queued`, and `waiting` are not terminal — keep waiting.
+4. `cancelled` and `skipped` are not failures. They mean the run was superseded by a newer push. In that case, go back to step 2 and find the run for the current `head sha`.
+5. While the run is `in_progress` or `queued`: do not re-request review, do not open a new review request, do not declare a blocker. Any of these actions will cancel the current run and restart the cycle.
+6. Polling interval: wait at least 30 seconds between status checks. Stop polling after 15 minutes of continuous `in_progress`/`queued` state — only then treat it as a timeout blocker requiring human input.
+7. If the run completes with `success`: the `ai-review-approved` check passes — proceed to merge when all other conditions are satisfied.
+8. If the run completes with `failure`: read all new review comments posted on the current `head sha`. Address the feedback, push a fix commit, then return to step 1.
+
+Do not use `reviewDecision` or GitHub approval count — the App has `authorAssociation=NONE` and its approval does not count toward branch protection.
 <!-- END IF -->
 <!-- IF:pull_requests.review.reviewers=both -->
 Both agent review and human review are required. Record the agent review result in the PR before human review begins.
