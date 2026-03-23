@@ -52,6 +52,14 @@ Every task must:
 - include dependencies when they exist;
 - avoid bundling unrelated goals.
 
+**One task — one area.** A task must carry exactly one `area:` label. If a feature requires work in multiple contours (e.g. both `area: backend` and `area: frontend`) — create a separate task for each contour and link them via Dependencies. The backend task comes first; the frontend task lists it as a dependency.
+
+Example — correct decomposition of a feature spanning two contours:
+```
+[Task] Implement order queue API and lifecycle statuses  →  area: backend
+[Task] Implement order queue UI for barista              →  area: frontend, depends on: backend task
+```
+
 New tasks start in `Backlog`.
 
 The agent must not create execution tasks before the intake result is coherent enough to support Definition of Ready.
