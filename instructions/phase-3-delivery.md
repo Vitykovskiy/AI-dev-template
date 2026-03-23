@@ -170,6 +170,12 @@ Every task uses its own branch and PR.
 <!-- END IF -->
 <!-- IF:pull_requests.creation_mode=for_significant_tasks -->
 A PR is required only for significant tasks. Significant tasks are those that change application or infrastructure code, change system behavior, or affect architecture, API, security, migrations, or external integrations. Documentation-only tasks and small low-risk changes are not significant unless the repository defines otherwise.
+
+**Branch protection override:** if `agent_configure_branch_protection = true`, branch protection blocks all direct pushes to `main` — including non-significant tasks. In that case, create a PR for every task regardless of significance:
+- Significant task → PR + full review cycle per review policy.
+- Non-significant task → PR without requesting review; merge automatically once all required checks pass.
+
+Never push implementation commits directly to `main` when branch protection is active.
 <!-- END IF -->
 <!-- IF:pull_requests.creation_mode=manual_per_task -->
 Whether a task requires a PR is determined by an explicit human decision for each task. Do not decide silently — ask for or obtain an explicit human decision before treating the task as PR-free.
