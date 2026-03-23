@@ -16,6 +16,7 @@ At the beginning of every new session, complete in order:
    - `docs/02-business-requirements.md`
    - `docs/04-tech-stack.md`
    - `docs/05-architecture.md`
+   - `docs/08-code-style.md`
    - `docs/external-libraries.md`
    - `docs/internal-libraries.md`
 4. Check open GitHub Issues.
@@ -89,6 +90,18 @@ Priority criteria — assign exactly one per task:
 - `priority: low` — improvement or nice-to-have; safe to defer past the initial release without harming core functionality.
 
 If multiple tasks seem equally urgent, prefer `priority: medium` as the default. Reserve `priority: high` only for genuine blockers.
+
+---
+
+## Code Style Rules
+
+Before writing or modifying any code, read `docs/08-code-style.md`.
+
+Apply all rules from that file throughout the task. Before closing a task:
+
+1. Check every new or modified file against the size limits defined in `docs/08-code-style.md`.
+2. If a file, component, or function exceeds a limit — decompose it before closing the task. Do not defer decomposition to a follow-up task.
+3. If a new pattern or convention was established during the task — update `docs/08-code-style.md` to record it.
 
 ---
 

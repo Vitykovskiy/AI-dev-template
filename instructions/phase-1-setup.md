@@ -55,7 +55,21 @@ Create `docs/project-map.md` — a file tree with a brief description of each fo
 
 If `project_map.enabled = false` — skip this step.
 
-## 7. Complete Phase
+## 7. Create Code Style Document
+
+Create `docs/08-code-style.md` based on the tech stack chosen for this project.
+
+Fill in the size limits table with concrete numbers appropriate for the stack. Examples:
+
+- **Vue 3:** component ≤ 300 lines, composable ≤ 150 lines, store module ≤ 200 lines
+- **React:** component ≤ 250 lines, custom hook ≤ 100 lines
+- **Node.js / Express:** route handler ≤ 50 lines, service function ≤ 80 lines, file ≤ 400 lines
+- **Go:** function ≤ 60 lines, file ≤ 500 lines
+- **Python:** function ≤ 50 lines, class ≤ 300 lines, module ≤ 500 lines
+
+Leave the Naming, Accepted Patterns, Forbidden Patterns, and Notes sections as stubs — they will be filled in as the project evolves. Do not invent conventions that have not been established yet.
+
+## 8. Complete Phase
 
 Delete this file: `instructions/phase-1-setup.md`
 
