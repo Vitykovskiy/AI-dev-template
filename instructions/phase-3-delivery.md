@@ -10,15 +10,15 @@ At the beginning of every new session, complete in order:
 
 1. Read `AGENTS.md`.
 2. Read `.ai-dev-template.config.json`.
-3. Read current documentation:
-   - `docs/00-project-overview.md`
-   - `docs/01-product-vision.md`
-   - `docs/02-business-requirements.md`
-   - `docs/04-tech-stack.md`
-   - `docs/05-architecture.md`
-   - `docs/08-code-style.md`
-   - `docs/external-libraries.md`
-   - `docs/internal-libraries.md`
+3. Read current documentation — only what is directly relevant to the task you are about to pick up:
+   - `docs/00-project-overview.md` — always
+   - `docs/01-product-vision.md` — always
+   - `docs/02-business-requirements.md` — always
+   - `docs/04-tech-stack.md` — only if the task touches stack choices or new dependencies
+   - `docs/05-architecture.md` — only if the task touches system structure or cross-service interactions
+   - `docs/08-code-style.md` — only if the task involves writing or modifying code
+   - `docs/external-libraries.md` — only if the task uses a library listed there
+   - `docs/internal-libraries.md` — only if the task uses a shared internal module
 4. Check open GitHub Issues.
 5. Check GitHub Project board state.
 <!-- IF:project_map.enabled=true -->
@@ -90,6 +90,20 @@ Priority criteria — assign exactly one per task:
 - `priority: low` — improvement or nice-to-have; safe to defer past the initial release without harming core functionality.
 
 If multiple tasks seem equally urgent, prefer `priority: medium` as the default. Reserve `priority: high` only for genuine blockers.
+
+---
+
+## Context Management
+
+Context is a finite resource. Every file read stays in context for the entire session. Treat context like memory: load only what the current task actually needs.
+
+**Rules:**
+
+1. **Read on demand, not upfront.** Do not read a file unless its content will directly affect a decision in the current task. Curiosity reads waste context.
+2. **Read large files in fragments.** For files longer than 300 lines, read only the relevant section. If you need the whole file, state why explicitly before reading it.
+3. **Do not re-read files already in context.** If a file was read earlier in the session, refer to what is already known.
+4. **Contracts and specs are task-scoped.** If the project contains large API contracts, UI specs, or data schemas — load only the module or section relevant to the current task, not the entire file.
+5. **Decompose monolithic artifacts before use.** If a file in the project exceeds 300 lines and covers multiple independent concerns (e.g. a single JSON contract for the entire UI), split it into per-feature or per-module files before working with it. Do this as an explicit step, not silently.
 
 ---
 
