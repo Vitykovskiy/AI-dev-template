@@ -82,6 +82,14 @@ Minimum required labels:
 - `status: blocked`
 - `status: needs-info`
 
+Priority criteria — assign exactly one per task:
+
+- `priority: high` — blocks launch or blocks another task from starting; the project cannot move forward without it.
+- `priority: medium` — required for a complete v1 but does not block parallel work; can be picked up after high-priority tasks.
+- `priority: low` — improvement or nice-to-have; safe to defer past the initial release without harming core functionality.
+
+If multiple tasks seem equally urgent, prefer `priority: medium` as the default. Reserve `priority: high` only for genuine blockers.
+
 ---
 
 ## External Library Rules
