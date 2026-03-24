@@ -19,11 +19,29 @@ The following are fixed by the template and are not optional:
 
 The following remain configurable:
 
+- frontend architecture policy, including whether FSD is the expected frontend structure
 - language for docs, issues, PR text, comments, and commits
 - execution mode
 - approval checkpoints
 - PR, review, and merge behavior
 - persistence policy for temporary work artifacts
+
+## Frontend Architecture Policy
+
+Use `architecture.use_fsd` to decide whether the repository treats Feature-Sliced Design as the expected frontend structure.
+
+- `true`: frontend guidance should explicitly use FSD layers, boundaries, and terminology.
+- `false`: the template must not require FSD and should allow another team-approved frontend structure.
+
+Example:
+
+```json
+{
+  "architecture": {
+    "use_fsd": true
+  }
+}
+```
 
 ## Execution Modes
 

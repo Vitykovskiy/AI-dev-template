@@ -23,6 +23,7 @@ Read configuration files only if the current setup task requires them.
 ## Rules
 
 - Optimize for a clean starting point for later phases.
+- Honor `.ai-dev-template.config.json` when initializing repository conventions such as optional frontend architecture rules.
 - Do not perform business intake, system analysis, implementation, deployment, or e2e validation in this role.
 - If setup reveals missing business context, stop and hand off to `intake`.
 - If setup changes workflow structure, update all affected canonical docs in the same change set.

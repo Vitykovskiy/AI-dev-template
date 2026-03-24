@@ -76,3 +76,5 @@ This supports safe returns to earlier stages without restoring deleted instructi
 Workflow policy is configured in `.ai-dev-template.config.json`.
 
 The configuration governs language, execution mode, approval checkpoints, and PR/review behavior. It does not replace the explicit stage state stored in `.ai-dev-template.workflow-state.json`.
+
+It also governs optional repository conventions such as `architecture.use_fsd`, which tells the template whether frontend work should explicitly follow Feature-Sliced Design.

@@ -13,6 +13,8 @@ It complements the analysis package:
 
 Record the main applications, packages, services, and infrastructure areas before delivery starts.
 
+If `.ai-dev-template.config.json` sets `architecture.use_fsd` to `true`, describe frontend areas in terms of FSD layers and record the intended boundaries in this file. If it is `false`, document the alternative frontend structure explicitly so later sessions do not infer FSD by default.
+
 | Area | Path | Responsibility | Owned Contour |
 | --- | --- | --- | --- |
 | `<app/package/service>` | `<path>` | `<responsibility>` | `<frontend/backend/devops/etc.>` |

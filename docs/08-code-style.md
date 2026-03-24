@@ -34,16 +34,19 @@ The agent reads this file at the start of every session and enforces all rules b
 
 ## Accepted Patterns
 
+- If `.ai-dev-template.config.json` contains `architecture.use_fsd: true`, frontend code follows FSD layers and import boundaries.
 - _List patterns explicitly approved for this project._
 
 ---
 
 ## Forbidden Patterns
 
+- If `.ai-dev-template.config.json` contains `architecture.use_fsd: true`, do not bypass FSD boundaries with cross-layer imports or mixed responsibilities.
 - _List patterns explicitly banned for this project._
 
 ---
 
 ## Notes
 
+- If `architecture.use_fsd` is `false`, document and enforce the alternative frontend structure chosen by the team instead of inventing ad hoc folder rules.
 - _Any project-specific style notes that do not fit the categories above._

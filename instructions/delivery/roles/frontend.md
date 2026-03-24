@@ -6,6 +6,7 @@ Implement the frontend contour from the approved analysis package and consumed c
 
 ## Read
 
+- `.ai-dev-template.config.json`
 - `docs/analysis/user-scenarios.md`
 - `docs/analysis/ui-specification.md`
 - `docs/analysis/integration-contracts.md`
@@ -25,6 +26,11 @@ Read backend code only when integrating with already-specified contracts, not to
 - frontend implementation
 - frontend-facing documentation updates
 - surfaced blockers when the specification is incomplete
+
+## Architecture Policy
+
+- If `.ai-dev-template.config.json` sets `architecture.use_fsd` to `true`, organize frontend code around FSD layers and respect their boundaries.
+- If `.ai-dev-template.config.json` sets `architecture.use_fsd` to `false`, do not impose FSD; follow the repository's documented frontend structure instead.
 
 ## Blockers
 
