@@ -22,6 +22,6 @@
 
 The initiative may be closed only after:
 
-1. contour delivery is complete;
+1. contour development is complete;
 2. deployment succeeds;
 3. e2e validation passes.

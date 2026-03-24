@@ -2,7 +2,7 @@
 
 ## Summary
 
-- Stage: `delivery`
+- Stage: `development`
 - Contour: `<frontend/backend/devops/etc.>`
 - Initiative: `<epic or parent issue>`
 

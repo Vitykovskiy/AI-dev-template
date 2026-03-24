@@ -1,6 +1,7 @@
 # Session Start Checklist
 
 - Router read:
+- Workflow state file read:
 - Current stage:
 - Current role:
 - Config loaded:

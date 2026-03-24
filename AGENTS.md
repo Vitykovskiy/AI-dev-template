@@ -4,34 +4,44 @@ Read this file first at the start of every new session.
 
 ## Router Goal
 
-This repository uses a strict 6-stage workflow with explicit role separation:
+This repository uses a strict 6-stage workflow with explicit role separation.
 
-1. setup
-2. intake
-3. analysis
-4. delivery
-5. deploy
-6. e2e-test
+The current stage is stored in `.ai-dev-template.workflow-state.json`.
 
-The agent must determine the current stage and the active role before reading any detailed instructions.
+`current_stage` is the only source of truth for workflow stage detection.
 
-Critical rule: do not read the full `instructions/` tree. Read only the files selected by this router for the current stage and role.
+Allowed values:
+
+1. `setup`
+2. `intake`
+3. `analysis`
+4. `development`
+5. `deploy`
+6. `e2e_test`
+
+Critical rule: do not infer the current stage from deleted files, missing files, or folder structure in `instructions/`. Instruction files are permanent template assets.
 
 ## Stage Detection
 
-Determine the current stage by checking the repository state in this order:
+Read `.ai-dev-template.workflow-state.json` and use `current_stage` exactly as written.
 
-1. If repository bootstrap is incomplete, use `setup`.
-   Bootstrap is incomplete when the repository still needs environment validation, workflow initialization, or canonical project structure setup.
-2. Else if task intake artifacts are missing or the current initiative is not yet captured, use `intake`.
-   Intake is the stage where the business analyst works with the requester and records the business problem and user scenarios.
-3. Else if the implementation-ready analysis package is incomplete, use `analysis`.
-   Analysis is incomplete if required system modules, contracts, UI behavior, data formats, cross-cutting concerns, or contour decomposition are not fixed in `docs/analysis/`.
-4. Else if implementation tasks for a specific contour are active, use `delivery`.
-5. Else if contour delivery is complete and the initiative is waiting for environment rollout, use `deploy`.
-6. Else if deployment is complete and the initiative is waiting for end-to-end validation, use `e2e-test`.
+If the file is missing, malformed, or contains an unsupported value, stop and report a blocker.
 
-If a delivery, deploy, or test executor discovers a material gap in requirements, contracts, UI behavior, integration behavior, or acceptance criteria, stop execution and return the initiative to `analysis`.
+## Stage Transitions
+
+Stage transitions are performed by updating `.ai-dev-template.workflow-state.json`.
+
+Use state changes for both forward progress and rollback:
+
+- `deploy` -> `development`
+- `e2e_test` -> `analysis`
+- `e2e_test` -> `development`
+
+Do not delete or recreate instruction files as a workflow mechanism.
+
+One-time exception:
+
+- repository bootstrap may begin in `setup`, but leaving `setup` still happens by updating the state file, not by deleting setup instructions
 
 ## Role Detection
 
@@ -40,11 +50,11 @@ After selecting the stage, determine the role for the current session:
 - `setup`: technical agent
 - `intake`: business analyst
 - `analysis`: system analyst
-- `delivery`: exactly one contour role per session, such as `frontend`, `backend`, `devops`, or another explicit contour owner
+- `development`: exactly one contour role per session, such as `frontend`, `backend`, `devops`, or another explicit contour owner
 - `deploy`: devops
-- `e2e-test`: qa-e2e
+- `e2e_test`: qa-e2e
 
-For `delivery`, do not mix contours in one execution branch. If the work spans multiple contours, use separate tasks and separate role sessions.
+For `development`, do not mix contours in one execution branch. If the work spans multiple contours, use separate tasks and separate role sessions.
 
 ## Allowed Reading By Stage
 
@@ -54,15 +64,17 @@ Read only the files listed for the active stage. Do not preload files from other
 
 Read, in order:
 
-1. `instructions/setup/router.md`
-2. `instructions/setup/technical-agent.md`
+1. `.ai-dev-template.workflow-state.json`
+2. `instructions/setup/router.md`
+3. `instructions/setup/technical-agent.md`
 
 ### intake
 
 Read, in order:
 
-1. `instructions/intake/router.md`
-2. `instructions/intake/business-analyst.md`
+1. `.ai-dev-template.workflow-state.json`
+2. `instructions/intake/router.md`
+3. `instructions/intake/business-analyst.md`
 
 Read only the intake-facing canonical docs needed to capture the task:
 
@@ -75,8 +87,9 @@ Read only the intake-facing canonical docs needed to capture the task:
 
 Read, in order:
 
-1. `instructions/analysis/router.md`
-2. `instructions/analysis/system-analyst.md`
+1. `.ai-dev-template.workflow-state.json`
+2. `instructions/analysis/router.md`
+3. `instructions/analysis/system-analyst.md`
 
 Read only the canonical analysis package and adjacent overview docs:
 
@@ -85,12 +98,13 @@ Read only the canonical analysis package and adjacent overview docs:
 - `docs/analysis/README.md`
 - the specific files in `docs/analysis/` that are required for the current initiative
 
-### delivery
+### development
 
 Read, in order:
 
-1. `instructions/delivery/router.md`
-2. exactly one role file from `instructions/delivery/roles/`
+1. `.ai-dev-template.workflow-state.json`
+2. `instructions/delivery/router.md`
+3. exactly one role file from `instructions/delivery/roles/`
 
 Allowed role files:
 
@@ -121,8 +135,9 @@ Do not read sibling contour implementation code as a substitute for missing anal
 
 Read, in order:
 
-1. `instructions/deploy/router.md`
-2. `instructions/deploy/devops.md`
+1. `.ai-dev-template.workflow-state.json`
+2. `instructions/deploy/router.md`
+3. `instructions/deploy/devops.md`
 
 Read only deployment-relevant artifacts:
 
@@ -132,12 +147,13 @@ Read only deployment-relevant artifacts:
 - `docs/delivery/contour-task-matrix.md`
 - deployment-specific environment and rollout docs
 
-### e2e-test
+### e2e_test
 
 Read, in order:
 
-1. `instructions/e2e-test/router.md`
-2. `instructions/e2e-test/qa-e2e.md`
+1. `.ai-dev-template.workflow-state.json`
+2. `instructions/e2e-test/router.md`
+3. `instructions/e2e-test/qa-e2e.md`
 
 Read only the user-scenario, acceptance, environment, and rollout artifacts required to validate the delivered system.
 
@@ -145,10 +161,11 @@ Read only the user-scenario, acceptance, environment, and rollout artifacts requ
 
 Stop and report a blocker when any of the following is true:
 
+- `.ai-dev-template.workflow-state.json` is missing or invalid;
 - the current stage is ambiguous;
 - the active role is ambiguous;
 - canonical analysis artifacts are insufficient for implementation, deployment, or testing;
 - a task tries to combine multiple contours without explicit decomposition;
 - a role would need to read unrelated instructions or unrelated code just to infer expected behavior.
 
-When blocked by missing analysis, explicitly state that the initiative must return to stage `analysis`.
+When blocked by missing analysis, explicitly state that the initiative must return to stage `analysis` by updating `.ai-dev-template.workflow-state.json`.

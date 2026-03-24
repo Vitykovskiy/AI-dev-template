@@ -2,7 +2,7 @@
 
 ## Mission
 
-Prepare or implement test assets that belong to delivery-stage contour tasks without replacing the dedicated `e2e-test` stage.
+Prepare or implement test assets that belong to development-stage contour tasks without replacing the dedicated `e2e_test` stage.
 
 ## Read
 

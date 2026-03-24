@@ -4,18 +4,18 @@ Template repository for an AI team that works through a fixed phase-and-role wor
 
 ## Operating Model
 
-The template enforces a 6-stage lifecycle:
+The template enforces a 6-stage lifecycle stored in `.ai-dev-template.workflow-state.json`:
 
-1. `setup` — technical agent initializes the repository and workflow.
-2. `intake` — business analyst captures the problem, users, scenarios, scope, and acceptance expectations.
-3. `analysis` — system analyst produces the implementation-ready specification package.
-4. `delivery` — contour-specific roles implement only their assigned slice, such as `frontend`, `backend`, or contour-specific `devops`.
-5. `deploy` — devops rolls the delivered contours into the target environment.
-6. `e2e-test` — qa-e2e validates the deployed system against user scenarios and acceptance criteria.
+1. `setup` - technical agent initializes the repository and workflow.
+2. `intake` - business analyst captures the problem, users, scenarios, scope, and acceptance expectations.
+3. `analysis` - system analyst produces the implementation-ready specification package.
+4. `development` - contour-specific roles implement only their assigned slice, such as `frontend`, `backend`, or contour-specific `devops`.
+5. `deploy` - devops rolls the delivered contours into the target environment.
+6. `e2e_test` - qa-e2e validates the deployed system against user scenarios and acceptance criteria.
 
 The repository is the canonical source of truth for:
 
-- workflow routing and role rules;
+- workflow routing, state, and role rules;
 - business context and user scenarios;
 - system analysis and integration contracts;
 - contour decomposition and lifecycle state;
@@ -23,7 +23,7 @@ The repository is the canonical source of truth for:
 
 ## Core Principles
 
-- No implementation before analysis is sufficient for delivery.
+- No implementation before analysis is sufficient for development.
 - User scenarios are fixed before contour decomposition.
 - Screens, interfaces, data formats, and integration contracts are analyzed before coding.
 - Frontend works from its own contour specification and contracts, not by reading backend code.
@@ -33,20 +33,22 @@ The repository is the canonical source of truth for:
 
 ## Repository Layout
 
-- `AGENTS.md` — router that selects the current stage and role branch.
-- `instructions/` — stage-specific and role-specific instructions.
-- `docs/analysis/` — canonical analysis package that gates delivery.
-- `docs/delivery/` — contour decomposition and delivery handoff artifacts.
-- `templates/` — reusable templates for intake, analysis, contour delivery, deploy, and e2e work.
-- `tasks/` — local scratch space only; not a durable backlog.
+- `AGENTS.md` - router that reads `.ai-dev-template.workflow-state.json` and selects the current stage and role branch.
+- `.ai-dev-template.workflow-state.json` - explicit workflow state file with `current_stage`.
+- `instructions/` - permanent stage-specific and role-specific instructions. These files are not deleted as part of stage transitions.
+- `docs/analysis/` - canonical analysis package that gates development.
+- `docs/delivery/` - contour decomposition and development handoff artifacts.
+- `templates/` - reusable templates for intake, analysis, contour development, deploy, and e2e work.
+- `tasks/` - local scratch space only; not a durable backlog.
 
 ## How A New Project Starts
 
 1. Create a repository from this template and clone it locally.
 2. Add `.ai-dev-template.config.json` to the root.
-3. Connect the repository to GitHub Issues and a GitHub Project board.
-4. Give the agent access to the repository and the business request.
-5. Start with `AGENTS.md`; the router will select `setup` or `intake` depending on repository state.
+3. Keep `.ai-dev-template.workflow-state.json` in the root and set `current_stage` to the correct value.
+4. Connect the repository to GitHub Issues and a GitHub Project board.
+5. Give the agent access to the repository and the business request.
+6. Start with `AGENTS.md`; the router will read the state file and select the matching instruction branch.
 
 ## GitHub Workflow
 
@@ -54,13 +56,23 @@ GitHub Issues and GitHub Project remain the operational backbone, but task creat
 
 - intake captures the initiative;
 - analysis produces implementation-ready artifacts;
-- delivery creates contour-specific tasks;
-- deploy and e2e-test run as separate stages after implementation.
+- development creates contour-specific tasks;
+- deploy and e2e_test run as separate stages after implementation.
 
 Closing an initiative before successful e2e validation is not allowed.
+
+## Workflow State
+
+Stage transitions happen by editing `.ai-dev-template.workflow-state.json`.
+
+This supports safe returns to earlier stages without restoring deleted instruction files, for example:
+
+- `deploy` -> `development`
+- `e2e_test` -> `analysis`
+- `e2e_test` -> `development`
 
 ## Configuration
 
 Workflow policy is configured in `.ai-dev-template.config.json`.
 
-The configuration governs language, execution mode, approval checkpoints, and PR/review behavior. It does not replace the phase-and-role lifecycle defined in `AGENTS.md`, `instructions/`, and `docs/07-workflow.md`.
+The configuration governs language, execution mode, approval checkpoints, and PR/review behavior. It does not replace the explicit stage state stored in `.ai-dev-template.workflow-state.json`.

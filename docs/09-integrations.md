@@ -38,11 +38,11 @@ Validation note:
 
 ## Runtime And External Integrations
 
-Document every external system that matters to delivery, deploy, or e2e validation.
+Document every external system that matters to development, deploy, or e2e validation.
 
 | Integration | Purpose | Stage first needed | Status | Notes |
 | --- | --- | --- | --- | --- |
-| `<integration>` | `<purpose>` | `<analysis/delivery/deploy/e2e-test>` | `<status>` | `<notes>` |
+| `<integration>` | `<purpose>` | `<analysis/development/deploy/e2e_test>` | `<status>` | `<notes>` |
 
 ## Integration Status
 

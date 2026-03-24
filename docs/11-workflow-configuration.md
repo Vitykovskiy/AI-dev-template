@@ -4,17 +4,17 @@
 
 `.ai-dev-template.config.json` stores operational policy for the repository.
 
-It configures how the agent executes work inside the lifecycle. It does not replace the fixed stage model defined in `AGENTS.md` and `docs/07-workflow.md`.
+It configures how the agent executes work inside the lifecycle. It does not replace the explicit workflow stage stored in `.ai-dev-template.workflow-state.json`.
 
 ## Fixed Lifecycle vs Configurable Policy
 
 The following are fixed by the template and are not optional:
 
-- 6 lifecycle stages: `setup`, `intake`, `analysis`, `delivery`, `deploy`, `e2e-test`
+- 6 lifecycle stages in `.ai-dev-template.workflow-state.json`: `setup`, `intake`, `analysis`, `development`, `deploy`, `e2e_test`
 - explicit primary role per stage
-- delivery from canonical analysis artifacts
+- development from canonical analysis artifacts
 - separate deploy stage
-- separate e2e-test stage
+- separate e2e_test stage
 - initiative closure only after successful e2e validation
 
 The following remain configurable:
@@ -30,7 +30,7 @@ The following remain configurable:
 - `autonomous`: continue through available work within the current allowed stage flow until a real blocker or configured checkpoint is reached.
 - `staged`: pause between work stages and wait for explicit human confirmation.
 
-Execution mode affects pacing. It does not authorize skipping `intake`, `analysis`, `deploy`, or `e2e-test`.
+Execution mode affects pacing. It does not authorize skipping `intake`, `analysis`, `deploy`, or `e2e_test`.
 
 ## Pull Request Policy
 
@@ -45,13 +45,14 @@ Typical policy fields include:
 - merge checks and approvals
 - whether the agent may self-merge
 
-PR policy changes the delivery mechanics, not the lifecycle gates.
+PR policy changes the delivery mechanics, not the lifecycle gates or the state-file model.
 
 ## Artifact Persistence
 
 Repository-persisted artifacts remain the source of truth for reusable knowledge:
 
 - `AGENTS.md`
+- `.ai-dev-template.workflow-state.json`
 - `instructions/`
 - `docs/`
 - templates and workflow assets

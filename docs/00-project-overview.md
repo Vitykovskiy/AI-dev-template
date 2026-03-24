@@ -13,19 +13,20 @@ Use it to identify:
 
 ## Lifecycle Summary
 
-The repository follows a fixed 6-stage lifecycle:
+The repository follows a fixed 6-stage lifecycle tracked in `.ai-dev-template.workflow-state.json`:
 
 1. `setup`
 2. `intake`
 3. `analysis`
-4. `delivery`
+4. `development`
 5. `deploy`
-6. `e2e-test`
+6. `e2e_test`
 
 Each stage has one primary executor and a dedicated instruction branch. See `AGENTS.md` for routing and `docs/07-workflow.md` for lifecycle rules.
 
 ## Current Status
 
+- Workflow state file: `.ai-dev-template.workflow-state.json`
 - Active stage: `<fill-current-stage>`
 - Active initiative: `<fill-initiative-or-epic>`
 - Current owner role: `<fill-role>`
@@ -50,7 +51,7 @@ Each stage has one primary executor and a dedicated instruction branch. See `AGE
 - `docs/analysis/ui-specification.md`
 - `docs/analysis/cross-cutting-concerns.md`
 
-### Delivery Handoff
+### Development Handoff
 
 - `docs/delivery/contour-task-matrix.md`
 
@@ -65,9 +66,10 @@ Each stage has one primary executor and a dedicated instruction branch. See `AGE
 ## Reading Policy
 
 - Start with `AGENTS.md`.
+- Read `.ai-dev-template.workflow-state.json`.
 - Read only the branch selected by the router.
 - Load only the canonical artifacts required for the current stage and role.
-- If a later-stage role needs to infer behavior from unrelated code or documents, treat that as a blocker and return to `analysis`.
+- If a later-stage role needs to infer behavior from unrelated code or documents, treat that as a blocker and return to `analysis` by updating the state file.
 
 ## GitHub Backbone
 

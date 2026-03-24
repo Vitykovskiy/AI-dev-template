@@ -1,8 +1,12 @@
-# Delivery Router
+# Development Router
 
-Stage: `delivery`
+Stage: `development`
 
 Primary executor: exactly one contour role per session.
+
+The active stage is selected from `.ai-dev-template.workflow-state.json`.
+
+Use this branch only while `current_stage = "development"`.
 
 Choose one role file and read only that file next:
 

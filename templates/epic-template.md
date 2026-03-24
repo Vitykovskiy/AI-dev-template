@@ -2,7 +2,8 @@
 
 ## Lifecycle Summary
 
-- Current stage: `<setup/intake/analysis/delivery/deploy/e2e-test>`
+- Workflow state file: `.ai-dev-template.workflow-state.json`
+- Current stage: `<setup/intake/analysis/development/deploy/e2e_test>`
 - Primary owner role: `<role>`
 
 ## Goal
@@ -29,6 +30,6 @@ Why this initiative matters.
 
 The initiative is complete only after:
 
-1. delivery tasks are finished by contour;
+1. development tasks are finished by contour;
 2. deployment succeeds;
 3. e2e validation passes.

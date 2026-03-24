@@ -2,7 +2,7 @@
 
 ## Summary
 
-- Stage: `<delivery/deploy/e2e-test>`
+- Stage: `<development/deploy/e2e_test>`
 - Owning role: `<frontend/backend/devops/qa-e2e/etc.>`
 - Parent initiative: `<epic>`
 

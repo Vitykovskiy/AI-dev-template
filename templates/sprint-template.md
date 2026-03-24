@@ -6,7 +6,7 @@ What this stage batch is meant to achieve.
 
 ## Stage
 
-`<analysis/delivery/deploy/e2e-test>`
+`<analysis/development/deploy/e2e_test>`
 
 ## Planned Items
 

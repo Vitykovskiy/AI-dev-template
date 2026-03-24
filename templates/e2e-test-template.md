@@ -2,7 +2,7 @@
 
 ## Summary
 
-- Stage: `e2e-test`
+- Stage: `e2e_test`
 - Owner: `qa-e2e`
 - Initiative: `<epic or parent issue>`
 
