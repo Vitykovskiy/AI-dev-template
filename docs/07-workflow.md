@@ -26,6 +26,14 @@ Rules:
 - change stages only by updating the state file;
 - do not delete or restore instruction files to represent workflow progress.
 
+## Git Synchronization Rule
+
+Before starting task work, sync Git state and confirm the current working branch is based on the latest remote state of its parent branch.
+
+After creating a commit, sync again and confirm the branch still grows from the latest working branch state before further changes, handoff, or PR creation.
+
+If the branch is behind, diverged, or based on an outdated parent, reconcile branch history first and only then continue the workflow task.
+
 ## Stage Ownership
 
 | Stage | Primary executor | Main output |

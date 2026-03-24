@@ -10,6 +10,7 @@ Implement the frontend contour from the approved analysis package and consumed c
 - `docs/analysis/user-scenarios.md`
 - `docs/analysis/ui-specification.md`
 - `docs/analysis/integration-contracts.md`
+- `docs/analysis/cross-cutting-concerns.md`
 - `docs/analysis/version-scope-and-acceptance.md`
 - `docs/delivery/contour-task-matrix.md`
 

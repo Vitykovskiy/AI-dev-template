@@ -19,13 +19,19 @@ Allowed values:
 5. `deploy`
 6. `e2e_test`
 
-Critical rule: do not infer the current stage from deleted files, missing files, or folder structure in `instructions/`. Instruction files are permanent template assets.
-
 ## Stage Detection
 
 Read `.ai-dev-template.workflow-state.json` and use `current_stage` exactly as written.
 
 If the file is missing, malformed, or contains an unsupported value, stop and report a blocker.
+
+## Git Sync Rule
+
+Before starting a task, sync Git state and confirm the working branch is based on the latest remote state of its parent branch.
+
+After creating a commit, sync again and confirm the branch still grows from the latest working branch state before continuing or opening a PR.
+
+If the branch is behind, diverged, or based on an outdated parent, stop implementation work, reconcile the branch history, and then continue.
 
 ## Stage Transitions
 
@@ -37,24 +43,22 @@ Use state changes for both forward progress and rollback:
 - `e2e_test` -> `analysis`
 - `e2e_test` -> `development`
 
-Do not delete or recreate instruction files as a workflow mechanism.
-
 One-time exception:
 
-- repository bootstrap may begin in `setup`, but leaving `setup` still happens by updating the state file, not by deleting setup instructions
+- repository bootstrap may begin in `setup`
 
 ## Role Detection
 
 After selecting the stage, determine the role for the current session:
 
-- `setup`: technical agent
-- `intake`: business analyst
-- `analysis`: system analyst
-- `development`: exactly one contour role per session, such as `frontend`, `backend`, `devops`, or another explicit contour owner
-- `deploy`: devops
-- `e2e_test`: qa-e2e
+- `setup`: senior technical agent
+- `intake`: senior business analyst
+- `analysis`: senior system analyst
+- `development`: exactly one senior contour owner per session, such as `frontend`, `backend`, `devops`, or `qa-e2e`
+- `deploy`: senior devops
+- `e2e_test`: senior qa-e2e
 
-For `development`, do not mix contours in one execution branch. If the work spans multiple contours, use separate tasks and separate role sessions.
+For `development`, a contour is a single delivery role domain such as `frontend`, `backend`, `devops`, or `qa-e2e`. Do not mix multiple contours in one execution branch. If the work spans multiple contours, split it into separate tasks and separate role sessions.
 
 ## Allowed Reading By Stage
 

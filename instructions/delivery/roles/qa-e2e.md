@@ -9,6 +9,8 @@ Prepare or implement test assets that belong to development-stage contour tasks 
 - `docs/analysis/user-scenarios.md`
 - `docs/analysis/version-scope-and-acceptance.md`
 - `docs/analysis/ui-specification.md` when test behavior depends on UI flows
+- `docs/analysis/integration-contracts.md` when end-to-end behavior depends on API or event contracts
+- `docs/analysis/cross-cutting-concerns.md` when validation depends on observability, security, or operational requirements
 - `docs/delivery/contour-task-matrix.md`
 
 ## Do Not Read By Default
