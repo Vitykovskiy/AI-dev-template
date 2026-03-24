@@ -1,27 +1,34 @@
 # Epic Template
 
+## Lifecycle Summary
+
+- Current stage: `<setup/intake/analysis/delivery/deploy/e2e-test>`
+- Primary owner role: `<role>`
+
 ## Goal
 
-Describe the strategic outcome this Epic exists to achieve.
+Describe the initiative outcome.
 
 ## Business Value
 
-Explain why this Epic matters to the business or users.
+Why this initiative matters.
 
-## Scope
+## Required Analysis Package
 
-- Included:
-- Excluded:
+- problem context
+- user scenarios
+- version scope and acceptance
+- system modules
+- domain model and data formats
+- integration contracts
+- UI specification
+- cross-cutting concerns
+- contour decomposition
 
-## Completion Criteria
+## Completion Rule
 
-- `<criterion>`
-- `<criterion>`
+The initiative is complete only after:
 
-## Dependencies
-
-- `<dependency>`
-
-## Risks
-
-- `<risk>`
+1. delivery tasks are finished by contour;
+2. deployment succeeds;
+3. e2e validation passes.

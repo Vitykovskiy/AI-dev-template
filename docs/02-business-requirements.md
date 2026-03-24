@@ -1,5 +1,7 @@
 # Business Requirements
 
+This document captures intake-level requirements. Analysis must refine these into canonical system, UI, and contract artifacts in `docs/analysis/`.
+
 ## Business Requirements
 
 1. Capture each business requirement as a clear outcome statement.
@@ -23,11 +25,13 @@ Example format:
 - `NFR-003`: Reliability expectations
 - `NFR-004`: Observability expectations
 
-## Acceptance Criteria
+## Acceptance Expectations
 
 - `<criterion 1>`
 - `<criterion 2>`
 - `<criterion 3>`
+
+Detailed implementation-ready acceptance criteria should be fixed in `docs/analysis/version-scope-and-acceptance.md`.
 
 ## Open Questions
 

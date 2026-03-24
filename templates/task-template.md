@@ -1,22 +1,31 @@
 # Task Template
 
-## What To Do
+## Summary
 
-Describe the concrete work item.
+- Stage: `<delivery/deploy/e2e-test>`
+- Owning role: `<frontend/backend/devops/qa-e2e/etc.>`
+- Parent initiative: `<epic>`
 
-## Why
+## Goal
 
-State the reason this task exists and which Epic or requirement it supports.
+Describe the specific outcome.
 
-## Expected Result
+## Canonical Inputs
 
-Describe the artifact, behavior, or outcome that must exist when the task is complete.
+- `<artifact>`
+- `<artifact>`
 
-## Dependencies
+## Scope
 
-- `<dependency>`
+- In scope:
+- Out of scope:
 
 ## Completion Criteria
 
-- `<criterion>`
-- `<criterion>`
+- Criterion 1
+- Criterion 2
+
+## Blockers
+
+- Missing analysis artifact:
+- Missing dependency:

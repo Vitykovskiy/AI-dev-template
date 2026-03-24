@@ -1,191 +1,159 @@
 # Workflow
 
-## Agent Working Cycle
+## Lifecycle
 
-1. Read mandatory context in the order defined by `AGENTS.md`.
-2. Load workflow policy from `.ai-dev-template.config.json`.
-3. Apply and acknowledge policy: fill in and show `templates/session-start-checklist.md` to the user. Every field must contain an actual value from `.ai-dev-template.config.json`. Do not proceed until the checklist is complete and visible.
-4. Run environment check.
-5. Perform business task intake.
-<!-- IF:workflow.execution_mode=staged -->
-6. Pause after intake and confirm with the user before continuing.
-<!-- END IF -->
-6. Persist intake results into docs.
-7. Create Epic and tasks in GitHub.
-<!-- IF:workflow.execution_mode=staged -->
-8. Pause after task creation and confirm with the user before continuing.
-<!-- END IF -->
-8. Align stack and best practices.
-9. Localize the relevant repository area using `docs/05-architecture.md`.
-10. Execute tasks one by one. Before any implementation commit for each task: fill in `templates/task-start-checklist.md`. This checklist gates the human checkpoint check, PR classification, branch creation, and delivery mode statement. No implementation commit is allowed before the checklist is complete.
-11. Finalize each task with persistence before context reset.
+The repository enforces a fixed 6-stage lifecycle:
 
-## Workflow Policy Inputs
+1. `setup`
+2. `intake`
+3. `analysis`
+4. `delivery`
+5. `deploy`
+6. `e2e-test`
 
-The repository workflow is controlled by `.ai-dev-template.config.json`.
+The lifecycle is sequential. A later stage may not compensate for a missing earlier-stage artifact.
 
-Minimum policy areas:
+## Stage Ownership
 
-- language for docs, issues, PR text, comments, and commit messages
-- execution mode
-- PR / review / merge policy
-- artifact persistence policy
+| Stage | Primary executor | Main output |
+| --- | --- | --- |
+| `setup` | technical agent | initialized repository and workflow baseline |
+| `intake` | business analyst | business context, scenarios, scope, acceptance expectations |
+| `analysis` | system analyst | implementation-ready specification package |
+| `delivery` | contour role (`frontend`, `backend`, `devops`, etc.) | contour implementation from approved specs |
+| `deploy` | devops | deployed system in target environment |
+| `e2e-test` | qa-e2e | end-to-end validation result |
 
-If repository language is Russian, repository artifacts should be written in clear Russian and should not contain avoidable mixed-language wording.
+## Mandatory Flow
 
-## Task Intake Phase
+1. Start every session with `AGENTS.md`.
+2. Determine the current stage.
+3. Determine the active role for the session.
+4. Read only the instruction branch and canonical artifacts allowed for that stage and role.
+5. Produce only the artifacts and decisions owned by that stage and role.
 
-Mandatory intake sequence:
+## Stage Gates
 
-1. Context and current problem
-2. Target result and business value
-3. Users, scenarios, current process
-4. Constraints, dependencies, first-version scope
-5. Success and acceptance criteria
-6. Risks, unknowns, open questions
-7. Implementation options
+### 1. Setup
 
-Interaction rules:
+Goal:
+prepare the repository, workflow, and baseline documentation.
 
-- One semantic block at a time
-- Short summary after each block
-- No decomposition before intake is coherent
+Exit condition:
+the repository is ready for intake and later role routing.
+
+### 2. Intake
+
+Goal:
+capture the business problem, target outcome, users, scenarios, scope, constraints, and success expectations.
+
+Rules:
+
+- work one semantic block at a time;
+- do not decompose into implementation tasks yet;
+- do not design system internals yet.
+
+Exit condition:
+the initiative is understood well enough to start system analysis.
+
+### 3. Analysis
+
+Goal:
+create the canonical implementation-ready package in `docs/analysis/`.
+
+The minimum required package includes:
+
+- problem context
+- user scenarios
+- version scope and acceptance
+- system modules
+- module relationships
+- domain model and data formats
+- API, event, and integration contracts
+- UI specification
+- cross-cutting concerns
+- contour task decomposition
+
+Exit condition:
+delivery roles can execute from their own artifacts and contracts without inferring behavior from sibling contour code.
+
+### 4. Delivery
+
+Goal:
+implement one contour at a time from approved analysis artifacts.
+
+Rules:
+
+- one task, one contour;
+- one session, one delivery role;
+- frontend uses frontend specs and contracts;
+- backend uses backend specs and contracts;
+- missing specification is a blocker, not a coding prompt.
+
+Exit condition:
+all contour tasks for the initiative are implemented and documented.
+
+### 5. Deploy
+
+Goal:
+roll the delivered system into the target environment as a separate stage.
+
+Exit condition:
+deployment completes and the target environment is ready for integrated validation.
+
+### 6. E2E Test
+
+Goal:
+validate the deployed system against canonical user scenarios and acceptance criteria.
+
+Exit condition:
+e2e validation passes. Only then may the initiative be considered complete.
+
+## Return-To-Analysis Rule
+
+Return the initiative to `analysis` when any later-stage role finds a material gap in:
+
+- expected user behavior;
+- UI states or interactions;
+- domain rules;
+- payload or data formats;
+- API or event contracts;
+- non-functional or cross-cutting requirements;
+- acceptance criteria needed for implementation, rollout, or testing.
+
+Do not close the gap with ad hoc code assumptions.
+
+## GitHub Lifecycle
+
+GitHub Issues and GitHub Project remain the operational system of record.
+
+Recommended initiative flow:
+
+1. create or update the initiative record during `intake`;
+2. complete the analysis package during `analysis`;
+3. create contour-specific implementation tasks after analysis;
+4. execute deploy tasks after contour delivery;
+5. execute e2e tasks after deployment;
+6. close the initiative only after successful e2e validation.
 
 ## Decomposition Rules
 
-- Tasks must be atomic.
-- Tasks must have a concrete expected result.
-- Tasks must include completion criteria.
-- Tasks must link dependencies when applicable.
-- Tasks must map cleanly to GitHub Issue state.
-
-## Code Navigation Before Changes
-
-Before reading implementation files in depth or changing code:
-
-1. determine which repository area the task belongs to;
-2. use `docs/05-architecture.md` as the structure map;
-3. search the relevant area first;
-4. avoid bringing unrelated areas into context unless they are required by the task.
-
-For monorepos, determine `where to work` before deciding `what to change`.
-
-## Task Status Movement
-
-- New task: `Backlog`
-- Active task: `In progress`
-- Completed task: `Closed`
-
-## Execution Mode
-
-<!-- IF:workflow.execution_mode=autonomous -->
-**autonomous** — treat execution as a continuous delivery loop: after closing each task, immediately pick the next priority task from the backlog. Do not stop to report completion to the user between tasks. Do not announce intent to continue — execute the first concrete action of the next task immediately. Stop only when a real blocker requires human input, a configured checkpoint is reached, or the backlog is exhausted.
-<!-- END IF -->
-<!-- IF:workflow.execution_mode=staged -->
-**staged** — stop between every work stage and wait for explicit human confirmation before continuing.
-<!-- END IF -->
-
-<!-- IF:pull_requests.enabled=true -->
-## Pull Request And Review Flow
-
-PR flow is task-scoped.
-
-Before the first implementation commit for a task, the agent must:
-
-1. Classify the task as PR-required or not.
-2. State the delivery mode explicitly.
-3. If PR-required: create or switch to a task branch. Do not push to `main` directly.
-4. If not PR-required: state that explicitly and justify against repository policy.
-
-Recommended lifecycle:
-
-1. Classify the task; confirm whether PR flow is required.
-2. Create or update the task branch.
-<!-- IF:pull_requests.draft_first=true -->
-3. Open a draft PR first before the broader review and merge cycle.
-<!-- END IF -->
-3. Make implementation commits; run required checks; update docs.
-4. Request review according to policy.
-<!-- IF:pull_requests.review.agent_must_read_comments=true -->
-5. Read all PR comments and review summaries before concluding review handling.
-<!-- END IF -->
-<!-- IF:pull_requests.review.agent_must_reply_to_comments=true -->
-5. Reply to PR comments where the workflow expects a direct answer.
-<!-- END IF -->
-<!-- IF:pull_requests.review.agent_must_apply_accepted_feedback=true -->
-5. Apply accepted review feedback before the PR is considered ready.
-<!-- END IF -->
-5. Merge only when all configured approvals and checks are satisfied.
-
-**Review:**
-
-<!-- IF:pull_requests.review.required=false -->
-Review is not required.
-<!-- END IF -->
-<!-- IF:pull_requests.review.required=true -->
-Review is required before merge.
-<!-- END IF -->
-<!-- IF:pull_requests.review.reviewers=human -->
-Human review is required; agent self-review does not satisfy this.
-<!-- END IF -->
-<!-- IF:pull_requests.review.reviewers=ai -->
-Agent review is the required path; record the result in the PR as a review comment or summary.
-<!-- END IF -->
-<!-- IF:pull_requests.review.reviewers=both -->
-Both agent review and human review are required; record the agent review result in the PR before human review.
-<!-- END IF -->
-
-**Merge:**
-
-<!-- IF:pull_requests.merge.require_green_checks=true -->
-The PR is not merge-ready while required checks are failing or missing.
-<!-- END IF -->
-<!-- IF:pull_requests.merge.min_approvals!=0 -->
-At least `{{pull_requests.merge.min_approvals}}` approval(s) required.
-<!-- END IF -->
-<!-- IF:pull_requests.merge.allow_agent_self_merge=false -->
-The agent must not merge. Wait for an authorized actor.
-<!-- END IF -->
-<!-- IF:pull_requests.merge.allow_agent_self_merge=true -->
-The agent may merge when all conditions are satisfied.
-<!-- END IF -->
-<!-- END IF -->
-
-<!-- IF:pull_requests.enabled=false -->
-## Delivery Without Pull Requests
-
-Pull requests are disabled. Deliver tasks through direct commits to the main branch.
-
-Track task completion through repository state, docs, GitHub Issues, and commits.
-<!-- END IF -->
-
+- Tasks must be atomic and contour-specific.
+- Each delivery task must have exactly one owning contour.
+- Cross-contour work is split into linked tasks instead of one shared task.
+- Deploy and e2e tasks are separate from implementation tasks.
 
 ## Documentation Update Rules
 
-- Requirement changes update `docs/02-business-requirements.md`.
-- Scope changes update `docs/03-scope-and-boundaries.md`.
-- Stack and official practices update `docs/04-tech-stack.md`.
-- Architecture changes update `docs/05-architecture.md`.
-- Material decisions update `docs/06-decision-log.md`.
+- Business problem or goals change: update `docs/01-product-vision.md` and `docs/02-business-requirements.md`.
+- Scope or acceptance changes: update `docs/03-scope-and-boundaries.md` and `docs/analysis/version-scope-and-acceptance.md`.
+- System design changes: update the relevant files in `docs/analysis/`.
+- Repository structure or runtime placement changes: update `docs/05-architecture.md`.
+- Lifecycle or role rules change: update `AGENTS.md`, `instructions/`, and this file together.
+- Material decisions change: update `docs/06-decision-log.md`.
 
-## Finalize -> Persist -> Reset Context
+## Execution Mode And PR Policy
 
-Before the agent clears context after a task, it must:
+The repository still uses `.ai-dev-template.config.json` for execution mode, approvals, and PR/review policy.
 
-1. persist code and documentation;
-2. update the related issue;
-3. update the project card;
-4. update labels or status if needed;
-5. create a dedicated commit;
-6. verify that important state is not trapped in transient context.
-
-<!-- IF:pull_requests.enabled=true -->
-The agent must also ensure that PR review comments were processed according to policy before considering the task complete.
-<!-- END IF -->
-
-## Known Limitations / Assumptions
-
-- The template assumes the team uses GitHub Issues and GitHub Project rather than a separate backlog tool.
-- Project board field names can vary by GitHub plan; the required logical fields remain `Status`, `Priority`, and `Area`.
-- Shell automation assumes `bash` is available. On Windows, Git Bash or WSL is typically required.
-- Some GitHub Project automations may still require repository-specific permissions that the agent cannot infer until environment check.
+Those settings control how a stage is executed. They do not change the required lifecycle order or the role boundaries defined in this document.

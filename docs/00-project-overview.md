@@ -1,55 +1,80 @@
 # Project Overview
 
-## Project Summary
+## Purpose
 
-Project name: `<fill-project-name>`
+This file is the high-signal entry point for a new agent session.
 
-Short description:
-Use this repository to manage project discovery, planning, implementation, and operational decisions through a consistent AI-assisted workflow.
+Use it to identify:
 
-## Goal
+- the current lifecycle stage;
+- the active initiative;
+- which canonical artifacts exist;
+- where each role must read next.
 
-Describe the business objective the project exists to achieve. Keep this section current when strategy changes.
+## Lifecycle Summary
+
+The repository follows a fixed 6-stage lifecycle:
+
+1. `setup`
+2. `intake`
+3. `analysis`
+4. `delivery`
+5. `deploy`
+6. `e2e-test`
+
+Each stage has one primary executor and a dedicated instruction branch. See `AGENTS.md` for routing and `docs/07-workflow.md` for lifecycle rules.
 
 ## Current Status
 
-- Lifecycle stage: `Discovery`
-- Delivery status: `Environment not yet validated`
-- Current focus: `Complete business task intake and connect GitHub Project`
+- Active stage: `<fill-current-stage>`
+- Active initiative: `<fill-initiative-or-epic>`
+- Current owner role: `<fill-role>`
+- Delivery status: `<fill-status>`
 
-## GitHub Project
+## Canonical Artifact Map
 
-- URL: `<paste GitHub Project URL in docs/09-integrations.md and mirror here if useful>`
-- Board model: `Kanban`
-- Required statuses: `Backlog`, `In progress`, `Closed`
+### Intake And Product Context
 
-## Documentation Map
+- `docs/01-product-vision.md`
+- `docs/02-business-requirements.md`
+- `docs/03-scope-and-boundaries.md`
 
-- `docs/00-project-overview.md`: entry point and navigation
-- `docs/01-product-vision.md`: problem, value, users, success
-- `docs/02-business-requirements.md`: requirements and acceptance criteria
-- `docs/03-scope-and-boundaries.md`: in-scope and out-of-scope
-- `docs/04-tech-stack.md`: chosen technologies and best practices
-- `docs/05-architecture.md`: system structure and data flow
-- `docs/06-decision-log.md`: ADR-lite decision history
-- `docs/07-workflow.md`: operating workflow for the agent
-- `docs/09-integrations.md`: GitHub Project URL, env vars, tokens
-- `docs/10-glossary.md`: agreed vocabulary
-- `docs/11-workflow-configuration.md`: workflow policy and configuration meanings
+### Analysis Package
 
-## Required Agent Reading Order
+- `docs/analysis/problem-context.md`
+- `docs/analysis/user-scenarios.md`
+- `docs/analysis/version-scope-and-acceptance.md`
+- `docs/analysis/system-modules.md`
+- `docs/analysis/domain-model.md`
+- `docs/analysis/integration-contracts.md`
+- `docs/analysis/ui-specification.md`
+- `docs/analysis/cross-cutting-concerns.md`
 
-1. `AGENTS.md`
-2. `README.md`
-3. `.ai-dev-template.config.json`
-4. `docs/00-project-overview.md`
-5. `docs/01-product-vision.md`
-6. `docs/02-business-requirements.md`
-7. `docs/04-tech-stack.md`
-8. `docs/05-architecture.md`
-9. Current GitHub issues
-10. Current GitHub Project board
+### Delivery Handoff
+
+- `docs/delivery/contour-task-matrix.md`
+
+### Operating Documents
+
+- `docs/05-architecture.md`
+- `docs/06-decision-log.md`
+- `docs/07-workflow.md`
+- `docs/09-integrations.md`
+- `docs/11-workflow-configuration.md`
+
+## Reading Policy
+
+- Start with `AGENTS.md`.
+- Read only the branch selected by the router.
+- Load only the canonical artifacts required for the current stage and role.
+- If a later-stage role needs to infer behavior from unrelated code or documents, treat that as a blocker and return to `analysis`.
+
+## GitHub Backbone
+
+- Epic and task tracking: GitHub Issues
+- Delivery status: GitHub Project
+- Integration metadata: `docs/09-integrations.md`
 
 ## Notes
 
-Keep this file high signal. It should quickly orient a new agent session without replacing the more detailed docs.
+Keep this file concise. It should orient a new session without duplicating the detailed stage artifacts.

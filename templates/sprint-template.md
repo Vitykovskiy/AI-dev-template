@@ -1,27 +1,19 @@
-# Sprint Template
+# Stage Batch Template
 
-## Period
+## Goal
 
-- Start:
-- End:
+What this stage batch is meant to achieve.
 
-## Goals
+## Stage
 
-- `<goal>`
-- `<goal>`
+`<analysis/delivery/deploy/e2e-test>`
 
-## Planned Tasks
+## Planned Items
 
-- `<issue or task>`
-- `<issue or task>`
+- Item 1
+- Item 2
 
 ## Risks
 
-- `<risk>`
-- `<risk>`
-
-## Outcomes
-
-- Completed:
-- Not completed:
-- Learnings:
+- Risk 1
+- Risk 2

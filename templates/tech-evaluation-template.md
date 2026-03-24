@@ -1,35 +1,20 @@
 # Tech Evaluation Template
 
-## Technology
+## Candidate
 
 - Name:
-- Category:
+- Purpose:
+- Relevant stage: `analysis`
 
-## Why It Is Being Considered
+## Evaluation
 
-- Problem it solves:
-- Relevant constraints:
-
-## Pros
-
-- `<pro>`
-- `<pro>`
-
-## Cons
-
-- `<con>`
-- `<con>`
-
-## Risks
-
-- `<risk>`
-
-## Alternatives
-
-- `<alternative>`
-- `<alternative>`
+- Benefits:
+- Risks:
+- Operational cost:
+- Impacted contours:
 
 ## Decision
 
-- Selected or rejected:
-- Rationale:
+- Adopt / Reject / Revisit
+- Contract or architecture impact:
+- Notes:

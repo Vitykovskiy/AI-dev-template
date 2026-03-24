@@ -2,84 +2,61 @@
 
 ## Purpose
 
-`.ai-dev-template.config.json` is the workflow policy file for this repository.
+`.ai-dev-template.config.json` stores operational policy for the repository.
 
-Use it to decide how the agent should operate before project execution starts.
+It configures how the agent executes work inside the lifecycle. It does not replace the fixed stage model defined in `AGENTS.md` and `docs/07-workflow.md`.
 
-## Current Configuration Areas
+## Fixed Lifecycle vs Configurable Policy
 
-- Language for docs, issues, PR text, comments, and commit messages
-- Execution mode: `autonomous` or `staged`
-- PR, review, and merge policy
-- Whether temporary AI work artifacts stay local or are persisted
-- Required and recommended GitHub token scopes
+The following are fixed by the template and are not optional:
 
-If repository language is Russian, repository artifacts should be written in clear Russian and should not contain avoidable mixed-language wording.
+- 6 lifecycle stages: `setup`, `intake`, `analysis`, `delivery`, `deploy`, `e2e-test`
+- explicit primary role per stage
+- delivery from canonical analysis artifacts
+- separate deploy stage
+- separate e2e-test stage
+- initiative closure only after successful e2e validation
+
+The following remain configurable:
+
+- language for docs, issues, PR text, comments, and commits
+- execution mode
+- approval checkpoints
+- PR, review, and merge behavior
+- persistence policy for temporary work artifacts
 
 ## Execution Modes
 
-- `autonomous`: the agent treats execution as a continuous delivery loop — after closing each task, it immediately picks the next priority task from the backlog without stopping to report to the user. It stops only when a real blocker requires human input, a configured checkpoint is reached, or the backlog is exhausted.
-- `staged`: the agent pauses between every work stage and waits for explicit human confirmation before continuing.
+- `autonomous`: continue through available work within the current allowed stage flow until a real blocker or configured checkpoint is reached.
+- `staged`: pause between work stages and wait for explicit human confirmation.
+
+Execution mode affects pacing. It does not authorize skipping `intake`, `analysis`, `deploy`, or `e2e-test`.
 
 ## Pull Request Policy
 
-If `pull_requests.enabled` is `false`, PR review and merge policy fields become informational only and must not drive the workflow.
+If `pull_requests.enabled` is `true`, PR policy applies to the tasks executed within each stage.
 
-If `pull_requests.enabled` is `true`, the repository should treat the following as policy:
+Typical policy fields include:
 
-- PRs are created only in the scope of a task, not for arbitrary unrelated changes
-- a task branch is created for the task
-- one or more commits may be created in that task branch
-- the PR is opened when that task is ready for review or merge
-- which tasks require a PR
-- whether drafts are used first
+- whether every task requires a PR
+- whether drafts are required first
 - whether review is mandatory
-- who reviews
-- whether the agent must read and process PR comments
-- whether task commits are squashed before merge
-- branch integration method: `merge` or `rebase`
-- required approvals
-- required green checks
-- whether self-merge by the agent is allowed
+- reviewer type
+- merge checks and approvals
+- whether the agent may self-merge
 
-These are not descriptive preferences. They are expected workflow rules for the agent.
-
-See `AGENTS.md` and `docs/07-workflow.md` for how the agent applies PR policy per task.
-
-`pull_requests.creation_mode` meanings:
-
-- `for_every_task`: every task uses its own branch and its own PR
-- `for_significant_tasks`: only tasks that are significant under repository policy use a PR
-- `manual_per_task`: whether a task uses a PR is decided explicitly by a human for that task
-
-Significant tasks are tasks that meet at least one of the following:
-
-- change application or infrastructure code
-- change system behavior
-- affect architecture, API, security, migrations, or external integrations
-- require review under repository policy
-
-Non-significant tasks are usually limited to documentation, text edits, or other small low-risk housekeeping changes that do not change system behavior.
+PR policy changes the delivery mechanics, not the lifecycle gates.
 
 ## Artifact Persistence
 
-Repository-persisted artifacts should remain the source of truth for reusable team knowledge.
+Repository-persisted artifacts remain the source of truth for reusable knowledge:
 
-Always keep in the repository:
-
-- `docs/`
 - `AGENTS.md`
-- architectural and operational decisions
+- `instructions/`
+- `docs/`
+- templates and workflow assets
 
-Configurable local-only policy applies only to temporary work artifacts such as:
-
-- scratch notes
-- temporary task breakdown drafts
-- temporary API dumps
-- agent work logs
-- experimental or intermediate generation files
-
-If `persist_temporary_workfiles_to_repo` is `false`, these temporary artifacts should remain local and follow the default local-only paths listed in `.gitignore`.
+Temporary local work artifacts may follow repository policy, but canonical lifecycle documents must remain in the repository.
 
 ## GitHub Token Requirements
 
@@ -93,4 +70,4 @@ Recommended additional scopes:
 - `read:org`
 - `workflow`
 
-These scopes do not guarantee repository-specific write access or bypass branch protection rules. They only define the token capability baseline.
+These scopes provide capability baseline only. Repository permissions and branch protections still apply.

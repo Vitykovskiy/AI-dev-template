@@ -1,62 +1,51 @@
 # Architecture
 
-## System Context
+## Purpose
 
-Describe the system boundary, major actors, and key external systems.
+This file is the structural navigation map for implementation, deployment, and testing work.
 
-## Project Structure Map
+It complements the analysis package:
 
-Use this file as the navigation map for the repository.
+- `docs/analysis/` defines the target system and contracts;
+- this file maps those decisions onto the actual repository structure and runtime boundaries.
 
-Record the main applications, packages, services, and layers before implementation starts.
+## Repository Structure Map
 
-This map should help a new session understand:
+Record the main applications, packages, services, and infrastructure areas before delivery starts.
 
-- which parts of the repository exist;
-- what each part is responsible for;
-- where frontend, backend, shared, data, and infrastructure code live;
-- which entry points and boundaries matter;
-- which area should be inspected first for a given task.
-
-For monorepos, this section is mandatory.
-
-| Area | Path | Responsibility | Notes |
+| Area | Path | Responsibility | Owned Contour |
 | --- | --- | --- | --- |
-| `<app/package/service>` | `<path>` | `<responsibility>` | `<notes>` |
+| `<app/package/service>` | `<path>` | `<responsibility>` | `<frontend/backend/devops/etc.>` |
 
-## Components
+## Runtime Modules
 
-| Component | Responsibility | Inputs | Outputs | Notes |
-| --- | --- | --- | --- | --- |
-| `<component>` | `<responsibility>` | `<input>` | `<output>` | `<notes>` |
+Map implemented runtime modules back to the canonical analysis artifacts.
 
-## Responsibility Boundaries
+| Runtime module | Repository path | Canonical source | Notes |
+| --- | --- | --- | --- |
+| `<module>` | `<path>` | `docs/analysis/<file>.md` | `<notes>` |
 
-- Frontend:
-- Backend:
-- Data layer:
-- Infrastructure:
-- External integrations:
+## Contour Boundaries
 
-## Data Flows
+- Frontend: `<owned modules, UI surfaces, consumed contracts>`
+- Backend: `<owned modules, domain services, produced contracts>`
+- DevOps: `<owned environments, pipelines, runtime infrastructure>`
+- QA E2E: `<owned suites, test environments, validation surfaces>`
 
-1. `<flow step 1>`
-2. `<flow step 2>`
-3. `<flow step 3>`
+## Cross-Contour Dependencies
 
-## Integrations
+| From contour | To contour | Dependency | Canonical contract |
+| --- | --- | --- | --- |
+| `<frontend>` | `<backend>` | `<dependency>` | `docs/analysis/integration-contracts.md` |
 
-- GitHub
-- External APIs: `<fill if applicable>`
-- Internal systems: `<fill if applicable>`
+## Deployment Topology
 
-## Technical Risks
-
-- `<technical risk>`
-- `<technical risk>`
+- Environments: `<local/staging/prod/etc.>`
+- Delivery units: `<apps/services/jobs>`
+- External integrations: `<systems and boundaries>`
 
 ## Update Rule
 
-Before reading large parts of the repository or changing code, the agent should use this file to localize the relevant area first.
+Update this file whenever repository structure, contour ownership, runtime module placement, or deployment topology changes.
 
-If implementation changes project structure, component responsibilities, data flow, or integration assumptions, update this file together with `docs/06-decision-log.md`.
+Do not use this file to invent missing product behavior. Missing behavior belongs in `docs/analysis/`.

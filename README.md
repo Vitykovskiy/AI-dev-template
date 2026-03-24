@@ -1,110 +1,66 @@
 # AI Dev Template
 
-Template repository for projects where an AI agent runs a consistent discovery, planning, delivery, and documentation workflow.
+Template repository for an AI team that works through a fixed phase-and-role workflow instead of improvising discovery, design, implementation, deployment, and validation in one session.
 
-## Purpose
+## Operating Model
 
-This template gives every new project the same operating model:
+The template enforces a 6-stage lifecycle:
 
-- the repository is the source of truth for goals, requirements, architecture, decisions, workflow, and integrations;
-- `.ai-dev-template.config.json` is the source of truth for workflow language, execution mode, and PR policy;
-- GitHub Issues and GitHub Project are the source of truth for backlog, task status, and current execution;
-- the agent must complete business task intake before planning implementation;
-- important state must be persisted to repository artifacts and GitHub, not left in transient session context.
+1. `setup` — technical agent initializes the repository and workflow.
+2. `intake` — business analyst captures the problem, users, scenarios, scope, and acceptance expectations.
+3. `analysis` — system analyst produces the implementation-ready specification package.
+4. `delivery` — contour-specific roles implement only their assigned slice, such as `frontend`, `backend`, or contour-specific `devops`.
+5. `deploy` — devops rolls the delivered contours into the target environment.
+6. `e2e-test` — qa-e2e validates the deployed system against user scenarios and acceptance criteria.
 
-## What The Agent Automates
+The repository is the canonical source of truth for:
 
-- Checks `git`, remotes, `gh`, authentication, and basic repository readiness.
-- Reports missing prerequisites instead of silently working around them.
-- Runs structured business task intake one topic block at a time.
-- Documents the task, project scope, architecture, decisions, and workflow.
-- Proposes a tech stack and records official best practices before implementation.
-- Creates and maintains labels, Epic issues, task issues, and the GitHub Project board.
-- Keeps documentation and delivery state synchronized.
-- Adapts its workflow according to `.ai-dev-template.config.json`.
+- workflow routing and role rules;
+- business context and user scenarios;
+- system analysis and integration contracts;
+- contour decomposition and lifecycle state;
+- architecture, decisions, and operational knowledge.
 
-## What The Human Does Manually
+## Core Principles
 
-Required manual steps:
+- No implementation before analysis is sufficient for delivery.
+- User scenarios are fixed before contour decomposition.
+- Screens, interfaces, data formats, and integration contracts are analyzed before coding.
+- Frontend works from its own contour specification and contracts, not by reading backend code.
+- Backend works from its own contour specification and contracts, not by reading frontend code.
+- Missing specification is a blocker that returns the initiative to `analysis`.
+- An initiative is not complete until deployment and e2e validation both succeed.
 
-1. Create a new GitHub repository from this template.
-2. Clone the new repository locally.
-3. Give the agent access to the repository workspace.
-4. Create a GitHub Project manually.
-5. Share the GitHub Project URL with the agent.
-6. Share the business task in natural language.
+## Repository Layout
 
-The human does not need to create issues, labels, or move project cards manually.
+- `AGENTS.md` — router that selects the current stage and role branch.
+- `instructions/` — stage-specific and role-specific instructions.
+- `docs/analysis/` — canonical analysis package that gates delivery.
+- `docs/delivery/` — contour decomposition and delivery handoff artifacts.
+- `templates/` — reusable templates for intake, analysis, contour delivery, deploy, and e2e work.
+- `tasks/` — local scratch space only; not a durable backlog.
 
-## New Project Initialization
+## How A New Project Starts
 
-1. Create a new GitHub repository from this template.
-2. Clone the repository locally.
-3. Add `.ai-dev-template.config.json` to the repository root. Use the configurator for a guided setup:
+1. Create a repository from this template and clone it locally.
+2. Add `.ai-dev-template.config.json` to the root.
+3. Connect the repository to GitHub Issues and a GitHub Project board.
+4. Give the agent access to the repository and the business request.
+5. Start with `AGENTS.md`; the router will select `setup` or `intake` depending on repository state.
 
-   - [AI Dev Template Configurator](https://vitykovskiy.github.io/AI-dev-template-configurator/)
+## GitHub Workflow
 
-   The configurator walks through language policy, execution mode, and PR and review policy, then generates a ready config file.
+GitHub Issues and GitHub Project remain the operational backbone, but task creation follows the lifecycle:
 
-4. Create required labels by running:
+- intake captures the initiative;
+- analysis produces implementation-ready artifacts;
+- delivery creates contour-specific tasks;
+- deploy and e2e-test run as separate stages after implementation.
 
-   ```bash
-   bash scripts/bootstrap-github-labels.sh
-   ```
+Closing an initiative before successful e2e validation is not allowed.
 
-5. Create a GitHub Project (simple kanban board — see below).
-6. Provide the agent with the repository context, the GitHub Project URL, and the business task.
-
-The agent handles the rest during Phase 1 (environment check, instructions adaptation, project map) and Phase 2 (business task intake).
-
-## GitHub Project
-
-Use a simple kanban board.
-
-Required statuses:
-
-- `Backlog`
-- `In progress`
-- `Closed`
-
-Required fields:
-
-- `Status`
-- `Priority`
-- `Area`
-
-Operating rules:
-
-- Labels are created by the agent.
-- Issues are created by the agent.
-- Project cards are moved by the agent.
-- The human does not need to manually decompose work into tasks.
-
-Store the actual GitHub Project URL in `docs/09-integrations.md`.
-
-## Status Lifecycle
-
-- `Backlog`: task is captured and ready for prioritization.
-- `In progress`: task is actively being executed.
-- `Closed`: task is implemented, documented, and reflected in GitHub state.
-
-## Workflow Configuration
+## Configuration
 
 Workflow policy is configured in `.ai-dev-template.config.json`.
 
-The configuration controls:
-
-- docs / issue / PR / comment / commit language;
-- execution mode: `autonomous`, `staged`;
-- human approval checkpoints;
-- task-scoped PR, review, and merge policy.
-
-See `docs/11-workflow-configuration.md` for the detailed meaning of each section.
-
-## Limitations And Assumptions
-
-- This template assumes GitHub Issues, GitHub Project, and `gh` CLI are the delivery backbone.
-- The template does not support GitHub Copilot instructions and intentionally excludes `.github/copilot-instructions.md`.
-- `tasks/` may hold temporary local notes, but final state must be reflected in docs and GitHub.
-- Labels remain canonically English in the default template configuration.
-- Shell scripts are written for `bash`; `.gitattributes` pins LF for shell-sensitive files to prevent cross-platform EOL breakage.
+The configuration governs language, execution mode, approval checkpoints, and PR/review behavior. It does not replace the phase-and-role lifecycle defined in `AGENTS.md`, `instructions/`, and `docs/07-workflow.md`.

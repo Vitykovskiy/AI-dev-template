@@ -1,5 +1,7 @@
 # Product Vision
 
+This document captures intake-level product context. It is an input to `analysis`, not an implementation specification.
+
 ## Problem
 
 Describe the core user or business problem. Do not start from a solution. Summarize the pain, inefficiency, revenue gap, or operational risk that motivates the project.
