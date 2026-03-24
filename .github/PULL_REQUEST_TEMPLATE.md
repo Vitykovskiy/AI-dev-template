@@ -1,3 +1,11 @@
+> PR title format: `<type>(<scope>): <summary>`
+>
+> Allowed `type` values: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+>
+> Examples:
+> `feat(auth): add GitHub SSO for admins`
+> `fix: prevent duplicate webhook delivery processing`
+
 # What Was Done
 
 Describe the implemented changes.
