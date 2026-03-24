@@ -31,8 +31,14 @@ Before delivery may start, define:
 - complete canonical artifacts in `docs/analysis/`
 - explicit source-of-truth mapping for each role
 - contour-ready task decomposition in `docs/delivery/contour-task-matrix.md`
+- GitHub-ready contour task set for operational tracking
 
 ## Rules
+
+- Treat `docs/delivery/contour-task-matrix.md` as the canonical decomposition source, but do not treat it as the final operational backlog by itself.
+- Before leaving `analysis`, publish the contour-specific implementation tasks in GitHub Issues and ensure they are represented in GitHub Project.
+- Each atomic contour implementation task must become its own GitHub Issue. Do not collapse multiple atomic tasks into one broad issue.
+- Verify that each planned issue exists and is linked into the operational project state before reporting `analysis` complete.
 
 - Fix all critical gaps before delivery starts.
 - If a behavior matters to implementation or testing, write it down explicitly.

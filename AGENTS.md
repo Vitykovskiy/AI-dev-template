@@ -25,11 +25,21 @@ Read `.ai-dev-template.workflow-state.json` and use `current_stage` exactly as w
 
 If the file is missing, malformed, or contains an unsupported value, stop and report a blocker.
 
-## Git Sync Rule
+## Git Delivery Rule
 
 Before starting a task, sync Git state and confirm the working branch is based on the latest remote state of its parent branch.
 
-After creating a commit, sync again and confirm the branch still grows from the latest working branch state before continuing or opening a PR.
+After creating a commit, sync again and confirm the branch still grows from the latest working branch state before continuing, handing off, or opening a PR.
+
+Every completed stage handoff must have repository-persisted evidence and verified operational side effects:
+
+- commit all repository changes required for the completed stage output;
+- push that commit before considering the task or stage handoff complete;
+- if `pull_requests.enabled = true`, follow the configured PR policy after pushing;
+- if `pull_requests.enabled = false`, push directly to the assigned working branch;
+- verify the push and any required GitHub side effects before reporting completion;
+- do not leave completed `setup`, `intake`, `analysis`, `development`, `deploy`, or `e2e_test` changes only in the local worktree;
+- do not treat GitHub-only changes as a complete handoff until the corresponding canonical repository documents are updated, committed, and pushed.
 
 If the branch is behind, diverged, or based on an outdated parent, stop implementation work, reconcile the branch history, and then continue.
 
@@ -72,6 +82,8 @@ Read, in order:
 2. `instructions/setup/router.md`
 3. `instructions/setup/technical-agent.md`
 
+Setup must ensure the repository is configured according to `.ai-dev-template.config.json` before leaving the stage. Apply the configuration to workflow assets, instructions, and required repository-management infrastructure. If GitHub Project tracking is configured and no project exists, create or connect one, record it in the canonical docs, and do not advance the stage until that integration is validated.
+
 ### intake
 
 Read, in order:
@@ -87,6 +99,8 @@ Read only the intake-facing canonical docs needed to capture the task:
 - `docs/02-business-requirements.md`
 - `docs/03-scope-and-boundaries.md`
 
+Before leaving `intake`, ensure the initiative exists in GitHub Issues and that the repository intake artifacts match that initiative record.
+
 ### analysis
 
 Read, in order:
@@ -99,8 +113,11 @@ Read only the canonical analysis package and adjacent overview docs:
 
 - `docs/00-project-overview.md`
 - `docs/07-workflow.md`
+- `docs/09-integrations.md`
 - `docs/analysis/README.md`
 - the specific files in `docs/analysis/` that are required for the current initiative
+
+Do not treat `docs/delivery/contour-task-matrix.md` as sufficient operational decomposition by itself. Before leaving `analysis`, publish each atomic contour-specific implementation task as its own GitHub Issue and place those issues in GitHub Project.
 
 ### development
 
@@ -134,6 +151,7 @@ Contour-specific reading:
 - `qa-e2e`: user scenarios, acceptance criteria, deployed environment details
 
 Do not read sibling contour implementation code as a substitute for missing analysis. Missing specification is a blocker that returns the work to `analysis`.
+Do not implement work that belongs to another contour under the pretext of integration, convenience, or cleanup. If the task requires another contour's owned output, stop and return to the GitHub task decomposition layer instead of silently absorbing the work.
 
 ### deploy
 

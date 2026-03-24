@@ -6,6 +6,16 @@
 - Board type: `Kanban`
 - Required statuses present: `yes/no`
 - Required fields present: `Status`, `Priority`, `Area`
+- Project item creation verified: `yes/no`
+- Setup validation status: `Unknown`
+- Notes: If `project_tracking = github_project`, this project must exist before `setup` can be considered complete.
+
+## GitHub Issues
+
+- Initiative creation verified: `yes/no`
+- Atomic contour task issue creation verified: `yes/no`
+- Labels prepared for workflow use: `yes/no`
+- Notes: Record the identifiers or URLs needed to prove that workflow-required issue records exist.
 
 ## Environment Variables
 
@@ -34,7 +44,8 @@ Validation note:
 
 - token scopes are necessary but not sufficient;
 - repository membership, project write access, and branch protection rules must still be validated separately;
-- record actual validation results in this file during `setup`.
+- record actual validation results in this file during `setup`;
+- do not report setup or later GitHub-side workflow steps complete until the corresponding side effects are verified, not merely attempted.
 
 ## Runtime And External Integrations
 
@@ -54,5 +65,7 @@ Document every external system that matters to development, deploy, or e2e valid
 ## Setup Notes
 
 - Update this file as integrations are connected or changed.
+- During `setup`, validate GitHub Issues access and GitHub Project access, and record the actual result here.
+- Record verification evidence for the GitHub operating model prepared in `setup`, including project readiness, issue creation ability, and required labels or project fields.
 - Do not store production secrets in committed files.
 - If the project uses a separate secret manager, document the reference location here.

@@ -38,9 +38,11 @@ Work through one semantic block at a time:
 - fixed user scenarios
 - version boundaries
 - intake summary ready for system analysis
+- initiative record ready and aligned in GitHub Issues
 
 ## Blockers
 
 Stop if the requester cannot confirm the target users, expected business outcome, or first-version boundary.
 
 Do not create implementation tasks from intake alone. Intake hands off to `analysis`.
+Before reporting `intake` complete, ensure the initiative exists in GitHub Issues and matches the canonical intake artifacts.

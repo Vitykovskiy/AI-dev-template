@@ -26,11 +26,21 @@ Rules:
 - change stages only by updating the state file;
 - do not delete or restore instruction files to represent workflow progress.
 
-## Git Synchronization Rule
+## Git Delivery Rule
 
 Before starting task work, sync Git state and confirm the current working branch is based on the latest remote state of its parent branch.
 
 After creating a commit, sync again and confirm the branch still grows from the latest working branch state before further changes, handoff, or PR creation.
+
+Every completed stage handoff must have repository-persisted evidence and verified operational side effects:
+
+- commit all repository changes required for the completed stage output;
+- push the commit before considering the task or stage handoff complete;
+- if `pull_requests.enabled = true`, follow the configured PR policy after pushing;
+- if `pull_requests.enabled = false`, push directly to the assigned working branch;
+- verify the push and any required GitHub side effects before reporting completion;
+- do not leave completed stage outputs only in the local worktree;
+- do not treat GitHub-only changes as a complete handoff until the corresponding canonical repository documents are updated, committed, and pushed.
 
 If the branch is behind, diverged, or based on an outdated parent, reconcile branch history first and only then continue the workflow task.
 
@@ -63,6 +73,16 @@ prepare the repository, workflow, and baseline documentation.
 Exit condition:
 the repository is ready for intake and later role routing.
 
+Mandatory completion conditions:
+
+- `.ai-dev-template.config.json` has been read and applied to the repository workflow assets and instructions;
+- the repository is connected to GitHub Issues;
+- the repository is connected to a GitHub Project when `project_tracking = github_project`;
+- the GitHub Project exists, is reachable, and its URL plus validation status are recorded in `docs/09-integrations.md`;
+- required GitHub workflow infrastructure for the configured process is prepared during setup, including project structure, labels, and other repository-management assets needed by later stages;
+- setup-side changes to instructions, docs, labels, project structure, or repository workflow assets are verified and recorded before stage exit;
+- if the configured GitHub Project does not exist yet, create it or stop with a setup blocker instead of advancing the stage.
+
 State transition:
 update `current_stage` from `setup` to `intake` when setup is complete.
 
@@ -79,6 +99,12 @@ Rules:
 
 Exit condition:
 the initiative is understood well enough to start system analysis.
+
+Mandatory completion conditions:
+
+- the active initiative record exists in GitHub Issues;
+- the initiative identifier is reflected in the repository context files needed by later stages;
+- the intake docs and the GitHub initiative record describe the same first-version boundary and success expectations.
 
 State transition:
 update `current_stage` from `intake` to `analysis` when intake is complete.
@@ -103,6 +129,13 @@ The minimum required package includes:
 
 Exit condition:
 development roles can execute from their own artifacts and contracts without inferring behavior from sibling contour code.
+
+Mandatory completion conditions:
+
+- `docs/delivery/contour-task-matrix.md` is complete enough to support contour-by-contour execution;
+- each atomic contour implementation task from the decomposition is represented as its own GitHub Issue;
+- contour-specific implementation tasks are created in GitHub Issues after analysis is complete;
+- those tasks are represented in GitHub Project before `current_stage` moves to `development`.
 
 State transition:
 update `current_stage` from `analysis` to `development` when the analysis package is implementation-ready.
@@ -168,18 +201,26 @@ Use explicit state rollback in `.ai-dev-template.workflow-state.json`.
 
 GitHub Issues and GitHub Project remain the operational system of record.
 
-Recommended initiative flow:
+Role split:
+
+- GitHub Issues are the canonical initiative and task records;
+- GitHub Project is the canonical delivery-status board for those issues;
+- repository docs remain the canonical source for product, analysis, architecture, and workflow context.
+
+Required initiative flow:
 
 1. create or update the initiative record during `intake`;
 2. complete the analysis package during `analysis`;
-3. create contour-specific implementation tasks after analysis;
-4. execute deploy tasks after contour development;
-5. execute e2e tasks after deployment;
-6. close the initiative only after successful e2e validation.
+3. create contour-specific implementation tasks in GitHub Issues after analysis;
+4. place those tasks in GitHub Project before starting `development`;
+5. execute deploy tasks after contour development;
+6. execute e2e tasks after deployment;
+7. close the initiative only after successful e2e validation.
 
 ## Decomposition Rules
 
 - Tasks must be atomic and contour-specific.
+- Each atomic contour implementation task must map to exactly one GitHub Issue.
 - Each development task must have exactly one owning contour.
 - Cross-contour work is split into linked tasks instead of one shared task.
 - Deploy and e2e tasks are separate from implementation tasks.

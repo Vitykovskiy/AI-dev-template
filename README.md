@@ -46,7 +46,7 @@ The repository is the canonical source of truth for:
 1. Create a repository from this template and clone it locally.
 2. Add `.ai-dev-template.config.json` to the root.
 3. Keep `.ai-dev-template.workflow-state.json` in the root and set `current_stage` to the correct value.
-4. Connect the repository to GitHub Issues and a GitHub Project board.
+4. Connect the repository to GitHub Issues and a GitHub Project board. If `project_tracking = github_project` and no project exists yet, create one before leaving `setup`.
 5. Give the agent access to the repository and the business request.
 6. Start with `AGENTS.md`; the router will read the state file and select the matching instruction branch.
 
@@ -55,9 +55,17 @@ The repository is the canonical source of truth for:
 GitHub Issues and GitHub Project remain the operational backbone, but task creation follows the lifecycle:
 
 - intake captures the initiative;
+- intake must create or update the initiative record in GitHub Issues before analysis starts;
 - analysis produces implementation-ready artifacts;
-- development creates contour-specific tasks;
+- analysis also publishes each atomic contour-specific implementation task into its own GitHub Issue and places those issues into GitHub Project before development starts;
 - deploy and e2e_test run as separate stages after implementation.
+
+GitHub record split:
+
+- GitHub Issues hold the canonical initiative and task definitions.
+- GitHub Project holds the canonical delivery status of those issues.
+
+Completed stage handoffs must have verified evidence. Repository changes must be committed and pushed, and required GitHub-side workflow actions must be verified before completion is reported. When pull requests are disabled, the agent pushes directly to the assigned working branch.
 
 Closing an initiative before successful e2e validation is not allowed.
 

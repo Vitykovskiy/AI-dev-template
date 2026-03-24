@@ -65,6 +65,12 @@ Typical policy fields include:
 
 PR policy changes the delivery mechanics, not the lifecycle gates or the state-file model.
 
+If `pull_requests.enabled` is `false`, the agent must still persist repository-changing work by commit and push:
+
+- commit completed stage outputs to the assigned working branch;
+- push directly to that working branch;
+- treat local-only completed changes as unfinished work, not as a completed handoff.
+
 ## Artifact Persistence
 
 Repository-persisted artifacts remain the source of truth for reusable knowledge:
@@ -76,6 +82,8 @@ Repository-persisted artifacts remain the source of truth for reusable knowledge
 - templates and workflow assets
 
 Temporary local work artifacts may follow repository policy, but canonical lifecycle documents must remain in the repository.
+
+Operational side effects in GitHub or other delivery systems do not replace repository persistence requirements. If a stage updates the operational system of record, the corresponding canonical repository evidence must also be updated, committed, and pushed.
 
 ## GitHub Token Requirements
 

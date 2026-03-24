@@ -5,6 +5,7 @@
 - Stage: `development`
 - Contour: `<frontend/backend/devops/etc.>`
 - Initiative: `<epic or parent issue>`
+- GitHub Issue: `<issue id or URL>`
 
 ## Goal
 
@@ -27,3 +28,7 @@
 ## Blocker Rule
 
 If the task cannot be completed from the listed inputs, return it to `analysis` instead of inferring missing behavior from code.
+
+## Tracking Rule
+
+This template represents exactly one atomic contour-owned implementation task and must map to exactly one GitHub Issue.
