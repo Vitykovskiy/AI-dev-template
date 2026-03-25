@@ -26,6 +26,8 @@ The following remain configurable:
 - PR, review, and merge behavior
 - persistence policy for temporary work artifacts
 
+Encoding rule is not configurable: workflow text artifacts must be stored and exchanged in UTF-8 so Git and GitHub tooling interpret them consistently.
+
 ## Frontend Architecture Policy
 
 Use `architecture.use_fsd` to decide whether the repository treats Feature-Sliced Design as the expected frontend structure.
@@ -84,6 +86,8 @@ Repository-persisted artifacts remain the source of truth for reusable knowledge
 Temporary local work artifacts may follow repository policy, but canonical lifecycle documents must remain in the repository.
 
 Operational side effects in GitHub or other delivery systems do not replace repository persistence requirements. If a stage updates the operational system of record, the corresponding canonical repository evidence must also be updated, committed, and pushed.
+
+On Windows or in PowerShell, temporary files passed to `gh`, `git`, or similar tools must be written with explicit UTF-8 encoding instead of shell-default encoding.
 
 ## GitHub Token Requirements
 

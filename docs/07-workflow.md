@@ -44,6 +44,17 @@ Every completed stage handoff must have repository-persisted evidence and verifi
 
 If the branch is behind, diverged, or based on an outdated parent, reconcile branch history first and only then continue the workflow task.
 
+## Text Encoding Rule
+
+Workflow text exchanged through repository files or external delivery tools must use explicit UTF-8 encoding.
+
+Rules:
+
+- use UTF-8 for markdown, templates, issue bodies, PR bodies, commit-message files, and other workflow text artifacts;
+- on Windows or in PowerShell, do not trust implicit default encoding when a file may contain non-ASCII text;
+- when writing temporary files for `gh`, `git`, or related tools, encode them explicitly as UTF-8, preferably without BOM;
+- if a GitHub-side artifact or repository text shows mojibake or replacement characters, rewrite the source file in explicit UTF-8 and repeat the operation instead of continuing with corrupted text.
+
 ## Stage Ownership
 
 | Stage | Primary executor | Main output |

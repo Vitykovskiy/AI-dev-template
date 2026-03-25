@@ -43,6 +43,15 @@ Every completed stage handoff must have repository-persisted evidence and verifi
 
 If the branch is behind, diverged, or based on an outdated parent, stop implementation work, reconcile the branch history, and then continue.
 
+## Text Encoding Rule
+
+When creating or updating text files that will be consumed by Git, GitHub CLI, or other external tools, use explicit UTF-8 encoding.
+
+- treat UTF-8 as the required default for markdown, issue bodies, PR bodies, commit-message files, templates, and other workflow text artifacts;
+- on Windows or in PowerShell, do not rely on implicit default encoding for files that may contain non-ASCII text;
+- when creating temporary files for `gh` or related tooling, write them in UTF-8 explicitly, preferably UTF-8 without BOM;
+- if text appears corrupted after a tool call, treat it as an encoding failure and rewrite the source file with explicit UTF-8 before retrying.
+
 ## Stage Transitions
 
 Stage transitions are performed by updating `.ai-dev-template.workflow-state.json`.

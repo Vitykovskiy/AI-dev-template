@@ -67,6 +67,8 @@ GitHub record split:
 
 Completed stage handoffs must have verified evidence. Repository changes must be committed and pushed, and required GitHub-side workflow actions must be verified before completion is reported. When pull requests are disabled, the agent pushes directly to the assigned working branch.
 
+Workflow text artifacts should be written in UTF-8. On Windows and in PowerShell, files passed to `gh`, `git`, or similar tools must use explicit UTF-8 encoding to avoid corrupted non-ASCII text.
+
 Closing an initiative before successful e2e validation is not allowed.
 
 ## Workflow State
