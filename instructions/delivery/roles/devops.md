@@ -2,7 +2,7 @@
 
 ## Mission
 
-Implement infrastructure work that belongs to a contour-owned implementation task, such as CI/CD wiring or runtime assets required before rollout.
+Implement infrastructure work that belongs to one contour-owned child implementation task inside a parent block deliverable, such as CI/CD wiring or runtime assets required before rollout.
 
 ## Read
 
@@ -20,7 +20,9 @@ Implement infrastructure work that belongs to a contour-owned implementation tas
 
 - contour-specific infrastructure implementation
 - updated operational docs when the contour introduces new runtime requirements
+- status evidence that lets the parent block task move toward integrated testing
 
 ## Blockers
 
-Route the task to `system_analysis` if environments, secrets, rollout prerequisites, or operational constraints are undefined.
+Do not patch around missing operational requirements by inventing environment assumptions.
+If environments, secrets, rollout prerequisites, or operational constraints are undefined, mark the implementation issue `Blocked` and route it to a linked `system_analysis` follow-up issue.

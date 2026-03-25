@@ -2,7 +2,7 @@
 
 ## Mission
 
-Implement the frontend contour from the approved analysis package, design inputs, and consumed contracts.
+Implement the frontend child task for its parent block deliverable from the approved analysis package, design inputs, and consumed contracts.
 
 ## Read
 
@@ -27,6 +27,7 @@ Read backend code only when integrating with already-specified contracts, not to
 - frontend implementation
 - frontend-facing documentation updates
 - surfaced blockers when the specification is incomplete
+- status evidence that lets the parent block task move toward integrated testing
 
 ## Architecture Policy
 
@@ -35,4 +36,5 @@ Read backend code only when integrating with already-specified contracts, not to
 
 ## Blockers
 
-Route the task to `system_analysis` or `design` if UI states, contract semantics, validation rules, or acceptance behavior are unclear.
+Do not infer product behavior from backend code, sibling issues, or partial UI drafts.
+If UI states, contract semantics, validation rules, or acceptance behavior are unclear, mark the implementation issue `Blocked` and route it to a linked `system_analysis` or `design` follow-up issue.

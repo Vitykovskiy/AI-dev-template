@@ -19,8 +19,9 @@ Why this initiative matters.
 
 - `business_analysis`
 - `system_analysis`
+- one or more `block_delivery` tasks
 - `design` if the initiative changes user experience or reusable design assets
-- contour-owned `implementation` tasks
+- contour-owned child `implementation` tasks under each `block_delivery`
 - `deploy`
 - `e2e`
 
@@ -29,6 +30,7 @@ Why this initiative matters.
 The initiative is complete only after:
 
 1. required child tasks are created and linked by dependencies;
-2. implementation tasks are finished by contour;
-3. deployment succeeds;
-4. e2e validation passes.
+2. each required `block_delivery` task reaches `Done` after integrated validation;
+3. child implementation tasks are finished by contour;
+4. deployment succeeds when required;
+5. e2e validation passes.

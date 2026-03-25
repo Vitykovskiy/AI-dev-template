@@ -1,6 +1,6 @@
 # AI Dev Template
 
-Template repository for an AI team that uses `setup` as a one-time bootstrap step and then runs all delivery through GitHub Issues, task dependencies, owner contours, and GitHub Project state.
+Template repository for an AI team that uses `setup` as a one-time bootstrap step and then runs all delivery through GitHub Issues, block-level delivery tasks, contour-owned child issues, and GitHub Project state.
 
 ## Operating Model
 
@@ -12,19 +12,23 @@ The template uses two workflow modes recorded in `.ai-dev-template.workflow-stat
 After `setup`, GitHub Issues become the primary execution objects:
 
 - an initiating Epic anchors the initiative;
-- business analysis, system analysis, design, implementation, deploy, and e2e work each live as explicit issues;
-- every operational issue has one owner contour and explicit dependencies;
-- agents execute only tasks owned by their contour and only when dependencies are resolved;
+- one `business_analysis` issue starts the initiative;
+- one `system_analysis` issue produces the canonical specification package and decomposes delivery into parent `block_delivery` tasks;
+- each `block_delivery` task represents one integrated deliverable and owns child implementation issues;
+- every implementation issue has one owner contour and explicit dependencies;
+- agents execute only tasks owned by their contour and only when task-linked inputs are sufficient;
 - GitHub Project holds the canonical execution state for those issues.
 
 ## Core Principles
 
 - No implementation before the required business-analysis, system-analysis, and design tasks are complete.
+- `system_analysis` is the single source of truth for implementation inputs and block decomposition.
 - User scenarios, interfaces, contracts, and acceptance expectations must exist before contour-owned implementation starts.
 - Each task has exactly one owner contour.
 - Cross-contour work must be split into linked tasks instead of one shared task.
-- Missing specification is a blocker that routes work back to the appropriate analysis or design task.
-- An initiative is not complete until deploy and e2e tasks both finish successfully.
+- Missing specification is a blocker that routes work back to a linked `system_analysis` follow-up task instead of guesswork.
+- `qa-e2e` validates integrated block-level outcomes, not isolated implementation issues.
+- An initiative is not complete until required block-level validation, deploy work, and e2e tasks finish successfully.
 
 ## Repository Layout
 
@@ -32,7 +36,7 @@ After `setup`, GitHub Issues become the primary execution objects:
 - `.ai-dev-template.workflow-state.json` - bootstrap guardrail that records whether setup is still active.
 - `instructions/` - setup instructions plus task-type and contour-specific instructions.
 - `docs/analysis/` - canonical analysis package that gates design, implementation, deploy, and e2e work.
-- `docs/delivery/` - contour decomposition and implementation handoff artifacts.
+- `docs/delivery/` - block decomposition and contour handoff artifacts.
 - `templates/` - reusable templates for initiative, analysis, design, implementation, deploy, and e2e tasks.
 - `tasks/` - local scratch space only; not a durable backlog.
 
@@ -54,6 +58,7 @@ Required GitHub Issue types:
 - `initiative`
 - `business_analysis`
 - `system_analysis`
+- `block_delivery`
 - `design`
 - `implementation`
 - `deploy`
@@ -67,6 +72,7 @@ Required task attributes:
 - explicit dependencies
 - definition of ready
 - definition of done
+- canonical inputs
 - GitHub Project status
 
 Required GitHub Project statuses:
@@ -75,6 +81,9 @@ Required GitHub Project statuses:
 - `Ready`
 - `In Progress`
 - `Blocked`
+- `Waiting for Testing`
+- `Testing`
+- `Waiting for Fix`
 - `In Review`
 - `Done`
 

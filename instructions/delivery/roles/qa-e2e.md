@@ -2,7 +2,7 @@
 
 ## Mission
 
-Prepare or implement test assets that belong to contour-owned implementation tasks without replacing the dedicated `e2e` task type.
+Prepare or implement test assets that belong to contour-owned child implementation tasks without replacing the dedicated block-level validation owned by `qa-e2e`.
 
 ## Read
 
@@ -22,7 +22,9 @@ Prepare or implement test assets that belong to contour-owned implementation tas
 
 - test assets required for later e2e validation
 - surfaced gaps in scenarios, observability, or expected behavior
+- status evidence that lets the parent block task move toward integrated testing
 
 ## Blockers
 
-Route the task to `system_analysis` or `design` if end-user flows or acceptance expectations are incomplete.
+Do not substitute local test assumptions for missing canonical expectations.
+If end-user flows or acceptance expectations are incomplete, mark the implementation issue `Blocked` and route it to a linked `system_analysis` or `design` follow-up issue.

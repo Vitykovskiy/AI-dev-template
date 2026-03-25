@@ -9,7 +9,7 @@ Allowed `current_stage` values:
 1. `setup`
 2. `issue_driven`
 
-`setup` is the only repository-wide stage. After setup completes, the repository switches to `issue_driven` and all routing is performed through GitHub Issues, dependencies, owner contours, and GitHub Project state.
+`setup` is the only repository-wide stage. After setup completes, the repository switches to `issue_driven` and all routing is performed through GitHub Issues, dependencies, owner contours, block-level delivery tasks, and GitHub Project state.
 
 ## Bootstrap State Rule
 
@@ -21,7 +21,7 @@ Rules:
 - use `current_stage` exactly as written;
 - switch from `setup` to `issue_driven` only when setup exit conditions are complete;
 - do not introduce new repository-wide post-setup stages;
-- do not edit the state file to move tasks between business analysis, system analysis, design, implementation, deploy, or e2e.
+- do not edit the state file to move tasks between business analysis, system analysis, block delivery, design, implementation, deploy, or e2e.
 
 ## Git Delivery Rule
 
@@ -59,10 +59,11 @@ All post-setup work must be represented by GitHub Issues with one of these task 
 | Task type | Primary owner contour | Purpose |
 | --- | --- | --- |
 | `initiative` | `business-analyst` or `system-analyst` | top-level business outcome and decomposition anchor |
-| `business_analysis` | `business-analyst` | clarify problem, users, scope, constraints, and success expectations |
-| `system_analysis` | `system-analyst` | produce implementation-ready specifications, contracts, and decomposition |
+| `business_analysis` | `business-analyst` | clarify problem, users, scope, constraints, success expectations, and workflow vocabulary |
+| `system_analysis` | `system-analyst` | produce the canonical specification package, block-level decomposition, and child implementation plan |
+| `block_delivery` | `system-analyst` or delivery owner defined by repository policy | parent issue for one integrated deliverable that waits for all required child implementation tasks and later block-level validation |
 | `design` | `designer` | define UX flows, visual states, reusable design decisions, and design assets |
-| `implementation` | one of `designer`, `frontend`, `backend`, `devops`, `qa-e2e` | execute one contour-owned delivery task |
+| `implementation` | one of `designer`, `frontend`, `backend`, `devops`, `qa-e2e` | execute one contour-owned child task within a block-level deliverable |
 | `deploy` | `devops` | roll validated build outputs into the target environment |
 | `e2e` | `qa-e2e` | validate the integrated system against scenarios and acceptance criteria |
 
@@ -73,6 +74,7 @@ Each operational issue must carry these attributes through issue fields, labels,
 - `task_type`
 - `owner_contour`
 - `parent_initiative`
+- `parent_block_task` for child implementation issues
 - `depends_on`
 - `definition_of_ready`
 - `definition_of_done`
@@ -87,6 +89,15 @@ Attribute rules:
 - `definition_of_done` must state the evidence needed for closure;
 - `canonical_inputs` must point to repository artifacts or prerequisite tasks;
 - `project_status` must match the GitHub Project item state.
+
+Hierarchy rules:
+
+- only one `business_analysis` issue should initiate a new delivery stream after setup;
+- `business_analysis` hands off to one `system_analysis` issue for the same initiative or version slice;
+- `system_analysis` creates one or more `block_delivery` parent issues;
+- each `block_delivery` issue owns all required child implementation issues for that integrated outcome;
+- `qa-e2e` validates the `block_delivery` issue after all required child implementation issues are done;
+- if implementation is blocked by missing specification, create a linked follow-up `system_analysis` issue instead of inferring requirements.
 
 ## GitHub Project Model
 
@@ -105,6 +116,9 @@ Minimum required statuses:
 - `Ready`
 - `In Progress`
 - `Blocked`
+- `Waiting for Testing`
+- `Testing`
+- `Waiting for Fix`
 - `In Review`
 - `Done`
 
@@ -114,6 +128,9 @@ Status semantics:
 - `Ready`: owner contour may start because dependencies are closed and inputs are sufficient.
 - `In Progress`: the owning contour is actively executing the task.
 - `Blocked`: work must stop until a dependency, access issue, or missing specification is resolved.
+- `Waiting for Testing`: a block-level delivery task has all required child implementation tasks done and is ready for integrated validation.
+- `Testing`: `qa-e2e` is actively validating the integrated block-level result.
+- `Waiting for Fix`: integrated validation found defects and the block-level task is waiting for child implementation follow-up.
 - `In Review`: implementation is complete and the configured review or verification step is pending.
 - `Done`: all done conditions are satisfied and the issue may be closed.
 
@@ -128,7 +145,9 @@ Every session must follow this sequence:
 5. Read the task metadata and determine `task_type`, `owner_contour`, dependencies, and `project_status`.
 6. Stop unless the owner contour matches the session role and all dependencies are closed.
 7. Read only the canonical artifacts and instructions allowed for that task type and contour.
-8. Produce only the output owned by that task.
+8. If the task is `implementation`, rely on task-linked inputs first and stop if they are insufficient.
+9. If the task is `block_delivery` in `Waiting for Testing` or `Testing`, validate the integrated result instead of reopening contour work speculatively.
+10. Produce only the output owned by that task.
 
 ## Setup Exit Conditions
 
@@ -160,7 +179,7 @@ Ready when:
 
 Done when:
 
-- child tasks for business analysis, system analysis, design when needed, implementation, deploy, and e2e are created or explicitly ruled out;
+- child tasks for business analysis, system analysis, block delivery, design when needed, implementation, deploy, and e2e are created or explicitly ruled out;
 - dependency links between those tasks are recorded;
 - the GitHub Project reflects the planned execution chain.
 
@@ -175,7 +194,8 @@ Done when:
 
 - users, scenarios, scope, constraints, and success expectations are documented;
 - unresolved business questions are recorded explicitly;
-- the system-analysis task has sufficient intake context to start.
+- workflow terminology and operating states are normalized for the initiative;
+- exactly one downstream `system_analysis` task has sufficient intake context to start.
 
 ### System Analysis
 
@@ -188,8 +208,25 @@ Done when:
 
 - the canonical analysis package is implementation-ready;
 - contour decomposition exists in `docs/delivery/contour-task-matrix.md`;
-- each required design, implementation, deploy, and e2e task exists as its own issue;
+- each required `block_delivery` task exists and records ready and done rules plus canonical inputs;
+- each required child implementation, deploy, and e2e task exists as its own issue;
 - dependencies between those tasks are explicit in GitHub.
+
+### Block Delivery
+
+Ready when:
+
+- the relevant `system_analysis` task is done;
+- the integrated deliverable boundary is explicit;
+- all required child implementation issues exist and are linked;
+- ready and done rules for integrated validation are recorded.
+
+Done when:
+
+- all required child implementation issues are done;
+- integrated validation passes for the block-level outcome;
+- follow-up implementation issues are closed or explicitly moved to another block;
+- the block task status is `Done`.
 
 ### Design
 
@@ -209,6 +246,7 @@ Done when:
 Ready when:
 
 - system-analysis outputs are complete for the task's contour;
+- the task belongs to exactly one `block_delivery` parent issue;
 - any required design task is done;
 - all declared dependencies are done;
 - the task status is `Ready` or `In Progress`.
@@ -218,7 +256,8 @@ Done when:
 - the contour-owned change is implemented;
 - required repository docs are updated;
 - tests or verification owned by that contour are complete;
-- downstream dependent tasks can start without guessing.
+- downstream dependent tasks can start without guessing;
+- the issue is ready for its block parent to move toward `Waiting for Testing` once sibling child issues are also done.
 
 ### Deploy
 
@@ -237,13 +276,13 @@ Done when:
 
 Ready when:
 
-- deploy is done;
+- the target `block_delivery` result is in `Waiting for Testing` or the deployed release slice is ready for integrated validation;
 - user scenarios and acceptance criteria are still current.
 
 Done when:
 
 - critical scenarios pass end to end;
-- defects are routed back into GitHub Issues when found;
+- defects are routed back into the affected `block_delivery` task and required child implementation issues when found;
 - release recommendation or rejection is recorded.
 
 ## Blocking Rules
@@ -260,10 +299,22 @@ Stop and mark a task `Blocked` when any of the following is true:
 Blocker routing rules:
 
 - missing business context -> create or reopen a `business_analysis` task;
-- missing specifications, contracts, or decomposition -> create or reopen a `system_analysis` task;
+- missing specifications, contracts, or decomposition -> block the current implementation issue and create or reopen a linked `system_analysis` follow-up task;
 - missing UX behavior, screen states, or design assets -> create or reopen a `design` task;
 - failed rollout prerequisites -> block `deploy` and create follow-up tasks in the owning contour;
-- failed integrated validation -> block the initiative and create follow-up tasks for the owning contour of each defect.
+- failed integrated validation -> move the relevant `block_delivery` task to `Waiting for Fix`, record defects, and create or reopen follow-up implementation issues for the owning contour of each defect.
+
+## Target Task Flow
+
+Canonical post-setup chain:
+
+1. `business_analysis`
+2. `system_analysis`
+3. `block_delivery`
+4. child `implementation` issues by contour
+5. block-level validation by `qa-e2e`
+6. `deploy` when rollout is required
+7. initiative closure after all required blocks are done
 
 ## Documentation Update Rules
 

@@ -2,7 +2,7 @@
 
 ## Mission
 
-Execute implementation tasks owned by the design contour, such as producing reusable design-system assets, tokens, or finalized interaction specifications that are explicitly tracked as implementation work.
+Execute design-contour child implementation tasks for a parent block deliverable, such as producing reusable design-system assets, tokens, or finalized interaction specifications that are explicitly tracked as implementation work.
 
 ## Read
 
@@ -22,7 +22,9 @@ Execute implementation tasks owned by the design contour, such as producing reus
 - design-contour implementation outputs
 - design-system or UX asset updates required by downstream consumers
 - blockers when upstream product or system constraints are incomplete
+- status evidence that lets the parent block task move toward integrated testing
 
 ## Blockers
 
-Route the task to `business_analysis`, `system_analysis`, or `design` when required upstream inputs are missing.
+Do not fill missing interaction details with undocumented assumptions.
+When required upstream inputs are missing, mark the implementation issue `Blocked` and route it to a linked `business_analysis`, `system_analysis`, or `design` follow-up issue.

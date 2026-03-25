@@ -4,7 +4,7 @@
 
 - URL: `<paste GitHub Project URL here>`
 - Board type: `Kanban`
-- Required statuses present: `Inbox`, `Ready`, `In Progress`, `Blocked`, `In Review`, `Done`
+- Required statuses present: `Inbox`, `Ready`, `In Progress`, `Blocked`, `Waiting for Testing`, `Testing`, `Waiting for Fix`, `In Review`, `Done`
 - Required fields present: `Status`, `Task Type`, `Owner Contour`, `Priority`
 - Project item creation verified: `yes/no`
 - Setup validation status: `Unknown`
@@ -16,7 +16,7 @@
 - Task issue creation verified: `yes/no`
 - Dependency linking verified: `yes/no`
 - Labels prepared for workflow use: `yes/no`
-- Required task types available: `initiative`, `business_analysis`, `system_analysis`, `design`, `implementation`, `deploy`, `e2e`
+- Required task types available: `initiative`, `business_analysis`, `system_analysis`, `block_delivery`, `design`, `implementation`, `deploy`, `e2e`
 - Notes: Record the identifiers or URLs needed to prove that workflow-required issue records exist and can be linked to project items.
 
 ## Environment Variables
@@ -55,7 +55,7 @@ Document every external system that matters to analysis, implementation, deploy,
 
 | Integration | Purpose | Task type first needed | Status | Notes |
 | --- | --- | --- | --- | --- |
-| `<integration>` | `<purpose>` | `<business_analysis/system_analysis/design/implementation/deploy/e2e>` | `<status>` | `<notes>` |
+| `<integration>` | `<purpose>` | `<business_analysis/system_analysis/block_delivery/design/implementation/deploy/e2e>` | `<status>` | `<notes>` |
 
 ## Integration Status
 

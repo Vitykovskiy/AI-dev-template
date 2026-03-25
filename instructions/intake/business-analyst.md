@@ -38,7 +38,7 @@ Work through one semantic block at a time:
 - updated business-context docs
 - fixed user scenarios
 - version boundaries
-- intake summary ready for system analysis
+- intake summary ready for exactly one downstream `system_analysis` issue
 - initiative record ready and aligned in GitHub Issues
 
 ## Blockers
@@ -46,4 +46,5 @@ Work through one semantic block at a time:
 Stop if the requester cannot confirm the target users, expected business outcome, or first-version boundary.
 
 Do not create implementation tasks from business analysis alone. Business analysis hands off to `system_analysis`.
+Do not decompose work into block-level delivery or child implementation issues from business analysis alone.
 Before reporting the task complete, ensure the initiative exists in GitHub Issues and matches the canonical intake artifacts.

@@ -9,7 +9,7 @@ This repository uses a two-mode workflow:
 1. `setup` bootstraps the repository, workflow assets, labels, and GitHub operating model.
 2. `issue_driven` runs all post-setup work through GitHub Issues, task dependencies, owner contours, and GitHub Project state.
 
-The repository must not use a fixed post-setup stage chain.
+After `setup`, operational work starts from exactly one `business_analysis` issue and then flows through issue hierarchy instead of repository-wide stages.
 
 ## Bootstrap State Detection
 
@@ -62,13 +62,24 @@ When `current_stage = "issue_driven"`, start from the active GitHub Issue instea
 
 Every operational task must have these required attributes, expressed through issue body fields, labels, or project fields:
 
-- task type: one of `initiative`, `business_analysis`, `system_analysis`, `design`, `implementation`, `deploy`, `e2e`;
+- task type: one of `initiative`, `business_analysis`, `system_analysis`, `block_delivery`, `design`, `implementation`, `deploy`, `e2e`;
 - owner contour: exactly one of `business-analyst`, `system-analyst`, `designer`, `frontend`, `backend`, `devops`, `qa-e2e`;
 - parent initiative: the top-level Epic or initiative issue;
+- parent block task: required for implementation issues that contribute to an integrated delivery block;
 - dependencies: explicit issue links or a `Blocked by` list;
 - ready rule: why the task is allowed to start;
 - done rule: what must be true to close the task;
-- project status: one of `Inbox`, `Ready`, `In Progress`, `Blocked`, `In Review`, `Done`.
+- canonical inputs: the specific repository artifacts and linked issues the task may rely on;
+- project status: one of `Inbox`, `Ready`, `In Progress`, `Blocked`, `Waiting for Testing`, `Testing`, `Waiting for Fix`, `In Review`, `Done`.
+
+Required task chain after setup:
+
+1. one `business_analysis` issue confirms the business problem and operating vocabulary;
+2. one `system_analysis` issue produces the canonical specification package;
+3. `system_analysis` decomposes delivery into one or more parent `block_delivery` tasks;
+4. each `block_delivery` task owns child implementation issues, one per responsible contour (`frontend`, `backend`, `devops` when needed, plus `designer` only when the work is explicitly implementation rather than upstream design);
+5. `qa-e2e` validates the integrated result at the `block_delivery` level after all required child implementation issues are done;
+6. `deploy` remains separate when rollout is required for the validated slice.
 
 ## Task Selection Rules
 
@@ -212,4 +223,4 @@ Stop and report a blocker when any of the following is true:
 - a role would need to read unrelated instructions or sibling implementation code just to infer expected behavior.
 
 When blocked by missing business context, route the work to a `business_analysis` task.
-When blocked by missing specifications, contracts, or UX behavior, route the work to a `system_analysis` or `design` task instead of continuing implementation.
+When blocked by missing specifications, contracts, decomposition details, or UX behavior, stop implementation, mark the implementation task `Blocked`, and create or request a linked `system_analysis` follow-up issue before any coding continues.

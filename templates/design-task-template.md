@@ -6,7 +6,8 @@
 - Owner contour: `designer`
 - Initiative: `<epic or parent issue>`
 - GitHub Issue: `<issue id or URL>`
-- GitHub Project status: `<Inbox/Ready/In Progress/Blocked/In Review/Done>`
+- Parent block task: `<block issue or n/a>`
+- GitHub Project status: `<Inbox/Ready/In Progress/Blocked/Waiting for Testing/Testing/Waiting for Fix/In Review/Done>`
 
 ## Goal
 

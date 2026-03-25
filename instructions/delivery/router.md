@@ -6,6 +6,8 @@ Primary executor: exactly one contour role per session.
 
 Use this branch only when the active GitHub Issue has `task_type = implementation`.
 
+This task must belong to exactly one parent `block_delivery` issue and must not be used as a multi-contour integration bucket.
+
 Choose one role file and read only that file next:
 
 - `instructions/delivery/roles/designer.md`

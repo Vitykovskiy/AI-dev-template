@@ -2,7 +2,7 @@
 
 ## Mission
 
-Implement the backend contour from the approved analysis package and published contracts.
+Implement the backend child task for its parent block deliverable from the approved analysis package and published contracts.
 
 ## Read
 
@@ -26,7 +26,9 @@ Read frontend code only when validating that implementation matches an existing 
 - backend implementation
 - backend-facing documentation updates
 - explicit blockers where contracts or domain rules are incomplete
+- status evidence that lets the parent block task move toward integrated testing
 
 ## Blockers
 
-Route the task to `system_analysis` if domain rules, payload formats, integration semantics, or non-functional requirements are unclear.
+Do not infer missing behavior from frontend code, sibling issues, or ad hoc discussion.
+If domain rules, payload formats, integration semantics, or non-functional requirements are unclear, mark the implementation issue `Blocked` and route it to a linked `system_analysis` follow-up issue.

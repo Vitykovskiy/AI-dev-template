@@ -15,12 +15,14 @@
 6. Integration contracts
 7. UI specification
 8. Cross-cutting concerns
-9. Contour decomposition
+9. Block delivery decomposition
+10. Child implementation decomposition by contour
 
 ## Definition Of Ready For Delivery
 
+- Each integrated deliverable is grouped into a parent `block_delivery` task with explicit ready and done rules.
 - Frontend can work from UI specs and consumed contracts.
 - Backend can work from module design, domain rules, and produced contracts.
 - DevOps can work from runtime and operational requirements.
-- QA E2E can work from user scenarios and acceptance criteria.
+- QA E2E can work from user scenarios and acceptance criteria at the block level.
 - No contour needs to read sibling contour code to infer expected behavior.

@@ -12,11 +12,15 @@ The following are fixed by the template and are not optional:
 
 - `setup` is the only repository-wide bootstrap stage;
 - post-setup work is issue-driven, not stage-driven;
+- post-setup work starts from a single `business_analysis` issue and then flows through `system_analysis` into block-level delivery tasks;
 - explicit task types and owner contours are required after setup;
+- `system_analysis` is the canonical source of truth for implementation inputs and delivery decomposition;
+- each integrated deliverable is represented by a parent `block_delivery` task;
 - one operational task has one owner contour;
 - deploy remains separate from implementation tasks;
 - e2e remains separate from deploy and implementation tasks;
-- initiative closure is allowed only after deploy and e2e tasks both finish successfully.
+- project status vocabulary includes explicit waiting-for-testing and waiting-for-fix states;
+- initiative closure is allowed only after required block-level validation, deploy work, and e2e tasks finish successfully.
 
 The following remain configurable:
 
@@ -51,7 +55,7 @@ Example:
 - `autonomous`: continue through available tasks whose dependencies are resolved until a real blocker or configured checkpoint is reached.
 - `staged`: pause between major task handoffs and wait for explicit human confirmation.
 
-Execution mode affects pacing. It does not authorize skipping business analysis, system analysis, design, deploy, or e2e tasks when they are required by the initiative.
+Execution mode affects pacing. It does not authorize skipping business analysis, system analysis, block decomposition, design, deploy, or e2e tasks when they are required by the initiative.
 
 ## Pull Request Policy
 

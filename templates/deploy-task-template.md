@@ -5,7 +5,8 @@
 - Task type: `deploy`
 - Owner contour: `devops`
 - Initiative: `<epic or parent issue>`
-- GitHub Project status: `<Inbox/Ready/In Progress/Blocked/In Review/Done>`
+- Parent block task: `<block issue or n/a>`
+- GitHub Project status: `<Inbox/Ready/In Progress/Blocked/Waiting for Testing/Testing/Waiting for Fix/In Review/Done>`
 
 ## Deployment Target
 
