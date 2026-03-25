@@ -2,7 +2,7 @@
 
 ## Mission
 
-Implement delivery-stage infrastructure work that belongs to a contour task, such as CI/CD wiring or runtime assets required before rollout.
+Implement infrastructure work that belongs to a contour-owned implementation task, such as CI/CD wiring or runtime assets required before rollout.
 
 ## Read
 
@@ -14,7 +14,7 @@ Implement delivery-stage infrastructure work that belongs to a contour task, suc
 ## Do Not Read By Default
 
 - feature contour code that is unrelated to infrastructure delivery
-- deploy-stage instructions unless the task has already moved to stage `deploy`
+- deploy instructions unless the task itself is a separate `deploy` task
 
 ## Produce
 
@@ -23,4 +23,4 @@ Implement delivery-stage infrastructure work that belongs to a contour task, suc
 
 ## Blockers
 
-Return to `analysis` if environments, secrets, rollout prerequisites, or operational constraints are undefined.
+Route the task to `system_analysis` if environments, secrets, rollout prerequisites, or operational constraints are undefined.

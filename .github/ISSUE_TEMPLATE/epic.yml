@@ -1,5 +1,5 @@
 name: Epic
-description: Create a large outcome that will be decomposed into smaller issues.
+description: Create a top-level initiative that will be decomposed into issue-driven workflow tasks.
 title: "[Epic] "
 labels:
   - "type: epic"
@@ -8,7 +8,7 @@ body:
     id: goal
     attributes:
       label: Goal
-      description: What outcome should exist when this Epic is done?
+      description: What outcome should exist when this initiative is done?
       placeholder: Describe the strategic outcome.
     validations:
       required: true
@@ -16,8 +16,16 @@ body:
     id: business_value
     attributes:
       label: Business value
-      description: Why does this Epic matter?
+      description: Why does this initiative matter?
       placeholder: Describe the business value.
+    validations:
+      required: true
+  - type: textarea
+    id: required_task_chain
+    attributes:
+      label: Required task chain
+      description: Which business analysis, system analysis, design, implementation, deploy, and e2e tasks are expected?
+      placeholder: List the planned child task types and any known contour splits.
     validations:
       required: true
   - type: textarea
@@ -25,22 +33,22 @@ body:
     attributes:
       label: Scope
       description: What is included and excluded?
-      placeholder: List what belongs to this Epic.
+      placeholder: List what belongs to this initiative.
     validations:
       required: true
   - type: textarea
     id: completion_criteria
     attributes:
       label: Completion criteria
-      description: What must be true to close the Epic?
-      placeholder: List measurable completion criteria.
+      description: What must be true to close the initiative?
+      placeholder: List measurable completion criteria, including deploy and e2e expectations.
     validations:
       required: true
   - type: textarea
     id: dependencies
     attributes:
       label: Dependencies
-      description: Which internal or external dependencies affect this Epic?
+      description: Which internal or external dependencies affect this initiative?
       placeholder: List dependencies or write None.
     validations:
       required: false

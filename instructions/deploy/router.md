@@ -1,15 +1,11 @@
 # Deploy Router
 
-Stage: `deploy`
+Task type: `deploy`
 
 Primary executor: devops.
 
-The active stage is selected from `.ai-dev-template.workflow-state.json`.
-
-Use this branch only while `current_stage = "deploy"`.
+Use this branch only when the active GitHub Issue has `task_type = deploy`.
 
 Read next:
 
 1. `instructions/deploy/devops.md`
-
-Do not read e2e instructions until rollout is complete.

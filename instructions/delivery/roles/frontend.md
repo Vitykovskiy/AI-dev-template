@@ -2,7 +2,7 @@
 
 ## Mission
 
-Implement the frontend contour from the approved analysis package and consumed contracts.
+Implement the frontend contour from the approved analysis package, design inputs, and consumed contracts.
 
 ## Read
 
@@ -35,4 +35,4 @@ Read backend code only when integrating with already-specified contracts, not to
 
 ## Blockers
 
-Return to `analysis` if UI states, contract semantics, validation rules, or acceptance behavior are unclear.
+Route the task to `system_analysis` or `design` if UI states, contract semantics, validation rules, or acceptance behavior are unclear.

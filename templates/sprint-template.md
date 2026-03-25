@@ -1,12 +1,12 @@
-# Stage Batch Template
+# Task Batch Template
 
 ## Goal
 
-What this stage batch is meant to achieve.
+What this task batch is meant to achieve.
 
-## Stage
+## Included Task Types
 
-`<analysis/development/deploy/e2e_test>`
+`<business_analysis/system_analysis/design/implementation/deploy/e2e>`
 
 ## Planned Items
 

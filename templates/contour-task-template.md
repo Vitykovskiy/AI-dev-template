@@ -2,10 +2,11 @@
 
 ## Summary
 
-- Stage: `development`
-- Contour: `<frontend/backend/devops/etc.>`
+- Task type: `implementation`
+- Owner contour: `<designer/frontend/backend/devops/qa-e2e>`
 - Initiative: `<epic or parent issue>`
 - GitHub Issue: `<issue id or URL>`
+- GitHub Project status: `<Inbox/Ready/In Progress/Blocked/In Review/Done>`
 
 ## Goal
 
@@ -14,20 +15,25 @@
 ## Canonical Inputs
 
 - `<analysis artifact>`
-- `<analysis artifact>`
+- `<design artifact or upstream dependency>`
 
 ## Dependencies
 
 - `<task or contract dependency>`
 
-## Completion Criteria
+## Definition Of Ready
+
+- `<all upstream tasks complete>`
+- `<canonical inputs exist>`
+
+## Definition Of Done
 
 - `<criterion>`
 - `<criterion>`
 
 ## Blocker Rule
 
-If the task cannot be completed from the listed inputs, return it to `analysis` instead of inferring missing behavior from code.
+If the task cannot be completed from the listed inputs, route it to `system_analysis` or `design` instead of inferring missing behavior from code.
 
 ## Tracking Rule
 

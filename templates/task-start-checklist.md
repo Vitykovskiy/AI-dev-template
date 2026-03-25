@@ -1,13 +1,15 @@
 # Task Start Checklist
 
 - Task issue:
-- Stage:
-- Owning role:
+- Task type:
+- Owner contour:
+- Parent initiative:
 - Goal:
 - Canonical inputs read:
+- Dependencies resolved:
 - Sibling contours intentionally not read:
 - Delivery mode:
 - PR required:
 - Branch:
 - Definition of ready confirmed:
-- Analysis sufficiency confirmed:
+- Definition of done confirmed:

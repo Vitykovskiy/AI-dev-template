@@ -6,31 +6,30 @@ This file is the high-signal entry point for a new agent session.
 
 Use it to identify:
 
-- the current lifecycle stage;
+- whether the repository is still in `setup` or already in `issue_driven` mode;
 - the active initiative;
+- the current task type and owner contour;
 - which canonical artifacts exist;
-- where each role must read next.
+- where the current task must read next.
 
-## Lifecycle Summary
+## Workflow Summary
 
-The repository follows a fixed 6-stage lifecycle tracked in `.ai-dev-template.workflow-state.json`:
+The repository uses a bootstrap guardrail tracked in `.ai-dev-template.workflow-state.json`:
 
 1. `setup`
-2. `intake`
-3. `analysis`
-4. `development`
-5. `deploy`
-6. `e2e_test`
+2. `issue_driven`
 
-Each stage has one primary executor and a dedicated instruction branch. See `AGENTS.md` for routing and `docs/07-workflow.md` for lifecycle rules.
+After setup, the active GitHub Issue and GitHub Project state determine routing.
 
 ## Current Status
 
 - Workflow state file: `.ai-dev-template.workflow-state.json`
-- Active stage: `<fill-current-stage>`
+- Active mode: `<fill-setup-or-issue_driven>`
 - Active initiative: `<fill-initiative-or-epic>`
-- Current owner role: `<fill-role>`
-- Delivery status: `<fill-status>`
+- Active task: `<fill-task-issue-or-url>`
+- Active task type: `<fill-task-type>`
+- Current owner contour: `<fill-owner-contour>`
+- Delivery status: `<fill-project-status>`
 
 ## Canonical Artifact Map
 
@@ -51,7 +50,7 @@ Each stage has one primary executor and a dedicated instruction branch. See `AGE
 - `docs/analysis/ui-specification.md`
 - `docs/analysis/cross-cutting-concerns.md`
 
-### Development Handoff
+### Delivery Handoff
 
 - `docs/delivery/contour-task-matrix.md`
 
@@ -62,21 +61,23 @@ Each stage has one primary executor and a dedicated instruction branch. See `AGE
 - `docs/07-workflow.md`
 - `docs/09-integrations.md`
 - `docs/11-workflow-configuration.md`
+- `docs/12-migration-to-issue-driven-model.md`
 
 ## Reading Policy
 
 - Start with `AGENTS.md`.
 - Read `.ai-dev-template.workflow-state.json`.
-- Read only the branch selected by the router.
-- Load only the canonical artifacts required for the current stage and role.
-- If a later-stage role needs to infer behavior from unrelated code or documents, treat that as a blocker and return to `analysis` by updating the state file.
+- If the repository is in `setup`, read only setup instructions.
+- If the repository is in `issue_driven`, read the active GitHub Issue metadata and route from `task_type`, `owner_contour`, dependencies, and project status.
+- Load only the canonical artifacts required for the current task type and contour.
+- If a later task needs to infer behavior from unrelated code or documents, treat that as a blocker and route the work back to `business_analysis`, `system_analysis`, or `design`.
 
 ## GitHub Backbone
 
-- Epic and task tracking: GitHub Issues
+- Initiative and task tracking: GitHub Issues
 - Delivery status: GitHub Project
 - Integration metadata: `docs/09-integrations.md`
 
 ## Notes
 
-Keep this file concise. It should orient a new session without duplicating the detailed stage artifacts.
+Keep this file concise. It should orient a new session without duplicating detailed task artifacts.

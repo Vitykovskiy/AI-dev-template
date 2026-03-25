@@ -1,46 +1,83 @@
-name: Feature
-description: Create a feature request tied to an Epic or business requirement.
-title: "[Feature] "
+name: Task
+description: Create one issue-driven workflow task with explicit owner and dependencies.
+title: "[Task] "
 labels:
-  - "type: feature"
+  - "type: task"
 body:
-  - type: textarea
-    id: description
+  - type: dropdown
+    id: task_type
     attributes:
-      label: Description
-      description: What should be built?
-      placeholder: Describe the feature.
+      label: Task type
+      description: Which operating-model task does this issue represent?
+      options:
+        - business_analysis
+        - system_analysis
+        - design
+        - implementation
+        - deploy
+        - e2e
+    validations:
+      required: true
+  - type: dropdown
+    id: owner_contour
+    attributes:
+      label: Owner contour
+      description: Which single contour owns execution of this task?
+      options:
+        - business-analyst
+        - system-analyst
+        - designer
+        - frontend
+        - backend
+        - devops
+        - qa-e2e
+    validations:
+      required: true
+  - type: input
+    id: parent_initiative
+    attributes:
+      label: Parent initiative
+      description: Which Epic or initiative issue owns this task?
+      placeholder: "#123"
     validations:
       required: true
   - type: textarea
-    id: expected_behavior
+    id: goal
     attributes:
-      label: Expected behavior
-      description: What should users or systems be able to do?
-      placeholder: Describe the expected behavior.
+      label: Goal
+      description: What specific outcome should exist when this task is done?
+      placeholder: Describe the task outcome.
     validations:
       required: true
   - type: textarea
-    id: acceptance_criteria
+    id: canonical_inputs
     attributes:
-      label: Acceptance criteria
-      description: Which conditions determine completion?
-      placeholder: List acceptance criteria.
+      label: Canonical inputs
+      description: Which repository artifacts or upstream tasks are required?
+      placeholder: List docs, contracts, designs, or completed tasks.
     validations:
       required: true
   - type: textarea
     id: dependencies
     attributes:
       label: Dependencies
-      description: Which issues, systems, or decisions does this feature depend on?
-      placeholder: List dependencies or write None.
+      description: Which issues block this task from starting?
+      placeholder: List issue IDs or write None.
     validations:
-      required: false
+      required: true
   - type: textarea
-    id: technical_notes
+    id: definition_of_ready
     attributes:
-      label: Technical notes
-      description: Add implementation constraints or notes if already known.
-      placeholder: Add technical notes if needed.
+      label: Definition of ready
+      description: What must be true before the owner contour may start?
+      placeholder: List the preconditions for starting.
     validations:
-      required: false
+      required: true
+  - type: textarea
+    id: definition_of_done
+    attributes:
+      label: Definition of done
+      description: What evidence is required before this issue may be closed?
+      placeholder: List measurable completion conditions.
+    validations:
+      required: true

@@ -21,5 +21,5 @@ Validate the deployed system end to end against the canonical user scenarios and
 
 - Test the integrated system, not isolated contour assumptions.
 - Validate against documented scenarios and acceptance criteria, not undocumented intent.
-- If a failure is caused by missing specification, return the initiative to `analysis`.
+- If a failure is caused by missing specification, route the work to `system_analysis` or `design`.
 - The initiative is not complete until e2e validation passes.

@@ -1,12 +1,10 @@
-# E2E Test Router
+# E2E Router
 
-Stage: `e2e_test`
+Task type: `e2e`
 
 Primary executor: qa-e2e.
 
-The active stage is selected from `.ai-dev-template.workflow-state.json`.
-
-Use this branch only while `current_stage = "e2e_test"`.
+Use this branch only when the active GitHub Issue has `task_type = e2e`.
 
 Read next:
 

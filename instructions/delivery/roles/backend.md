@@ -29,4 +29,4 @@ Read frontend code only when validating that implementation matches an existing 
 
 ## Blockers
 
-Return to `analysis` if domain rules, payload formats, integration semantics, or non-functional requirements are unclear.
+Route the task to `system_analysis` if domain rules, payload formats, integration semantics, or non-functional requirements are unclear.

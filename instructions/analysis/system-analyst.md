@@ -13,7 +13,7 @@ Turn intake results into an implementation-ready specification package. The outp
 
 ## Required Analysis Package
 
-Before delivery may start, define:
+Before downstream tasks may start, define:
 
 - problem and business context
 - user scenarios
@@ -31,16 +31,15 @@ Before delivery may start, define:
 - complete canonical artifacts in `docs/analysis/`
 - explicit source-of-truth mapping for each role
 - contour-ready task decomposition in `docs/delivery/contour-task-matrix.md`
-- GitHub-ready contour task set for operational tracking
+- GitHub-ready task set for operational tracking
 
 ## Rules
 
 - Treat `docs/delivery/contour-task-matrix.md` as the canonical decomposition source, but do not treat it as the final operational backlog by itself.
-- Before leaving `analysis`, publish the contour-specific implementation tasks in GitHub Issues and ensure they are represented in GitHub Project.
-- Each atomic contour implementation task must become its own GitHub Issue. Do not collapse multiple atomic tasks into one broad issue.
-- Verify that each planned issue exists and is linked into the operational project state before reporting `analysis` complete.
-
-- Fix all critical gaps before delivery starts.
+- Before reporting `system_analysis` complete, publish each required design, implementation, deploy, and e2e task in GitHub Issues and ensure dependencies are represented in GitHub Project.
+- Each atomic implementation task must become its own GitHub Issue. Do not collapse multiple atomic tasks into one broad issue.
+- Verify that each planned issue exists and is linked into the operational project state before reporting completion.
+- Fix all critical gaps before downstream work starts.
 - If a behavior matters to implementation or testing, write it down explicitly.
-- Do not let developers derive contracts by reading neighboring contour code.
+- Do not let downstream roles derive contracts by reading neighboring contour code.
 - If a requirement is unresolved, record it as a blocker instead of masking it with assumptions.

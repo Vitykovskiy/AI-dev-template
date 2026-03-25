@@ -1,30 +1,27 @@
 # Workflow
 
-## Lifecycle
+## Operating Model
 
-The repository enforces a fixed 6-stage lifecycle tracked by `.ai-dev-template.workflow-state.json`.
+The repository uses a two-mode workflow tracked by `.ai-dev-template.workflow-state.json`.
 
 Allowed `current_stage` values:
 
 1. `setup`
-2. `intake`
-3. `analysis`
-4. `development`
-5. `deploy`
-6. `e2e_test`
+2. `issue_driven`
 
-The lifecycle is sequential, but the state file allows explicit rollback to an earlier stage when a blocker is found.
+`setup` is the only repository-wide stage. After setup completes, the repository switches to `issue_driven` and all routing is performed through GitHub Issues, dependencies, owner contours, and GitHub Project state.
 
-## State File Rule
+## Bootstrap State Rule
 
-`.ai-dev-template.workflow-state.json` is the only source of truth for the current workflow stage.
+`.ai-dev-template.workflow-state.json` is a bootstrap guardrail, not a post-setup lifecycle engine.
 
 Rules:
 
 - read the file at the start of every session;
 - use `current_stage` exactly as written;
-- change stages only by updating the state file;
-- do not delete or restore instruction files to represent workflow progress.
+- switch from `setup` to `issue_driven` only when setup exit conditions are complete;
+- do not introduce new repository-wide post-setup stages;
+- do not edit the state file to move tasks between business analysis, system analysis, design, implementation, deploy, or e2e.
 
 ## Git Delivery Rule
 
@@ -32,14 +29,14 @@ Before starting task work, sync Git state and confirm the current working branch
 
 After creating a commit, sync again and confirm the branch still grows from the latest working branch state before further changes, handoff, or PR creation.
 
-Every completed stage handoff must have repository-persisted evidence and verified operational side effects:
+Every completed task handoff must have repository-persisted evidence and verified operational side effects:
 
-- commit all repository changes required for the completed stage output;
-- push the commit before considering the task or stage handoff complete;
+- commit all repository changes required for the completed task output;
+- push the commit before considering the task handoff complete;
 - if `pull_requests.enabled = true`, follow the configured PR policy after pushing;
 - if `pull_requests.enabled = false`, push directly to the assigned working branch;
 - verify the push and any required GitHub side effects before reporting completion;
-- do not leave completed stage outputs only in the local worktree;
+- do not leave completed task outputs only in the local worktree;
 - do not treat GitHub-only changes as a complete handoff until the corresponding canonical repository documents are updated, committed, and pushed.
 
 If the branch is behind, diverged, or based on an outdated parent, reconcile branch history first and only then continue the workflow task.
@@ -55,34 +52,88 @@ Rules:
 - when writing temporary files for `gh`, `git`, or related tools, encode them explicitly as UTF-8, preferably without BOM;
 - if a GitHub-side artifact or repository text shows mojibake or replacement characters, rewrite the source file in explicit UTF-8 and repeat the operation instead of continuing with corrupted text.
 
-## Stage Ownership
+## Task Types
 
-| Stage | Primary executor | Main output |
+All post-setup work must be represented by GitHub Issues with one of these task types:
+
+| Task type | Primary owner contour | Purpose |
 | --- | --- | --- |
-| `setup` | technical agent | initialized repository and workflow baseline |
-| `intake` | business analyst | business context, scenarios, scope, acceptance expectations |
-| `analysis` | system analyst | implementation-ready specification package |
-| `development` | contour role (`frontend`, `backend`, `devops`, etc.) | contour implementation from approved specs |
-| `deploy` | devops | deployed system in target environment |
-| `e2e_test` | qa-e2e | end-to-end validation result |
+| `initiative` | `business-analyst` or `system-analyst` | top-level business outcome and decomposition anchor |
+| `business_analysis` | `business-analyst` | clarify problem, users, scope, constraints, and success expectations |
+| `system_analysis` | `system-analyst` | produce implementation-ready specifications, contracts, and decomposition |
+| `design` | `designer` | define UX flows, visual states, reusable design decisions, and design assets |
+| `implementation` | one of `designer`, `frontend`, `backend`, `devops`, `qa-e2e` | execute one contour-owned delivery task |
+| `deploy` | `devops` | roll validated build outputs into the target environment |
+| `e2e` | `qa-e2e` | validate the integrated system against scenarios and acceptance criteria |
 
-## Mandatory Flow
+## Mandatory Task Attributes
 
-1. Start every session with `AGENTS.md`.
+Each operational issue must carry these attributes through issue fields, labels, or body sections:
+
+- `task_type`
+- `owner_contour`
+- `parent_initiative`
+- `depends_on`
+- `definition_of_ready`
+- `definition_of_done`
+- `canonical_inputs`
+- `project_status`
+
+Attribute rules:
+
+- `owner_contour` must contain exactly one contour;
+- `depends_on` must list all blocking tasks explicitly or say `none`;
+- `definition_of_ready` must state the preconditions for starting;
+- `definition_of_done` must state the evidence needed for closure;
+- `canonical_inputs` must point to repository artifacts or prerequisite tasks;
+- `project_status` must match the GitHub Project item state.
+
+## GitHub Project Model
+
+GitHub Project is the canonical execution-status board for post-setup work.
+
+Minimum required fields:
+
+- `Status`
+- `Task Type`
+- `Owner Contour`
+- `Priority`
+
+Minimum required statuses:
+
+- `Inbox`
+- `Ready`
+- `In Progress`
+- `Blocked`
+- `In Review`
+- `Done`
+
+Status semantics:
+
+- `Inbox`: created but not yet decomposed or triaged.
+- `Ready`: owner contour may start because dependencies are closed and inputs are sufficient.
+- `In Progress`: the owning contour is actively executing the task.
+- `Blocked`: work must stop until a dependency, access issue, or missing specification is resolved.
+- `In Review`: implementation is complete and the configured review or verification step is pending.
+- `Done`: all done conditions are satisfied and the issue may be closed.
+
+## Routing Algorithm
+
+Every session must follow this sequence:
+
+1. Start with `AGENTS.md`.
 2. Read `.ai-dev-template.workflow-state.json`.
-3. Determine the active role for the session.
-4. Read only the instruction branch and canonical artifacts allowed for that stage and role.
-5. Produce only the artifacts and decisions owned by that stage and role.
+3. If `current_stage = "setup"`, execute setup instructions only.
+4. If `current_stage = "issue_driven"`, select the active GitHub Issue.
+5. Read the task metadata and determine `task_type`, `owner_contour`, dependencies, and `project_status`.
+6. Stop unless the owner contour matches the session role and all dependencies are closed.
+7. Read only the canonical artifacts and instructions allowed for that task type and contour.
+8. Produce only the output owned by that task.
 
-## Stage Gates
-
-### 1. Setup
+## Setup Exit Conditions
 
 Goal:
-prepare the repository, workflow, and baseline documentation.
-
-Exit condition:
-the repository is ready for intake and later role routing.
+prepare the repository, workflow, and GitHub operating model.
 
 Mandatory completion conditions:
 
@@ -90,163 +141,142 @@ Mandatory completion conditions:
 - the repository is connected to GitHub Issues;
 - the repository is connected to a GitHub Project when `project_tracking = github_project`;
 - the GitHub Project exists, is reachable, and its URL plus validation status are recorded in `docs/09-integrations.md`;
-- required GitHub workflow infrastructure for the configured process is prepared during setup, including project structure, labels, and other repository-management assets needed by later stages;
-- setup-side changes to instructions, docs, labels, project structure, or repository workflow assets are verified and recorded before stage exit;
-- if the configured GitHub Project does not exist yet, create it or stop with a setup blocker instead of advancing the stage.
+- required GitHub workflow infrastructure for the configured process is prepared during setup, including project fields, labels, and issue templates needed by later tasks;
+- setup-side changes to instructions, docs, labels, project structure, or repository workflow assets are verified and recorded before setup exit;
+- the repository has a top-level initiating Epic template or documented creation path.
 
-State transition:
-update `current_stage` from `setup` to `intake` when setup is complete.
+Bootstrap transition:
+update `current_stage` from `setup` to `issue_driven` when setup is complete.
 
-### 2. Intake
+## Task Readiness And Completion Rules
 
-Goal:
-capture the business problem, target outcome, users, scenarios, scope, constraints, and success expectations.
+### Initiative
 
-Rules:
+Ready when:
 
-- work one semantic block at a time;
-- do not decompose into implementation tasks yet;
-- do not design system internals yet.
+- setup is complete;
+- the triggering request exists;
+- no higher-level initiative already covers the same outcome.
 
-Exit condition:
-the initiative is understood well enough to start system analysis.
+Done when:
 
-Mandatory completion conditions:
+- child tasks for business analysis, system analysis, design when needed, implementation, deploy, and e2e are created or explicitly ruled out;
+- dependency links between those tasks are recorded;
+- the GitHub Project reflects the planned execution chain.
 
-- the active initiative record exists in GitHub Issues;
-- the initiative identifier is reflected in the repository context files needed by later stages;
-- the intake docs and the GitHub initiative record describe the same first-version boundary and success expectations.
+### Business Analysis
 
-State transition:
-update `current_stage` from `intake` to `analysis` when intake is complete.
+Ready when:
 
-### 3. Analysis
+- an initiative exists;
+- the request, requester, and expected business outcome are identifiable.
 
-Goal:
-create the canonical implementation-ready package in `docs/analysis/`.
+Done when:
 
-The minimum required package includes:
+- users, scenarios, scope, constraints, and success expectations are documented;
+- unresolved business questions are recorded explicitly;
+- the system-analysis task has sufficient intake context to start.
 
-- problem context
-- user scenarios
-- version scope and acceptance
-- system modules
-- module relationships
-- domain model and data formats
-- API, event, and integration contracts
-- UI specification
-- cross-cutting concerns
-- contour task decomposition
+### System Analysis
 
-Exit condition:
-development roles can execute from their own artifacts and contracts without inferring behavior from sibling contour code.
+Ready when:
 
-Mandatory completion conditions:
+- business-analysis outputs are complete or the initiative is already intake-complete;
+- business blockers are closed.
 
-- `docs/delivery/contour-task-matrix.md` is complete enough to support contour-by-contour execution;
-- each atomic contour implementation task from the decomposition is represented as its own GitHub Issue;
-- contour-specific implementation tasks are created in GitHub Issues after analysis is complete;
-- those tasks are represented in GitHub Project before `current_stage` moves to `development`.
+Done when:
 
-State transition:
-update `current_stage` from `analysis` to `development` when the analysis package is implementation-ready.
+- the canonical analysis package is implementation-ready;
+- contour decomposition exists in `docs/delivery/contour-task-matrix.md`;
+- each required design, implementation, deploy, and e2e task exists as its own issue;
+- dependencies between those tasks are explicit in GitHub.
 
-### 4. Development
+### Design
 
-Goal:
-implement one contour at a time from approved analysis artifacts.
+Ready when:
 
-Rules:
+- relevant business-analysis and system-analysis inputs exist;
+- the affected UX surface is known.
 
-- one task, one contour;
-- one session, one development role;
-- frontend uses frontend specs and contracts;
-- backend uses backend specs and contracts;
-- missing specification is a blocker, not a coding prompt.
+Done when:
 
-Exit condition:
-all contour tasks for the initiative are implemented and documented.
+- user flows, screen states, interaction behavior, and design decisions are documented or linked;
+- implementation tasks that consume the design have the inputs they need;
+- open UX uncertainties are recorded as blockers instead of deferred implicitly.
 
-State transition:
-update `current_stage` from `development` to `deploy` when contour delivery is complete.
+### Implementation
 
-### 5. Deploy
+Ready when:
 
-Goal:
-roll the delivered system into the target environment as a separate stage.
+- system-analysis outputs are complete for the task's contour;
+- any required design task is done;
+- all declared dependencies are done;
+- the task status is `Ready` or `In Progress`.
 
-Exit condition:
-deployment completes and the target environment is ready for integrated validation.
+Done when:
 
-State transition:
-update `current_stage` from `deploy` to `e2e_test` when rollout succeeds.
+- the contour-owned change is implemented;
+- required repository docs are updated;
+- tests or verification owned by that contour are complete;
+- downstream dependent tasks can start without guessing.
 
-### 6. E2E Test
+### Deploy
 
-Goal:
-validate the deployed system against canonical user scenarios and acceptance criteria.
+Ready when:
 
-Exit condition:
-e2e validation passes. Only then may the initiative be considered complete.
+- all implementation tasks needed for the release slice are done;
+- deployment prerequisites and runtime requirements are documented.
 
-State transition:
-keep `e2e_test` until validation finishes. If a blocker is found, move the state file back to the appropriate prior stage.
+Done when:
 
-## Return-To-Analysis Rule
+- rollout succeeds in the target environment;
+- deployment evidence and environment notes are recorded;
+- the e2e task is unblocked.
 
-Return the initiative to `analysis` when any later-stage role finds a material gap in:
+### E2E
 
-- expected user behavior;
-- UI states or interactions;
-- domain rules;
-- payload or data formats;
-- API or event contracts;
-- non-functional or cross-cutting requirements;
-- acceptance criteria needed for implementation, rollout, or testing.
+Ready when:
 
-Do not close the gap with ad hoc code assumptions.
+- deploy is done;
+- user scenarios and acceptance criteria are still current.
 
-Use explicit state rollback in `.ai-dev-template.workflow-state.json`.
+Done when:
 
-## GitHub Lifecycle
+- critical scenarios pass end to end;
+- defects are routed back into GitHub Issues when found;
+- release recommendation or rejection is recorded.
 
-GitHub Issues and GitHub Project remain the operational system of record.
+## Blocking Rules
 
-Role split:
+Stop and mark a task `Blocked` when any of the following is true:
 
-- GitHub Issues are the canonical initiative and task records;
-- GitHub Project is the canonical delivery-status board for those issues;
-- repository docs remain the canonical source for product, analysis, architecture, and workflow context.
+- the task metadata or owner contour is missing or ambiguous;
+- the task depends on unfinished work;
+- a role would need to read sibling implementation code just to infer behavior;
+- canonical inputs are insufficient for the task type;
+- the task improperly mixes multiple owner contours;
+- required access to GitHub, environments, or external systems is missing.
 
-Required initiative flow:
+Blocker routing rules:
 
-1. create or update the initiative record during `intake`;
-2. complete the analysis package during `analysis`;
-3. create contour-specific implementation tasks in GitHub Issues after analysis;
-4. place those tasks in GitHub Project before starting `development`;
-5. execute deploy tasks after contour development;
-6. execute e2e tasks after deployment;
-7. close the initiative only after successful e2e validation.
-
-## Decomposition Rules
-
-- Tasks must be atomic and contour-specific.
-- Each atomic contour implementation task must map to exactly one GitHub Issue.
-- Each development task must have exactly one owning contour.
-- Cross-contour work is split into linked tasks instead of one shared task.
-- Deploy and e2e tasks are separate from implementation tasks.
+- missing business context -> create or reopen a `business_analysis` task;
+- missing specifications, contracts, or decomposition -> create or reopen a `system_analysis` task;
+- missing UX behavior, screen states, or design assets -> create or reopen a `design` task;
+- failed rollout prerequisites -> block `deploy` and create follow-up tasks in the owning contour;
+- failed integrated validation -> block the initiative and create follow-up tasks for the owning contour of each defect.
 
 ## Documentation Update Rules
 
 - Business problem or goals change: update `docs/01-product-vision.md` and `docs/02-business-requirements.md`.
 - Scope or acceptance changes: update `docs/03-scope-and-boundaries.md` and `docs/analysis/version-scope-and-acceptance.md`.
+- UX or design behavior changes: update `docs/analysis/ui-specification.md` and the relevant design artifacts.
 - System design changes: update the relevant files in `docs/analysis/`.
 - Repository structure or runtime placement changes: update `docs/05-architecture.md`.
-- Lifecycle, state, or role rules change: update `AGENTS.md`, `.ai-dev-template.workflow-state.json`, `instructions/`, and this file together.
+- Workflow, routing, task metadata, or role rules change: update `AGENTS.md`, `.ai-dev-template.workflow-state.json`, issue templates, `instructions/`, and this file together.
 - Material decisions change: update `docs/06-decision-log.md`.
 
 ## Execution Mode And PR Policy
 
 The repository still uses `.ai-dev-template.config.json` for execution mode, approvals, and PR/review policy.
 
-Those settings control how a stage is executed. They do not change the required lifecycle order or the state-file routing model defined in this document.
+Those settings control how tasks are executed. They do not replace task ownership, dependencies, or GitHub Project state.

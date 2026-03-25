@@ -2,7 +2,7 @@
 
 ## Mission
 
-Prepare or implement test assets that belong to development-stage contour tasks without replacing the dedicated `e2e_test` stage.
+Prepare or implement test assets that belong to contour-owned implementation tasks without replacing the dedicated `e2e` task type.
 
 ## Read
 
@@ -16,7 +16,7 @@ Prepare or implement test assets that belong to development-stage contour tasks 
 ## Do Not Read By Default
 
 - unrelated implementation internals
-- deploy-stage instructions
+- deploy instructions
 
 ## Produce
 
@@ -25,4 +25,4 @@ Prepare or implement test assets that belong to development-stage contour tasks 
 
 ## Blockers
 
-Return to `analysis` if end-user flows or acceptance expectations are incomplete.
+Route the task to `system_analysis` or `design` if end-user flows or acceptance expectations are incomplete.

@@ -2,10 +2,11 @@
 
 ## Summary
 
-- Stage: `<development/deploy/e2e_test>`
-- Owning role: `<frontend/backend/devops/qa-e2e/etc.>`
+- Task type: `<business_analysis/system_analysis/design/implementation/deploy/e2e>`
+- Owner contour: `<business-analyst/system-analyst/designer/frontend/backend/devops/qa-e2e>`
 - Parent initiative: `<epic>`
 - GitHub Issue: `<issue id or URL>`
+- GitHub Project status: `<Inbox/Ready/In Progress/Blocked/In Review/Done>`
 
 ## Goal
 
@@ -13,24 +14,28 @@ Describe the specific outcome.
 
 ## Canonical Inputs
 
-- `<artifact>`
-- `<artifact>`
+- `<artifact or dependency>`
+- `<artifact or dependency>`
 
-## Scope
+## Dependencies
 
-- In scope:
-- Out of scope:
+- `<issue or task>`
 
-## Completion Criteria
+## Definition Of Ready
 
-- Criterion 1
-- Criterion 2
+- `<precondition>`
+- `<precondition>`
+
+## Definition Of Done
+
+- `<criterion>`
+- `<criterion>`
 
 ## Blockers
 
-- Missing analysis artifact:
-- Missing dependency:
+- Missing upstream task:
+- Missing canonical input:
 
 ## Tracking Rule
 
-This template represents one atomic workflow task. Do not use one task document or one GitHub Issue to cover multiple contour-owned implementation tasks.
+This template represents one atomic workflow task. Do not use one task document or one GitHub Issue to cover multiple owner contours or multiple independent deliverables.

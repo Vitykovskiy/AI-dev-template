@@ -1,10 +1,10 @@
 # Setup Router
 
-Stage: `setup`
+Mode: `setup`
 
 Primary executor: technical agent.
 
-The active stage is selected from `.ai-dev-template.workflow-state.json`.
+The active mode is selected from `.ai-dev-template.workflow-state.json`.
 
 Use this branch only while `current_stage = "setup"`.
 
@@ -12,4 +12,4 @@ Read next:
 
 1. `instructions/setup/technical-agent.md`
 
-Do not read intake, analysis, development, deploy, or e2e instructions during setup unless the setup task explicitly updates those documents as template assets.
+Do not execute business analysis, system analysis, design, implementation, deploy, or e2e tasks during setup unless the setup task explicitly updates those documents as template assets.

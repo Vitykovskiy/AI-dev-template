@@ -1,10 +1,11 @@
 # Epic Template
 
-## Lifecycle Summary
+## Summary
 
-- Workflow state file: `.ai-dev-template.workflow-state.json`
-- Current stage: `<setup/intake/analysis/development/deploy/e2e_test>`
-- Primary owner role: `<role>`
+- Workflow mode: `issue_driven`
+- Task type: `initiative`
+- Owner contour: `<business-analyst/system-analyst>`
+- Project status: `Inbox`
 
 ## Goal
 
@@ -14,22 +15,20 @@ Describe the initiative outcome.
 
 Why this initiative matters.
 
-## Required Analysis Package
+## Required Task Chain
 
-- problem context
-- user scenarios
-- version scope and acceptance
-- system modules
-- domain model and data formats
-- integration contracts
-- UI specification
-- cross-cutting concerns
-- contour decomposition
+- `business_analysis`
+- `system_analysis`
+- `design` if the initiative changes user experience or reusable design assets
+- contour-owned `implementation` tasks
+- `deploy`
+- `e2e`
 
 ## Completion Rule
 
 The initiative is complete only after:
 
-1. development tasks are finished by contour;
-2. deployment succeeds;
-3. e2e validation passes.
+1. required child tasks are created and linked by dependencies;
+2. implementation tasks are finished by contour;
+3. deployment succeeds;
+4. e2e validation passes.

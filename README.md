@@ -1,90 +1,100 @@
 # AI Dev Template
 
-Template repository for an AI team that works through a fixed phase-and-role workflow instead of improvising discovery, design, implementation, deployment, and validation in one session.
+Template repository for an AI team that uses `setup` as a one-time bootstrap step and then runs all delivery through GitHub Issues, task dependencies, owner contours, and GitHub Project state.
 
 ## Operating Model
 
-The template enforces a 6-stage lifecycle stored in `.ai-dev-template.workflow-state.json`:
+The template uses two workflow modes recorded in `.ai-dev-template.workflow-state.json`:
 
-1. `setup` - technical agent initializes the repository and workflow.
-2. `intake` - business analyst captures the problem, users, scenarios, scope, and acceptance expectations.
-3. `analysis` - system analyst produces the implementation-ready specification package.
-4. `development` - contour-specific roles implement only their assigned slice, such as `frontend`, `backend`, or contour-specific `devops`.
-5. `deploy` - devops rolls the delivered contours into the target environment.
-6. `e2e_test` - qa-e2e validates the deployed system against user scenarios and acceptance criteria.
+1. `setup` - technical agent initializes the repository, issue templates, labels, project structure, and workflow rules.
+2. `issue_driven` - all post-setup work is routed by GitHub task metadata instead of a repository-wide stage chain.
 
-The repository is the canonical source of truth for:
+After `setup`, GitHub Issues become the primary execution objects:
 
-- workflow routing, state, and role rules;
-- business context and user scenarios;
-- system analysis and integration contracts;
-- contour decomposition and lifecycle state;
-- architecture, decisions, and operational knowledge.
+- an initiating Epic anchors the initiative;
+- business analysis, system analysis, design, implementation, deploy, and e2e work each live as explicit issues;
+- every operational issue has one owner contour and explicit dependencies;
+- agents execute only tasks owned by their contour and only when dependencies are resolved;
+- GitHub Project holds the canonical execution state for those issues.
 
 ## Core Principles
 
-- No implementation before analysis is sufficient for development.
-- User scenarios are fixed before contour decomposition.
-- Screens, interfaces, data formats, and integration contracts are analyzed before coding.
-- Frontend works from its own contour specification and contracts, not by reading backend code.
-- Backend works from its own contour specification and contracts, not by reading frontend code.
-- Missing specification is a blocker that returns the initiative to `analysis`.
-- An initiative is not complete until deployment and e2e validation both succeed.
+- No implementation before the required business-analysis, system-analysis, and design tasks are complete.
+- User scenarios, interfaces, contracts, and acceptance expectations must exist before contour-owned implementation starts.
+- Each task has exactly one owner contour.
+- Cross-contour work must be split into linked tasks instead of one shared task.
+- Missing specification is a blocker that routes work back to the appropriate analysis or design task.
+- An initiative is not complete until deploy and e2e tasks both finish successfully.
 
 ## Repository Layout
 
-- `AGENTS.md` - router that reads `.ai-dev-template.workflow-state.json` and selects the current stage and role branch.
-- `.ai-dev-template.workflow-state.json` - explicit workflow state file with `current_stage`.
-- `instructions/` - permanent stage-specific and role-specific instructions. These files are not deleted as part of stage transitions.
-- `docs/analysis/` - canonical analysis package that gates development.
-- `docs/delivery/` - contour decomposition and development handoff artifacts.
-- `templates/` - reusable templates for intake, analysis, contour development, deploy, and e2e work.
+- `AGENTS.md` - router that decides between `setup` and post-setup issue-driven routing.
+- `.ai-dev-template.workflow-state.json` - bootstrap guardrail that records whether setup is still active.
+- `instructions/` - setup instructions plus task-type and contour-specific instructions.
+- `docs/analysis/` - canonical analysis package that gates design, implementation, deploy, and e2e work.
+- `docs/delivery/` - contour decomposition and implementation handoff artifacts.
+- `templates/` - reusable templates for initiative, analysis, design, implementation, deploy, and e2e tasks.
 - `tasks/` - local scratch space only; not a durable backlog.
 
 ## How A New Project Starts
 
 1. Create a repository from this template and clone it locally.
 2. Add `.ai-dev-template.config.json` to the root.
-3. Keep `.ai-dev-template.workflow-state.json` in the root and set `current_stage` to the correct value.
+3. Keep `.ai-dev-template.workflow-state.json` in the root with `current_stage = "setup"`.
 4. Connect the repository to GitHub Issues and a GitHub Project board. If `project_tracking = github_project` and no project exists yet, create one before leaving `setup`.
 5. Give the agent access to the repository and the business request.
-6. Start with `AGENTS.md`; the router will read the state file and select the matching instruction branch.
+6. Start with `AGENTS.md`; the router will either keep the repository in `setup` or switch to issue-driven routing after setup is validated.
 
 ## GitHub Workflow
 
-GitHub Issues and GitHub Project remain the operational backbone, but task creation follows the lifecycle:
+GitHub Issues and GitHub Project are the operational backbone after setup.
 
-- intake captures the initiative;
-- intake must create or update the initiative record in GitHub Issues before analysis starts;
-- analysis produces implementation-ready artifacts;
-- analysis also publishes each atomic contour-specific implementation task into its own GitHub Issue and places those issues into GitHub Project before development starts;
-- deploy and e2e_test run as separate stages after implementation.
+Required GitHub Issue types:
 
-GitHub record split:
+- `initiative`
+- `business_analysis`
+- `system_analysis`
+- `design`
+- `implementation`
+- `deploy`
+- `e2e`
 
-- GitHub Issues hold the canonical initiative and task definitions.
-- GitHub Project holds the canonical delivery status of those issues.
+Required task attributes:
 
-Completed stage handoffs must have verified evidence. Repository changes must be committed and pushed, and required GitHub-side workflow actions must be verified before completion is reported. When pull requests are disabled, the agent pushes directly to the assigned working branch.
+- task type
+- owner contour
+- parent initiative
+- explicit dependencies
+- definition of ready
+- definition of done
+- GitHub Project status
+
+Required GitHub Project statuses:
+
+- `Inbox`
+- `Ready`
+- `In Progress`
+- `Blocked`
+- `In Review`
+- `Done`
+
+Completed task handoffs must have verified evidence. Repository changes must be committed and pushed, and required GitHub-side workflow actions must be verified before completion is reported. When pull requests are disabled, the agent pushes directly to the assigned working branch.
 
 Workflow text artifacts should be written in UTF-8. On Windows and in PowerShell, files passed to `gh`, `git`, or similar tools must use explicit UTF-8 encoding to avoid corrupted non-ASCII text.
 
-Closing an initiative before successful e2e validation is not allowed.
+## Bootstrap Guardrail
 
-## Workflow State
+`.ai-dev-template.workflow-state.json` remains in the repository as a lightweight guardrail:
 
-Stage transitions happen by editing `.ai-dev-template.workflow-state.json`.
+- `setup` blocks operational work until the repository and GitHub operating model are ready;
+- `issue_driven` means setup is complete and no global post-setup stage transitions are allowed.
 
-This supports safe returns to earlier stages without restoring deleted instruction files, for example:
-
-- `deploy` -> `development`
-- `e2e_test` -> `analysis`
-- `e2e_test` -> `development`
+The file no longer represents a sequential lifecycle after setup.
 
 ## Configuration
 
 Workflow policy is configured in `.ai-dev-template.config.json`.
 
-The configuration governs language, execution mode, approval checkpoints, and PR/review behavior. It does not replace the explicit stage state stored in `.ai-dev-template.workflow-state.json`.
+The configuration governs language, execution mode, approval checkpoints, and PR/review behavior. It does not replace task ownership, dependencies, or GitHub Project state.
 
 It also governs optional repository conventions such as `architecture.use_fsd`, which tells the template whether frontend work should explicitly follow Feature-Sliced Design.

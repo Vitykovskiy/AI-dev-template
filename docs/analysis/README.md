@@ -2,7 +2,7 @@
 
 `docs/analysis/` is the canonical implementation-ready specification package.
 
-Delivery, deploy, and e2e roles must work from these artifacts instead of inferring behavior from neighboring contour code.
+Design, implementation, deploy, and e2e tasks must work from these artifacts instead of inferring behavior from neighboring contour code.
 
 ## Required Files
 
@@ -19,6 +19,7 @@ Delivery, deploy, and e2e roles must work from these artifacts instead of inferr
 
 - business analyst: intake-facing product docs plus scenario context
 - system analyst: all analysis files in this folder
+- designer: `user-scenarios.md`, `ui-specification.md`, `version-scope-and-acceptance.md`, consumed contract details
 - frontend: `user-scenarios.md`, `ui-specification.md`, consumed portions of `integration-contracts.md`, `version-scope-and-acceptance.md`
 - backend: `system-modules.md`, `domain-model.md`, produced and consumed portions of `integration-contracts.md`, `cross-cutting-concerns.md`, `version-scope-and-acceptance.md`
 - devops: `cross-cutting-concerns.md`, runtime-related module and integration details, rollout constraints
@@ -26,4 +27,4 @@ Delivery, deploy, and e2e roles must work from these artifacts instead of inferr
 
 ## Rule
 
-If any role cannot execute from the artifacts it owns, the initiative is not ready and must return to `analysis`.
+If any role cannot execute from the artifacts it owns, the initiative is not ready and must return to `system_analysis` or `design` through GitHub task routing.
