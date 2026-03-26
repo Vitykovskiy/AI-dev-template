@@ -2,7 +2,7 @@
 
 ## Summary
 
-- Stage: `<development/deploy/e2e_test>`
+- Task type: `<implementation/deploy/e2e>`
 - Owning role: `<frontend/backend/devops/qa-e2e/etc.>`
 - Parent initiative: `<epic>`
 - GitHub Issue: `<issue id or URL>`

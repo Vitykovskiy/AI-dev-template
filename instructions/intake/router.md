@@ -1,15 +1,15 @@
-# Intake Router
+# Business Analysis Router
 
-Stage: `intake`
+Task type: `business_analysis`
 
 Primary executor: business analyst.
 
-The active stage is selected from `.ai-dev-template.workflow-state.json`.
+The repository mode is selected from `.ai-dev-template.workflow-state.json`.
 
-Use this branch only while `current_stage = "intake"`.
+Use this branch only after setup, when `current_stage = "issue_driven"` and the active GitHub Issue has `task_type = "business_analysis"`.
 
 Read next:
 
 1. `instructions/intake/business-analyst.md`
 
-Do not read analysis, development, deploy, or e2e instructions during intake.
+Do not read system-analysis, implementation, deploy, or e2e instructions during business analysis.

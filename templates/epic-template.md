@@ -3,7 +3,7 @@
 ## Lifecycle Summary
 
 - Workflow state file: `.ai-dev-template.workflow-state.json`
-- Current stage: `<setup/intake/analysis/development/deploy/e2e_test>`
+- Current mode: `<setup/issue_driven>`
 - Primary owner role: `<role>`
 
 ## Goal

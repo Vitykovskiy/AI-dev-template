@@ -4,7 +4,7 @@
 
 - Name:
 - Purpose:
-- Relevant stage: `analysis`
+- Relevant task type or context: `system_analysis`
 
 ## Evaluation
 
