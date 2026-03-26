@@ -5,15 +5,16 @@
 - URL: `<paste GitHub Project URL here>`
 - Board type: `Kanban`
 - Required statuses present: `yes/no`
-- Required fields present: `Status`, `Priority`, `Area`
+- Required fields present: `Status`, `Task Type`, `Owner Contour`, `Priority`
 - Project item creation verified: `yes/no`
 - Setup validation status: `Unknown`
 - Notes: If `project_tracking = github_project`, this project must exist before `setup` can be considered complete.
 
 ## GitHub Issues
 
-- Initiative creation verified: `yes/no`
-- Atomic contour task issue creation verified: `yes/no`
+- Initiative issue creation verified: `yes/no`
+- Operational issue templates verified: `yes/no`
+- Required task metadata captured by forms: `yes/no`
 - Labels prepared for workflow use: `yes/no`
 - Notes: Record the identifiers or URLs needed to prove that workflow-required issue records exist.
 

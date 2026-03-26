@@ -1,6 +1,6 @@
 #!/bin/bash
 # Creates required labels for AI Dev Template workflow.
-# Safe to re-run: existing labels are skipped without error.
+# Safe to re-run: required labels are created or updated, legacy labels are removed.
 # Usage: bash scripts/bootstrap-github-labels.sh
 
 set -e
@@ -21,7 +21,7 @@ if [ -z "$GH_CMD" ]; then
   exit 1
 fi
 
-create_label() {
+ensure_label() {
   local name="$1"
   local color="$2"
   local description="$3"
@@ -29,28 +29,52 @@ create_label() {
   if "$GH_CMD" label create "$name" --color "$color" --description "$description" 2>/dev/null; then
     echo "Created:  $name"
   else
-    echo "Skipped:  $name (already exists)"
+    "$GH_CMD" label edit "$name" --color "$color" --description "$description" >/dev/null
+    echo "Updated:  $name"
+  fi
+}
+
+delete_label_if_present() {
+  local name="$1"
+
+  if "$GH_CMD" label delete "$name" --yes >/dev/null 2>&1; then
+    echo "Deleted:  $name"
+  else
+    echo "Skipped:  $name (not present)"
   fi
 }
 
 echo "Creating labels..."
 
-create_label "type: epic"    "3E4B9E" "Large outcome decomposed into features and tasks"
-create_label "type: feature" "0075ca" "New capability or enhancement"
-create_label "type: bug"     "d73a4a" "Defect with observable impact"
-create_label "type: task"    "e4e669" "Atomic delivery task"
+ensure_label "task_type: initiative"         "3E4B9E" "Top-level delivery outcome and decomposition anchor"
+ensure_label "task_type: business_analysis"  "1D76DB" "Clarifies business problem, users, and scope"
+ensure_label "task_type: system_analysis"    "5319E7" "Produces canonical implementation-ready specifications"
+ensure_label "task_type: block_delivery"     "0E8A16" "Parent issue for one integrated deliverable"
+ensure_label "task_type: implementation"     "FBCA04" "Contour-owned child implementation task"
+ensure_label "task_type: deploy"             "BFDADC" "Rolls validated outputs into a target environment"
+ensure_label "task_type: e2e"                "C2E0C6" "Integrated validation task"
+ensure_label "type: bug"                     "D73A4A" "Defect requiring correction"
 
-create_label "area: frontend" "bfd4f2" "Frontend code or UI"
-create_label "area: backend"  "0e8a16" "Backend code or API"
-create_label "area: infra"    "5319e7" "Infrastructure or deployment"
-create_label "area: docs"     "c5def5" "Documentation"
-create_label "area: data"     "f9d0c4" "Data models or migrations"
+ensure_label "owner_contour: business-analyst" "C5DEF5" "Owned by the business-analyst contour"
+ensure_label "owner_contour: system-analyst"   "BFD4F2" "Owned by the system-analyst contour"
+ensure_label "owner_contour: frontend"         "7057FF" "Owned by the frontend contour"
+ensure_label "owner_contour: backend"          "0E8A16" "Owned by the backend contour"
+ensure_label "owner_contour: devops"           "D4C5F9" "Owned by the devops contour"
+ensure_label "owner_contour: qa-e2e"           "F9D0C4" "Owned by the qa-e2e contour"
 
-create_label "priority: high"   "d93f0b" "Must be resolved urgently"
-create_label "priority: medium" "fbca04" "Normal priority"
-create_label "priority: low"    "c2e0c6" "Low urgency"
+ensure_label "priority: high"                "D93F0B" "Must be resolved urgently"
+ensure_label "priority: medium"              "FBCA04" "Normal priority"
+ensure_label "priority: low"                 "C2E0C6" "Low urgency"
 
-create_label "status: blocked"    "b60205" "Cannot proceed without resolution"
-create_label "status: needs-info" "d4c5f9" "Awaiting clarification"
+delete_label_if_present "type: epic"
+delete_label_if_present "type: feature"
+delete_label_if_present "type: task"
+delete_label_if_present "area: frontend"
+delete_label_if_present "area: backend"
+delete_label_if_present "area: infra"
+delete_label_if_present "area: docs"
+delete_label_if_present "area: data"
+delete_label_if_present "status: blocked"
+delete_label_if_present "status: needs-info"
 
 echo "Done."

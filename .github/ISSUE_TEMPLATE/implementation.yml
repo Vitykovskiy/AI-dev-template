@@ -1,0 +1,88 @@
+name: Implementation
+description: Create one contour-owned child implementation issue under a block_delivery parent.
+title: "[Implementation] "
+labels:
+  - "task_type: implementation"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This template creates one contour-owned implementation issue.
+        The `task_type` is fixed by this template as `implementation`.
+  - type: dropdown
+    id: owner_contour
+    attributes:
+      label: owner_contour
+      options:
+        - frontend
+        - backend
+        - devops
+        - qa-e2e
+    validations:
+      required: true
+  - type: input
+    id: parent_initiative
+    attributes:
+      label: parent_initiative
+      placeholder: "#123"
+    validations:
+      required: true
+  - type: input
+    id: parent_block_task
+    attributes:
+      label: parent_block_task
+      placeholder: "#456"
+    validations:
+      required: true
+  - type: textarea
+    id: canonical_inputs
+    attributes:
+      label: canonical_inputs
+      placeholder: docs/analysis/*, API contracts, design links, upstream issue links
+    validations:
+      required: true
+  - type: textarea
+    id: depends_on
+    attributes:
+      label: depends_on
+      placeholder: "#789"
+    validations:
+      required: true
+  - type: textarea
+    id: implementation_goal
+    attributes:
+      label: Implementation goal
+      description: What must this contour deliver?
+      placeholder: Describe the contour-owned change and expected evidence.
+    validations:
+      required: true
+  - type: textarea
+    id: definition_of_ready
+    attributes:
+      label: definition_of_ready
+      placeholder: Analysis outputs complete; task belongs to exactly one block; all dependencies are done; status is Ready or In Progress.
+    validations:
+      required: true
+  - type: textarea
+    id: definition_of_done
+    attributes:
+      label: definition_of_done
+      placeholder: Contour-owned change implemented; docs updated; tests/verification complete; downstream tasks can proceed without guessing.
+    validations:
+      required: true
+  - type: dropdown
+    id: project_status
+    attributes:
+      label: project_status
+      options:
+        - Inbox
+        - Ready
+        - In Progress
+        - Blocked
+        - Waiting for Testing
+        - Testing
+        - Waiting for Fix
+        - In Review
+        - Done
+    validations:
+      required: true
