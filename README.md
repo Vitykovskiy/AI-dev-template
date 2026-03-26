@@ -13,7 +13,7 @@ After `setup`, GitHub Issues become the primary execution objects:
 
 - an initiating Epic anchors the initiative;
 - one `business_analysis` issue starts the initiative;
-- one `system_analysis` issue produces the canonical specification package and decomposes delivery into parent `block_delivery` tasks;
+- one or more bounded `system_analysis` issues produce the canonical specification package slice by slice and decompose only the delivery they fully specify;
 - each `block_delivery` task represents one integrated deliverable and owns child implementation issues;
 - every implementation issue has one owner contour and explicit dependencies;
 - exactly one open issue is marked with `session: active` when a repository session is in flight;
@@ -23,11 +23,12 @@ After `setup`, GitHub Issues become the primary execution objects:
 ## Core Principles
 
 - Implementation starts after the required business-analysis and system-analysis tasks are complete.
-- `system_analysis` is the single source of truth for implementation inputs and block decomposition.
+- `system_analysis` remains the single source of truth for implementation inputs and block decomposition, but analysis may be split into bounded slices.
 - User scenarios, interfaces, contracts, and acceptance expectations exist before contour-owned implementation starts.
 - Each task has exactly one owner contour.
 - Cross-contour delivery is decomposed into linked tasks with explicit ownership.
 - Missing specification routes work into a linked `system_analysis` follow-up task with explicit clarification scope.
+- Large initiatives may split `system_analysis` by version slice, capability slice, or explicit follow-up clarification scope.
 - `qa-e2e` validates integrated block-level outcomes.
 - An initiative closes after required block-level validation, deploy work, and e2e tasks finish successfully.
 

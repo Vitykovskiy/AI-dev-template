@@ -11,6 +11,7 @@ Use this file to decompose approved analysis into contour-specific execution tas
 - dependencies must reference the upstream task names or issue IDs explicitly
 - deploy and e2e work are separate rows, not hidden inside implementation rows
 - child implementation rows must reference their parent block task explicitly
+- rows may depend on a specific bounded `system_analysis` slice and should name that slice explicitly when it is not the only analysis issue for the initiative
 - when implementation is blocked by missing specification, record a linked `system_analysis` follow-up row or issue with explicit clarification scope
 
 ## Matrix

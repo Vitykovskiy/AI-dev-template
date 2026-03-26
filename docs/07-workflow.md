@@ -62,7 +62,7 @@ All post-setup work must be represented by GitHub Issues with one of these task 
 | --- | --- | --- |
 | `initiative` | `business-analyst` or `system-analyst` | top-level business outcome and decomposition anchor |
 | `business_analysis` | `business-analyst` | clarify problem, users, scope, constraints, success expectations, and workflow vocabulary |
-| `system_analysis` | `system-analyst` | produce the canonical specification package, block-level decomposition, and child implementation plan |
+| `system_analysis` | `system-analyst` | produce the canonical specification package for one bounded analysis slice, plus the related block-level decomposition and child implementation plan |
 | `block_delivery` | `system-analyst` or delivery owner defined by repository policy | parent issue for one integrated deliverable that waits for all required child implementation tasks and later block-level validation |
 | `implementation` | one of `frontend`, `backend`, `devops`, `qa-e2e` | execute one contour-owned child task within a block-level deliverable |
 | `deploy` | `devops` | roll validated build outputs into the target environment |
@@ -94,11 +94,31 @@ Attribute rules:
 Hierarchy rules:
 
 - only one `business_analysis` issue should initiate a new delivery stream after setup;
-- `business_analysis` hands off to one `system_analysis` issue for the same initiative or version slice;
-- `system_analysis` creates one or more `block_delivery` parent issues;
+- `business_analysis` hands off to one or more bounded `system_analysis` issues for the same initiative or version stream;
+- each `system_analysis` issue must declare a bounded scope before creating downstream work;
+- `system_analysis` creates one or more `block_delivery` parent issues only for the slice it fully specifies;
 - each `block_delivery` issue owns all required child implementation issues for that integrated outcome;
 - `qa-e2e` validates the `block_delivery` issue after all required child implementation issues are done;
 - if implementation is blocked by missing specification, create a linked follow-up `system_analysis` issue that defines the missing requirements explicitly.
+
+## System Analysis Decomposition
+
+`system_analysis` is canonical by scope, not by issue size.
+
+Approved decomposition patterns:
+
+- version slice: one issue covers one release increment, milestone, or rollout slice;
+- capability slice: one issue covers one bounded business or technical capability;
+- follow-up clarification slice: one issue closes a specific specification gap discovered after downstream work starts.
+
+Decomposition rules:
+
+- each `system_analysis` issue must state its bounded scope in the issue body and canonical docs;
+- a bounded scope must be small enough to review without requiring the full initiative context in one session;
+- downstream `block_delivery`, `implementation`, `deploy`, and `e2e` tasks may be created only for the slice whose specifications are implementation-ready;
+- unresolved work outside that slice must remain in another planned or follow-up `system_analysis` issue, not hidden inside the current one;
+- multiple `system_analysis` issues may exist for the same initiative when their boundaries and dependencies are explicit;
+- no `block_delivery` issue may depend on unspecified behavior that belongs to another undeclared analysis slice.
 
 ## GitHub Project Model
 
@@ -241,11 +261,12 @@ Ready when:
 
 Done when:
 
-- the canonical analysis package is implementation-ready;
+- the bounded analysis slice has an implementation-ready canonical analysis package;
 - contour decomposition exists in `docs/delivery/contour-task-matrix.md`;
-- each required `block_delivery` task exists and records ready and done rules plus canonical inputs;
-- each required child implementation, deploy, and e2e task exists as its own issue;
-- dependencies between those tasks are explicit in GitHub.
+- each required `block_delivery` task for that slice exists and records ready and done rules plus canonical inputs;
+- each required child implementation, deploy, and e2e task for that slice exists as its own issue;
+- dependencies between those tasks are explicit in GitHub;
+- any remaining unspecified scope is represented by another planned or linked follow-up `system_analysis` issue with explicit boundaries.
 
 ### Block Delivery
 
@@ -331,7 +352,7 @@ Blocker routing rules:
 Canonical post-setup chain:
 
 1. `business_analysis`
-2. `system_analysis`
+2. one or more bounded `system_analysis` issues
 3. `block_delivery`
 4. child `implementation` issues by contour
 5. block-level validation by `qa-e2e`

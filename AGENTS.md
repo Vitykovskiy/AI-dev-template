@@ -99,8 +99,8 @@ Every operational task must have these required attributes, expressed through is
 Required task chain after setup:
 
 1. one `business_analysis` issue confirms the business problem and operating vocabulary;
-2. one `system_analysis` issue produces the canonical specification package;
-3. `system_analysis` decomposes delivery into one or more parent `block_delivery` tasks;
+2. one or more bounded `system_analysis` issues produce the canonical specification package in slices for the same initiative or version stream;
+3. each `system_analysis` issue decomposes only its approved analysis slice into one or more parent `block_delivery` tasks;
 4. each `block_delivery` task owns child implementation issues, one per responsible contour (`frontend`, `backend`, `devops`, `qa-e2e` when contour-owned test assets are required);
 5. `qa-e2e` validates the integrated result at the `block_delivery` level after all required child implementation issues are done;
 6. `deploy` remains separate when rollout is required for the validated slice.

@@ -2,7 +2,7 @@
 
 ## Mission
 
-Turn intake results into the canonical specification package for one initiative or version slice. The output must be sufficient for block-based delivery without role guesswork.
+Turn intake results into the canonical specification package for one bounded initiative, version, capability, or clarification slice. The output must be sufficient for block-based delivery without role guesswork.
 
 ## Execution Profile
 
@@ -38,6 +38,8 @@ Before downstream tasks may start, define:
 - block-level task decomposition
 - child implementation issues by contour
 
+The package must be complete for the active bounded slice. It does not need to close the entire initiative in one issue when boundaries and follow-up analysis tasks are explicit.
+
 ## Produce
 
 - complete canonical artifacts in `docs/analysis/`
@@ -48,9 +50,11 @@ Before downstream tasks may start, define:
 ## Rules
 
 - Treat `docs/delivery/contour-task-matrix.md` as the canonical decomposition source and pair it with GitHub Issues as the operational backlog.
-- Before reporting `system_analysis` complete, publish each required `block_delivery`, implementation, deploy, and e2e task in GitHub Issues and ensure dependencies are represented in GitHub Project.
+- State the bounded analysis scope explicitly before decomposition begins. Approved scope patterns are version slice, capability slice, and follow-up clarification slice.
+- Before reporting `system_analysis` complete, publish each required `block_delivery`, implementation, deploy, and e2e task for the slice resolved by this issue and ensure dependencies are represented in GitHub Project.
 - Each integrated deliverable must have its own parent `block_delivery` issue with explicit ready and done rules.
 - Each atomic implementation task must become its own child GitHub Issue under exactly one parent block task. Do not collapse multiple atomic tasks into one broad issue.
+- Do not create downstream tasks for behavior that still depends on unresolved analysis outside the bounded slice. Create or link another `system_analysis` issue instead.
 - Verify that each planned issue exists and is linked into the operational project state before reporting completion.
 - Fix all critical gaps before downstream work starts.
 - If a behavior matters to implementation or testing, write it down explicitly.

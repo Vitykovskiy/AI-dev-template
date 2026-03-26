@@ -26,4 +26,4 @@ Implementation, deploy, and e2e tasks work from these artifacts as their canonic
 
 ## Rule
 
-If any role cannot execute from the artifacts it owns, the initiative is not ready and must return to `system_analysis` through GitHub task routing.
+If any role cannot execute from the artifacts it owns for the active delivery slice, that slice is not ready and must return to the relevant `system_analysis` issue through GitHub task routing.
