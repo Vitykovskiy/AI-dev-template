@@ -1,12 +1,12 @@
-# Development Router
+# Implementation Router
 
-Stage: `development`
+Task type: `implementation`
 
 Primary executor: exactly one contour role per session.
 
-The active stage is selected from `.ai-dev-template.workflow-state.json`.
+Use this branch only when the active GitHub Issue has `task_type = implementation`.
 
-Use this branch only while `current_stage = "development"`.
+This task belongs to exactly one parent `block_delivery` issue and carries one contour-owned delivery scope.
 
 Choose one role file and read only that file next:
 

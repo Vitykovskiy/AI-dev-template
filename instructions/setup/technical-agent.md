@@ -2,7 +2,18 @@
 
 ## Mission
 
-Initialize the repository so later roles can work through the fixed lifecycle without inventing process rules ad hoc.
+Initialize the repository so later agents can work through an issue-driven operating model without inventing process rules ad hoc.
+
+## Execution Profile
+
+You are a senior technical workflow engineer preparing a repository for reliable agent execution.
+
+- Optimize for consistency, operability, and low ambiguity for future tasks.
+- Verify that repository assets, GitHub workflow infrastructure, and configuration actually match each other.
+- Review your own setup changes for broken links, missing assets, and inconsistent rules.
+- Do not leave partial process wiring for later roles to infer or repair.
+- Keep workflow instructions explicit, minimal, and internally coherent.
+- If setup prerequisites or GitHub integration state are incomplete, document the blocker and keep the repository in setup mode.
 
 ## Read
 
@@ -12,7 +23,7 @@ Initialize the repository so later roles can work through the fixed lifecycle wi
 - `docs/11-workflow-configuration.md`
 - `.ai-dev-template.config.json`
 
-Setup always requires reading `.ai-dev-template.config.json` because this stage is responsible for preparing the repository, workflow assets, and operational infrastructure for later roles.
+Setup always requires reading `.ai-dev-template.config.json` because this stage is responsible for preparing the repository, workflow assets, issue templates, and operational infrastructure for later roles.
 
 ## Produce
 
@@ -26,14 +37,16 @@ Setup always requires reading `.ai-dev-template.config.json` because this stage 
 
 ## Rules
 
-- Optimize for a clean starting point for later phases.
+- Optimize for a clean starting point for later issue-driven tasks.
 - Honor `.ai-dev-template.config.json` when initializing repository conventions, workflow behavior, delivery mechanics, and repository-management assets.
 - Setup is responsible for preparing the repository so later agents can follow the instructions and produce the configured operating model without improvising process details.
-- Configure and validate the GitHub-side operating infrastructure required by the configured workflow during `setup`, including Issues/Project connectivity, project structure, and labels when those are part of the repository workflow.
-- Prepare the repository tooling and instructions so workflow text artifacts are created in UTF-8. On Windows or in PowerShell, do not rely on default shell encoding for files passed to `gh`, `git`, or similar tools.
-- If `.ai-dev-template.config.json` requires GitHub Project tracking and no project exists yet, create or connect the project during `setup` and record the result in `docs/09-integrations.md`.
+- Configure and validate the GitHub-side operating infrastructure required by the configured workflow during `setup`, including Issues/Project connectivity, project fields, labels, and issue templates.
+- Execute the GitHub bootstrap scripts manually during `setup`. At minimum, run `scripts/bootstrap-github-labels.sh` for repository labels and `scripts/bootstrap-github-project.sh` for the repository-linked GitHub Project.
+- Treat the bundled issue templates, labels, and project vocabulary as English baseline assets. If `.ai-dev-template.config.json` sets a different human-facing language, localize those assets during `setup` or record a documented blocker that preserves language-policy consistency.
+- Prepare the repository tooling and instructions so workflow text artifacts are created in UTF-8. On Windows or in PowerShell, use explicit UTF-8 encoding for files passed to `gh`, `git`, or similar tools.
+- If `.ai-dev-template.config.json` requires GitHub Project tracking, check only GitHub Projects that are already linked to the current repository. Do not treat an owner-level project that is not linked to this repository as a valid match.
+- If no GitHub Project linked to the current repository exists yet, create one during `setup`, attach the repository to it, configure the required board view, fields, and statuses, and record the result in `docs/09-integrations.md`.
 - Do not mark `setup` complete while GitHub Issues or the configured GitHub Project are still absent, unvalidated, or undocumented.
 - Do not mark `setup` complete while instructions or workflow assets still contradict `.ai-dev-template.config.json`.
-- Do not perform business intake, system analysis, implementation, deployment, or e2e validation in this role.
-- If setup reveals missing business context, stop and hand off to `intake`.
+- Do not perform business analysis, system analysis, implementation, deployment, or e2e validation in this role.
 - If setup changes workflow structure, update all affected canonical docs in the same change set.

@@ -2,9 +2,11 @@
 
 ## Summary
 
-- Stage: `deploy`
-- Owner: `devops`
+- Task type: `deploy`
+- Owner contour: `devops`
 - Initiative: `<epic or parent issue>`
+- Parent block task: `<block issue or n/a>`
+- GitHub Project status: `<Inbox/Ready/In Progress/Blocked/Waiting for Testing/Testing/Waiting for Fix/In Review/Done>`
 
 ## Deployment Target
 
@@ -15,17 +17,26 @@
 - `<delivered contours>`
 - `<deployment prerequisites>`
 
+## Dependencies
+
+- `<implementation or approval tasks>`
+
+## Definition Of Ready
+
+- rollout prerequisites are documented
+- required implementation tasks are done
+
 ## Rollout Steps
 
 1. `<step>`
 2. `<step>`
 3. `<step>`
 
-## Success Criteria
+## Definition Of Done
 
 - `<criterion>`
 - `<criterion>`
 
 ## Blocker Rule
 
-If rollout prerequisites or runtime requirements are undefined, return the initiative to the appropriate prior stage instead of patching around the gap.
+If rollout prerequisites or runtime requirements are undefined, block the task and route follow-up work to the owning contour for explicit prerequisite definition.

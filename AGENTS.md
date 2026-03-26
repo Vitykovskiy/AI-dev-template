@@ -4,26 +4,30 @@ Read this file first at the start of every new session.
 
 ## Router Goal
 
-This repository uses a strict 6-stage workflow with explicit role separation.
+This repository uses a two-mode workflow:
 
-The current stage is stored in `.ai-dev-template.workflow-state.json`.
+1. `setup` bootstraps the repository, workflow assets, labels, and GitHub operating model.
+2. `issue_driven` runs all post-setup work through GitHub Issues, task dependencies, owner contours, and GitHub Project state.
 
-`current_stage` is the only source of truth for workflow stage detection.
+After `setup`, operational work starts from exactly one `business_analysis` issue and then flows through issue hierarchy, task metadata, dependencies, owner contours, and GitHub Project state.
+
+## Bootstrap State Detection
+
+Read `.ai-dev-template.workflow-state.json` and use `current_stage` exactly as written.
 
 Allowed values:
 
 1. `setup`
-2. `intake`
-3. `analysis`
-4. `development`
-5. `deploy`
-6. `e2e_test`
-
-## Stage Detection
-
-Read `.ai-dev-template.workflow-state.json` and use `current_stage` exactly as written.
+2. `issue_driven`
 
 If the file is missing, malformed, or contains an unsupported value, stop and report a blocker.
+
+`current_stage` acts as a bootstrap guardrail with two repository-wide modes:
+
+- `setup` means the repository is being prepared for operational work;
+- `issue_driven` means setup is complete and routing comes from the active GitHub Issue plus GitHub Project state.
+
+`current_stage` accepts exactly these two values.
 
 ## Git Delivery Rule
 
@@ -31,15 +35,15 @@ Before starting a task, sync Git state and confirm the working branch is based o
 
 After creating a commit, sync again and confirm the branch still grows from the latest working branch state before continuing, handing off, or opening a PR.
 
-Every completed stage handoff must have repository-persisted evidence and verified operational side effects:
+Every completed task handoff must have repository-persisted evidence and verified operational side effects:
 
-- commit all repository changes required for the completed stage output;
-- push that commit before considering the task or stage handoff complete;
+- commit all repository changes required for the completed task output;
+- push that commit before considering the task handoff complete;
 - if `pull_requests.enabled = true`, follow the configured PR policy after pushing;
 - if `pull_requests.enabled = false`, push directly to the assigned working branch;
 - verify the push and any required GitHub side effects before reporting completion;
-- do not leave completed `setup`, `intake`, `analysis`, `development`, `deploy`, or `e2e_test` changes only in the local worktree;
-- do not treat GitHub-only changes as a complete handoff until the corresponding canonical repository documents are updated, committed, and pushed.
+- keep completed task outputs in the repository worktree as committed, pushed evidence;
+- pair GitHub-side changes with corresponding canonical repository document updates, commits, and pushes.
 
 If the branch is behind, diverged, or based on an outdated parent, stop implementation work, reconcile the branch history, and then continue.
 
@@ -48,40 +52,74 @@ If the branch is behind, diverged, or based on an outdated parent, stop implemen
 When creating or updating text files that will be consumed by Git, GitHub CLI, or other external tools, use explicit UTF-8 encoding.
 
 - treat UTF-8 as the required default for markdown, issue bodies, PR bodies, commit-message files, templates, and other workflow text artifacts;
-- on Windows or in PowerShell, do not rely on implicit default encoding for files that may contain non-ASCII text;
+- on Windows or in PowerShell, use explicit UTF-8 encoding for files that may contain non-ASCII text;
 - when creating temporary files for `gh` or related tooling, write them in UTF-8 explicitly, preferably UTF-8 without BOM;
 - if text appears corrupted after a tool call, treat it as an encoding failure and rewrite the source file with explicit UTF-8 before retrying.
 
-## Stage Transitions
+## Post-Setup Routing
 
-Stage transitions are performed by updating `.ai-dev-template.workflow-state.json`.
+When `current_stage = "issue_driven"`, start from the active GitHub Issue.
 
-Use state changes for both forward progress and rollback:
+Every operational task must have these required attributes, expressed through issue body fields, labels, or project fields:
 
-- `deploy` -> `development`
-- `e2e_test` -> `analysis`
-- `e2e_test` -> `development`
+- task type: one of `initiative`, `business_analysis`, `system_analysis`, `block_delivery`, `implementation`, `deploy`, `e2e`;
+- owner contour: exactly one of `business-analyst`, `system-analyst`, `frontend`, `backend`, `devops`, `qa-e2e`;
+- parent initiative: the top-level Epic or initiative issue;
+- parent block task: required for implementation issues that contribute to an integrated delivery block;
+- dependencies: explicit issue links or a `Blocked by` list;
+- ready rule: why the task is allowed to start;
+- done rule: what must be true to close the task;
+- canonical inputs: the specific repository artifacts and linked issues the task may rely on;
+- project status: one of `Inbox`, `Ready`, `In Progress`, `Blocked`, `Waiting for Testing`, `Testing`, `Waiting for Fix`, `In Review`, `Done`.
 
-One-time exception:
+Required task chain after setup:
 
-- repository bootstrap may begin in `setup`
+1. one `business_analysis` issue confirms the business problem and operating vocabulary;
+2. one `system_analysis` issue produces the canonical specification package;
+3. `system_analysis` decomposes delivery into one or more parent `block_delivery` tasks;
+4. each `block_delivery` task owns child implementation issues, one per responsible contour (`frontend`, `backend`, `devops`, `qa-e2e` when contour-owned test assets are required);
+5. `qa-e2e` validates the integrated result at the `block_delivery` level after all required child implementation issues are done;
+6. `deploy` remains separate when rollout is required for the validated slice.
+
+## Task Selection Rules
+
+An agent works on a task when all of the following are true:
+
+- the task owner contour matches the agent's role for the session;
+- all declared dependencies are already complete or explicitly marked as no longer blocking;
+- the GitHub Project status is `Ready` or `In Progress`;
+- the canonical inputs named by the task exist and are sufficient;
+- the task belongs to exactly one owner contour.
+
+Execution stays within the assigned contour, resolved dependency set, and declared task boundary.
 
 ## Role Detection
 
-After selecting the stage, determine the role for the current session:
+Use the active task's `owner contour` field to determine the role for the current session:
 
-- `setup`: senior technical agent
-- `intake`: senior business analyst
-- `analysis`: senior system analyst
-- `development`: exactly one senior contour owner per session, such as `frontend`, `backend`, `devops`, or `qa-e2e`
-- `deploy`: senior devops
-- `e2e_test`: senior qa-e2e
+- `business-analyst`
+- `system-analyst`
+- `frontend`
+- `backend`
+- `devops`
+- `qa-e2e`
 
-For `development`, a contour is a single delivery role domain such as `frontend`, `backend`, `devops`, or `qa-e2e`. Do not mix multiple contours in one execution branch. If the work spans multiple contours, split it into separate tasks and separate role sessions.
+If the owner contour is missing or ambiguous, stop and report a blocker.
 
-## Allowed Reading By Stage
+## Role Prompt Rule
 
-Read only the files listed for the active stage. Do not preload files from other stages.
+After the session role is identified and the corresponding role file is read, adopt that role file's `Execution Profile` section as the active role prompt for the rest of the task.
+
+Rules:
+
+- treat the role profile as mandatory operating behavior;
+- apply the role profile together with repository safety, routing, dependency, and blocking rules;
+- if a role file says to verify, review, or avoid assumptions, perform that behavior explicitly before reporting completion;
+- preserve the role's required rigor throughout the task.
+
+## Allowed Reading By Mode And Task Type
+
+Read only the files listed for the active mode and task type.
 
 ### setup
 
@@ -91,50 +129,37 @@ Read, in order:
 2. `instructions/setup/router.md`
 3. `instructions/setup/technical-agent.md`
 
-Setup must ensure the repository is configured according to `.ai-dev-template.config.json` before leaving the stage. Apply the configuration to workflow assets, instructions, and required repository-management infrastructure. If GitHub Project tracking is configured and no project exists, create or connect one, record it in the canonical docs, and do not advance the stage until that integration is validated.
+Setup must ensure the repository is configured according to `.ai-dev-template.config.json` before switching to `issue_driven`. Apply the configuration to workflow assets, instructions, issue templates, labels, project structure, and required repository-management infrastructure. If GitHub Project tracking is configured, treat only a project already linked to the current repository as an existing project for setup purposes. If no repository-linked project exists, create one, connect it to the repository, record it in the canonical docs, and advance the bootstrap state after that integration is validated.
 
-### intake
-
-Read, in order:
-
-1. `.ai-dev-template.workflow-state.json`
-2. `instructions/intake/router.md`
-3. `instructions/intake/business-analyst.md`
-
-Read only the intake-facing canonical docs needed to capture the task:
-
-- `docs/00-project-overview.md`
-- `docs/01-product-vision.md`
-- `docs/02-business-requirements.md`
-- `docs/03-scope-and-boundaries.md`
-
-Before leaving `intake`, ensure the initiative exists in GitHub Issues and that the repository intake artifacts match that initiative record.
-
-### analysis
+### business_analysis
 
 Read, in order:
 
-1. `.ai-dev-template.workflow-state.json`
-2. `instructions/analysis/router.md`
-3. `instructions/analysis/system-analyst.md`
+1. `instructions/intake/router.md`
+2. `instructions/intake/business-analyst.md`
+3. `docs/00-project-overview.md`
+4. `docs/01-product-vision.md`
+5. `docs/02-business-requirements.md`
+6. `docs/03-scope-and-boundaries.md`
 
-Read only the canonical analysis package and adjacent overview docs:
-
-- `docs/00-project-overview.md`
-- `docs/07-workflow.md`
-- `docs/09-integrations.md`
-- `docs/analysis/README.md`
-- the specific files in `docs/analysis/` that are required for the current initiative
-
-Do not treat `docs/delivery/contour-task-matrix.md` as sufficient operational decomposition by itself. Before leaving `analysis`, publish each atomic contour-specific implementation task as its own GitHub Issue and place those issues in GitHub Project.
-
-### development
+### system_analysis
 
 Read, in order:
 
-1. `.ai-dev-template.workflow-state.json`
-2. `instructions/delivery/router.md`
-3. exactly one role file from `instructions/delivery/roles/`
+1. `instructions/analysis/router.md`
+2. `instructions/analysis/system-analyst.md`
+3. `docs/00-project-overview.md`
+4. `docs/07-workflow.md`
+5. `docs/09-integrations.md`
+6. `docs/analysis/README.md`
+7. the specific files in `docs/analysis/` required for the initiative
+
+### implementation
+
+Read, in order:
+
+1. `instructions/delivery/router.md`
+2. exactly one role file from `instructions/delivery/roles/`
 
 Allowed role files:
 
@@ -143,8 +168,6 @@ Allowed role files:
 - `instructions/delivery/roles/devops.md`
 - `instructions/delivery/roles/qa-e2e.md`
 
-Read only the canonical artifacts for the assigned contour and the exact contracts it depends on.
-
 Minimum common context:
 
 - `docs/00-project-overview.md`
@@ -152,51 +175,43 @@ Minimum common context:
 - `docs/analysis/README.md`
 - `docs/delivery/contour-task-matrix.md`
 
-Contour-specific reading:
-
-- `frontend`: UI behavior, screen specs, frontend task decomposition, and consumed contracts
-- `backend`: modules, domain model, backend task decomposition, and produced contracts
-- `devops`: deployment topology, runtime requirements, operational constraints
-- `qa-e2e`: user scenarios, acceptance criteria, deployed environment details
-
-Do not read sibling contour implementation code as a substitute for missing analysis. Missing specification is a blocker that returns the work to `analysis`.
-Do not implement work that belongs to another contour under the pretext of integration, convenience, or cleanup. If the task requires another contour's owned output, stop and return to the GitHub task decomposition layer instead of silently absorbing the work.
+Read only the canonical artifacts for the assigned contour and the exact contracts it depends on.
 
 ### deploy
 
 Read, in order:
 
-1. `.ai-dev-template.workflow-state.json`
-2. `instructions/deploy/router.md`
-3. `instructions/deploy/devops.md`
+1. `instructions/deploy/router.md`
+2. `instructions/deploy/devops.md`
+3. `docs/00-project-overview.md`
+4. `docs/07-workflow.md`
+5. `docs/analysis/cross-cutting-concerns.md`
+6. `docs/delivery/contour-task-matrix.md`
+7. deployment-specific environment and rollout docs
 
-Read only deployment-relevant artifacts:
-
-- `docs/00-project-overview.md`
-- `docs/07-workflow.md`
-- `docs/analysis/cross-cutting-concerns.md`
-- `docs/delivery/contour-task-matrix.md`
-- deployment-specific environment and rollout docs
-
-### e2e_test
+### e2e
 
 Read, in order:
 
-1. `.ai-dev-template.workflow-state.json`
-2. `instructions/e2e-test/router.md`
-3. `instructions/e2e-test/qa-e2e.md`
-
-Read only the user-scenario, acceptance, environment, and rollout artifacts required to validate the delivered system.
+1. `instructions/e2e-test/router.md`
+2. `instructions/e2e-test/qa-e2e.md`
+3. `docs/00-project-overview.md`
+4. `docs/analysis/user-scenarios.md`
+5. `docs/analysis/version-scope-and-acceptance.md`
+6. deployment result and environment docs
 
 ## Blocking Rules
 
 Stop and report a blocker when any of the following is true:
 
 - `.ai-dev-template.workflow-state.json` is missing or invalid;
-- the current stage is ambiguous;
+- setup is not complete but work tries to bypass `setup`;
+- the active issue is missing task metadata or owner contour;
+- the task has unresolved dependencies;
 - the active role is ambiguous;
 - canonical analysis artifacts are insufficient for implementation, deployment, or testing;
 - a task tries to combine multiple contours without explicit decomposition;
-- a role would need to read unrelated instructions or unrelated code just to infer expected behavior.
+- a role would need to read unrelated instructions or sibling implementation code just to infer expected behavior.
 
-When blocked by missing analysis, explicitly state that the initiative must return to stage `analysis` by updating `.ai-dev-template.workflow-state.json`.
+When blocked by missing business context, route the work to a `business_analysis` task.
+When blocked by missing specifications, contracts, decomposition details, or UX behavior, stop implementation, mark the implementation task `Blocked`, and create or request a linked `system_analysis` follow-up issue before any coding continues.

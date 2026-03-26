@@ -45,7 +45,7 @@ Validation note:
 - token scopes are necessary but not sufficient;
 - repository membership, project write access, and branch protection rules must still be validated separately;
 - record actual validation results in this file during `setup`;
-- do not report setup or later GitHub-side workflow steps complete until the corresponding side effects are verified, not merely attempted.
+- report setup or later GitHub-side workflow steps complete after the corresponding side effects are verified.
 
 ## Runtime And External Integrations
 

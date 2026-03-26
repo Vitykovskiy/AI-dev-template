@@ -2,7 +2,7 @@
 
 `docs/analysis/` is the canonical implementation-ready specification package.
 
-Delivery, deploy, and e2e roles must work from these artifacts instead of inferring behavior from neighboring contour code.
+Implementation, deploy, and e2e tasks work from these artifacts as their canonical behavior source.
 
 ## Required Files
 
@@ -26,4 +26,4 @@ Delivery, deploy, and e2e roles must work from these artifacts instead of inferr
 
 ## Rule
 
-If any role cannot execute from the artifacts it owns, the initiative is not ready and must return to `analysis`.
+If any role cannot execute from the artifacts it owns, the initiative is not ready and must return to `system_analysis` through GitHub task routing.
