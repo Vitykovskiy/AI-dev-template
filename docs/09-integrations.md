@@ -20,6 +20,11 @@
 - Labels prepared for workflow use: `yes/no`
 - Notes: Record the identifiers or URLs needed to prove that workflow-required issue records exist.
 
+## Effective Workflow Policy
+
+- Effective `.ai-dev-template.config.json` committed and pushed: `yes/no`
+- Notes: If setup used a modified configuration file, record the commit or push evidence here.
+
 ## Environment Variables
 
 | Variable | Required | Purpose | Stage first needed | Status |

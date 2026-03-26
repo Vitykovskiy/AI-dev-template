@@ -156,6 +156,7 @@ Read, in order:
 
 Setup must ensure the repository is configured according to `.ai-dev-template.config.json` before switching to `issue_driven`. Apply the configuration to workflow assets, instructions, issue templates, labels, project structure, and required repository-management infrastructure. If GitHub Project tracking is configured, treat only a project already linked to the current repository as an existing project for setup purposes. If no repository-linked project exists, create one, connect it to the repository, record it in the canonical docs, and advance the bootstrap state after that integration is validated.
 Setup must also seed the starting backlog before leaving `setup`. At minimum, create one open `initiative` issue plus one open `business_analysis` issue, mark the `business_analysis` issue with `session: active`, and leave that issue ready for immediate execution in `issue_driven`.
+If setup consumed a user-updated `.ai-dev-template.config.json`, that file is part of the effective setup state and must be staged, committed, and pushed as part of the setup evidence unless a documented repository policy explicitly says otherwise.
 
 ### business_analysis
 

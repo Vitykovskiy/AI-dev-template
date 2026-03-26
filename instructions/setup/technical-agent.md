@@ -39,6 +39,7 @@ Setup always requires reading `.ai-dev-template.config.json` because this stage 
 
 - Optimize for a clean starting point for later issue-driven tasks.
 - Honor `.ai-dev-template.config.json` when initializing repository conventions, workflow behavior, delivery mechanics, and repository-management assets.
+- If setup uses a user-updated `.ai-dev-template.config.json`, stage, commit, and push that file together with the setup changes so the committed repository state matches the effective setup policy.
 - Setup is responsible for preparing the repository so later agents can follow the instructions and produce the configured operating model without improvising process details.
 - Configure and validate the GitHub-side operating infrastructure required by the configured workflow during `setup`, including Issues/Project connectivity, project fields, labels, and issue templates.
 - Execute the GitHub bootstrap scripts manually during `setup`. At minimum, run `scripts/bootstrap-github-labels.sh` for repository labels, `scripts/bootstrap-github-project.sh` for the repository-linked GitHub Project, and `scripts/bootstrap-initial-backlog.sh` to seed the initial initiative plus `business_analysis` issue chain.

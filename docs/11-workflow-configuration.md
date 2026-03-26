@@ -95,6 +95,7 @@ If `pull_requests.enabled` is `false`, the agent must still persist repository-c
 
 Repository-persisted artifacts remain the source of truth for reusable knowledge:
 
+- `.ai-dev-template.config.json`
 - `AGENTS.md`
 - `.ai-dev-template.workflow-state.json`
 - `instructions/`
@@ -102,6 +103,8 @@ Repository-persisted artifacts remain the source of truth for reusable knowledge
 - templates and workflow assets
 
 Temporary local work artifacts may follow repository policy, but canonical workflow and task-governance documents must remain in the repository.
+
+If setup consumed a modified `.ai-dev-template.config.json`, that file is mandatory committed evidence for the setup result unless a documented repository policy explicitly carves out an exception.
 
 Operational side effects in GitHub or other delivery systems complement repository persistence requirements. If a task updates the operational system of record, the corresponding canonical repository evidence must also be updated, committed, and pushed.
 

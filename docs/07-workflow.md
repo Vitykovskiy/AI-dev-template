@@ -185,6 +185,7 @@ prepare the repository, workflow, and GitHub operating model.
 Mandatory completion conditions:
 
 - `.ai-dev-template.config.json` has been read and applied to the repository workflow assets and instructions;
+- if `.ai-dev-template.config.json` was modified before or during setup and its contents were used, that file is committed and pushed as part of the setup evidence unless an explicit documented exception applies;
 - the repository is connected to GitHub Issues;
 - the repository is connected to a GitHub Project when `project_tracking = github_project`;
 - the project used for setup is linked to the current repository, not merely visible under the same owner account or organization;
