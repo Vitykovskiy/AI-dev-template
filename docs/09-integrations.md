@@ -13,6 +13,7 @@
 ## GitHub Issues
 
 - Initiative issue creation verified: `yes/no`
+- Initial seeded `business_analysis` issue verified: `yes/no`
 - Operational issue templates verified: `yes/no`
 - Required task metadata captured by forms: `yes/no`
 - Active-session label `session: active` verified: `yes/no`

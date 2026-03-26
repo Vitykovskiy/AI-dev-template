@@ -11,6 +11,8 @@ This repository uses a two-mode workflow:
 
 After `setup`, operational work starts from exactly one `business_analysis` issue and then flows through issue hierarchy, task metadata, dependencies, owner contours, and GitHub Project state.
 
+Setup must not transition to `issue_driven` until the repository has a seeded starting backlog containing at least one open `initiative` issue and exactly one open initial `business_analysis` issue.
+
 ## Bootstrap State Detection
 
 Read `.ai-dev-template.workflow-state.json` and use `current_stage` exactly as written.
@@ -153,6 +155,7 @@ Read, in order:
 3. `instructions/setup/technical-agent.md`
 
 Setup must ensure the repository is configured according to `.ai-dev-template.config.json` before switching to `issue_driven`. Apply the configuration to workflow assets, instructions, issue templates, labels, project structure, and required repository-management infrastructure. If GitHub Project tracking is configured, treat only a project already linked to the current repository as an existing project for setup purposes. If no repository-linked project exists, create one, connect it to the repository, record it in the canonical docs, and advance the bootstrap state after that integration is validated.
+Setup must also seed the starting backlog before leaving `setup`. At minimum, create one open `initiative` issue plus one open `business_analysis` issue, mark the `business_analysis` issue with `session: active`, and leave that issue ready for immediate execution in `issue_driven`.
 
 ### business_analysis
 

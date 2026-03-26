@@ -12,7 +12,8 @@ The following parts of the operating model are fixed by the template:
 
 - `setup` is the repository-wide bootstrap mode;
 - `issue_driven` is the repository-wide post-setup execution mode;
-- post-setup work starts from a single `business_analysis` issue and then flows through `system_analysis` into block-level delivery tasks;
+- setup seeds one initial `initiative` plus one initial `business_analysis` issue before `issue_driven` begins;
+- post-setup work starts from that single seeded `business_analysis` issue and then flows through `system_analysis` into block-level delivery tasks;
 - explicit task types and owner contours are required after setup;
 - `system_analysis` is the canonical source of truth for implementation inputs and delivery decomposition;
 - each integrated deliverable is represented by a parent `block_delivery` task;

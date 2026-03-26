@@ -11,6 +11,8 @@ Allowed `current_stage` values:
 
 `setup` is the only repository-wide stage. After setup completes, the repository switches to `issue_driven` and all routing is performed through GitHub Issues, dependencies, owner contours, block-level delivery tasks, and GitHub Project state.
 
+`issue_driven` must not start from an empty backlog. Setup seeds the first `initiative` plus the first `business_analysis` issue before the repository leaves `setup`.
+
 ## Bootstrap State Rule
 
 `.ai-dev-template.workflow-state.json` is the bootstrap guardrail that records the repository mode and the setup-to-operations transition.
@@ -190,6 +192,8 @@ Mandatory completion conditions:
 - if no repository-linked GitHub Project existed before setup, setup created one, linked the repository, and applied the required fields and statuses;
 - setup manually executed the repository GitHub bootstrap scripts and verified the resulting labels, project fields, and board view;
 - setup created or verified the `session: active` label used to mark the active issue;
+- setup created or verified the initial seeded backlog, including at least one open `initiative` issue and exactly one open initial `business_analysis` issue;
+- the initial `business_analysis` issue is marked with `session: active` before the repository enters `issue_driven`;
 - required GitHub workflow infrastructure for the configured process is prepared during setup, including project fields, labels, and issue templates needed by later tasks;
 - setup-side changes to instructions, docs, labels, project structure, or repository workflow assets are verified and recorded before setup exit;
 - the repository has a top-level initiating Epic template or documented creation path.

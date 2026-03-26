@@ -46,9 +46,15 @@ After `setup`, GitHub Issues become the primary execution objects:
 1. Create a repository from this template and clone it locally.
 2. Add `.ai-dev-template.config.json` to the root.
 3. Keep `.ai-dev-template.workflow-state.json` in the root with `current_stage = "setup"`.
-4. Connect the repository to GitHub Issues and a GitHub Project board. During `setup`, run `scripts/bootstrap-github-labels.sh` and `scripts/bootstrap-github-project.sh` manually. If `project_tracking = github_project`, treat only a project already linked to this repository as an existing match. If no repository-linked project exists yet, create one and attach the repository before leaving `setup`.
+4. Connect the repository to GitHub Issues and a GitHub Project board. During `setup`, run `scripts/bootstrap-github-labels.sh`, `scripts/bootstrap-github-project.sh`, and `scripts/bootstrap-initial-backlog.sh` manually. If `project_tracking = github_project`, treat only a project already linked to this repository as an existing match. If no repository-linked project exists yet, create one and attach the repository before leaving `setup`.
 5. Give the agent access to the repository and the business request.
 6. Start with `AGENTS.md`; the router will either keep the repository in `setup` or switch to issue-driven routing after setup is validated.
+
+The repository must not leave `setup` until the starting backlog exists:
+
+- at least one open `initiative` issue exists;
+- exactly one open initial `business_analysis` issue exists;
+- that `business_analysis` issue carries `session: active`.
 
 ## GitHub Workflow
 
