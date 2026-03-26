@@ -217,8 +217,12 @@ Mandatory completion conditions:
 - the initial `business_analysis` issue is marked with `session: active` before the repository enters `issue_driven`;
 - required GitHub workflow infrastructure for the configured process is prepared during setup, including project fields, labels, and issue templates needed by later tasks;
 - setup-side changes to instructions, docs, labels, project structure, or repository workflow assets are verified and recorded before setup exit;
-- when environment or permission blockers prevent GitHub-side setup, the blocker is reported immediately instead of being worked around with unrequested bootstrap tooling;
 - the repository has a top-level initiating Epic template or documented creation path.
+
+Blocker handling during setup:
+
+- when environment or permission blockers prevent GitHub-side setup, report the blocker immediately instead of working around it with unrequested bootstrap tooling;
+- keep the repository in `setup` until the blocker is resolved.
 
 Bootstrap transition:
 update `current_stage` from `setup` to `issue_driven` when setup is complete.
