@@ -133,6 +133,31 @@ Status semantics:
 - `In Review`: implementation is complete and the configured review or verification step is pending.
 - `Done`: all done conditions are satisfied and the issue may be closed.
 
+## Active Issue Signal
+
+The canonical active-task marker is the GitHub Issue label `session: active`.
+
+Rules:
+
+- at most one open issue may carry `session: active` at a time;
+- if exactly one open issue carries `session: active`, that issue is the active issue for the session;
+- if multiple open issues carry `session: active`, stop and report a blocker;
+- if no open issue carries `session: active`, select one eligible issue automatically, apply `session: active`, and then proceed;
+- `Status` in GitHub Project is not the active-session signal by itself.
+
+Eligibility and tie-breaking:
+
+1. consider only open issues that have the required workflow metadata and whose declared dependencies are done;
+2. prefer eligible issues with GitHub Project status `In Progress`;
+3. if no eligible `In Progress` issue exists, consider eligible issues with status `Ready`;
+4. within the chosen status bucket, rank by `priority: high`, then `priority: medium`, then `priority: low`, then no priority label;
+5. if multiple eligible issues still remain, choose the lowest issue number.
+
+Session handoff rule:
+
+- add `session: active` to the selected issue before execution starts;
+- remove `session: active` when work is handed off, blocked, or completed and another issue becomes active.
+
 ## Routing Algorithm
 
 Every session must follow this sequence:
@@ -140,7 +165,7 @@ Every session must follow this sequence:
 1. Start with `AGENTS.md`.
 2. Read `.ai-dev-template.workflow-state.json`.
 3. If `current_stage = "setup"`, execute setup instructions only.
-4. If `current_stage = "issue_driven"`, select the active GitHub Issue.
+4. If `current_stage = "issue_driven"`, select the active GitHub Issue using the `session: active` rules.
 5. Read the task metadata and determine `task_type`, `owner_contour`, dependencies, and `project_status`.
 6. Stop unless the owner contour matches the session role and all dependencies are closed.
 7. Read only the canonical artifacts and instructions allowed for that task type and contour.
@@ -164,6 +189,7 @@ Mandatory completion conditions:
 - the GitHub Project exists, is reachable, and its URL plus validation status are recorded in `docs/09-integrations.md`;
 - if no repository-linked GitHub Project existed before setup, setup created one, linked the repository, and applied the required fields and statuses;
 - setup manually executed the repository GitHub bootstrap scripts and verified the resulting labels, project fields, and board view;
+- setup created or verified the `session: active` label used to mark the active issue;
 - required GitHub workflow infrastructure for the configured process is prepared during setup, including project fields, labels, and issue templates needed by later tasks;
 - setup-side changes to instructions, docs, labels, project structure, or repository workflow assets are verified and recorded before setup exit;
 - the repository has a top-level initiating Epic template or documented creation path.
@@ -280,6 +306,7 @@ Done when:
 Stop and mark a task `Blocked` when any of the following is true:
 
 - the task metadata or owner contour is missing or ambiguous;
+- the active issue signal is missing, duplicated, or not resolvable by the documented selection order;
 - the task depends on unfinished work;
 - a role would need to read sibling implementation code just to infer behavior;
 - canonical inputs are insufficient for the task type;

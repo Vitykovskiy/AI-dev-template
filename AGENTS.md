@@ -60,6 +60,28 @@ When creating or updating text files that will be consumed by Git, GitHub CLI, o
 
 When `current_stage = "issue_driven"`, start from the active GitHub Issue.
 
+Active issue signal:
+
+- the canonical active-task marker is the GitHub Issue label `session: active`;
+- at most one open issue may carry `session: active` at a time;
+- if exactly one open issue carries `session: active`, that issue is the active issue for the session;
+- if multiple open issues carry `session: active`, stop and report a blocker;
+- if no open issue carries `session: active`, select one eligible issue automatically, add `session: active`, and then proceed.
+
+Eligible issue selection order:
+
+1. open issues with all required task metadata present and all declared dependencies already complete;
+2. prefer issues whose GitHub Project status is `In Progress`;
+3. if no eligible `In Progress` issue exists, consider eligible issues with status `Ready`;
+4. within the chosen status bucket, sort by priority label in this order: `priority: high`, `priority: medium`, `priority: low`, then unlabeled;
+5. if more than one issue still matches, choose the lowest issue number.
+
+Lifecycle rule:
+
+- move `session: active` to the newly selected issue before execution starts;
+- remove `session: active` when the task is handed off, blocked, or finished and another issue becomes active;
+- do not use GitHub Project status alone as the active-session signal.
+
 Every operational task must have these required attributes, expressed through issue body fields, labels, or project fields:
 
 - task type: one of `initiative`, `business_analysis`, `system_analysis`, `block_delivery`, `implementation`, `deploy`, `e2e`;
@@ -88,6 +110,7 @@ An agent works on a task when all of the following are true:
 - the task owner contour matches the agent's role for the session;
 - all declared dependencies are already complete or explicitly marked as no longer blocking;
 - the GitHub Project status is `Ready` or `In Progress`;
+- the active issue signal rules identify exactly one current issue;
 - the canonical inputs named by the task exist and are sufficient;
 - the task belongs to exactly one owner contour.
 
@@ -207,6 +230,7 @@ Stop and report a blocker when any of the following is true:
 - `.ai-dev-template.workflow-state.json` is missing or invalid;
 - setup is not complete but work tries to bypass `setup`;
 - the active issue is missing task metadata or owner contour;
+- the active issue signal is missing, duplicated, or cannot be resolved by the documented selection order;
 - the task has unresolved dependencies;
 - the active role is ambiguous;
 - canonical analysis artifacts are insufficient for implementation, deployment, or testing;

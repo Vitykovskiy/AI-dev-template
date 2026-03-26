@@ -42,6 +42,7 @@ Setup always requires reading `.ai-dev-template.config.json` because this stage 
 - Setup is responsible for preparing the repository so later agents can follow the instructions and produce the configured operating model without improvising process details.
 - Configure and validate the GitHub-side operating infrastructure required by the configured workflow during `setup`, including Issues/Project connectivity, project fields, labels, and issue templates.
 - Execute the GitHub bootstrap scripts manually during `setup`. At minimum, run `scripts/bootstrap-github-labels.sh` for repository labels and `scripts/bootstrap-github-project.sh` for the repository-linked GitHub Project.
+- Create or validate the `session: active` issue label during `setup` and confirm the routing docs use it as the canonical active-task signal.
 - Treat the bundled issue templates, labels, and project vocabulary as English baseline assets. If `.ai-dev-template.config.json` sets a different human-facing language, localize those assets during `setup` or record a documented blocker that preserves language-policy consistency.
 - Prepare the repository tooling and instructions so workflow text artifacts are created in UTF-8. On Windows or in PowerShell, use explicit UTF-8 encoding for files passed to `gh`, `git`, or similar tools.
 - If `.ai-dev-template.config.json` requires GitHub Project tracking, check only GitHub Projects that are already linked to the current repository. Do not treat an owner-level project that is not linked to this repository as a valid match.

@@ -62,6 +62,7 @@ ensure_label "owner_contour: backend"          "0E8A16" "Owned by the backend co
 ensure_label "owner_contour: devops"           "D4C5F9" "Owned by the devops contour"
 ensure_label "owner_contour: qa-e2e"           "F9D0C4" "Owned by the qa-e2e contour"
 
+ensure_label "session: active"               "0366D6" "Marks the single issue that is active for the current session"
 ensure_label "priority: high"                "D93F0B" "Must be resolved urgently"
 ensure_label "priority: medium"              "FBCA04" "Normal priority"
 ensure_label "priority: low"                 "C2E0C6" "Low urgency"

@@ -16,6 +16,7 @@ After `setup`, GitHub Issues become the primary execution objects:
 - one `system_analysis` issue produces the canonical specification package and decomposes delivery into parent `block_delivery` tasks;
 - each `block_delivery` task represents one integrated deliverable and owns child implementation issues;
 - every implementation issue has one owner contour and explicit dependencies;
+- exactly one open issue is marked with `session: active` when a repository session is in flight;
 - agents execute only tasks owned by their contour and only when task-linked inputs are sufficient;
 - GitHub Project holds the canonical execution state for those issues.
 
@@ -74,6 +75,12 @@ Required task attributes:
 - canonical inputs
 - GitHub Project status
 
+Canonical active-session marker:
+
+- GitHub Issue label `session: active`
+- exactly one open issue may carry it at a time
+- if none is set, select from eligible `In Progress` issues first, then eligible `Ready` issues, then highest priority, then the lowest issue number
+
 Required GitHub Project statuses:
 
 - `Inbox`
@@ -92,6 +99,13 @@ Required GitHub Project board fields:
 - `Task Type`
 - `Owner Contour`
 - `Priority`
+
+Required workflow labels:
+
+- `session: active`
+- `priority: high`
+- `priority: medium`
+- `priority: low`
 
 Completed task handoffs must have verified evidence. Repository changes must be committed and pushed, and required GitHub-side workflow actions must be verified before completion is reported. When pull requests are disabled, the agent pushes directly to the assigned working branch.
 

@@ -15,6 +15,7 @@
 - Initiative issue creation verified: `yes/no`
 - Operational issue templates verified: `yes/no`
 - Required task metadata captured by forms: `yes/no`
+- Active-session label `session: active` verified: `yes/no`
 - Labels prepared for workflow use: `yes/no`
 - Notes: Record the identifiers or URLs needed to prove that workflow-required issue records exist.
 
