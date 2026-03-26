@@ -56,7 +56,7 @@ Document every external system that matters to development, deploy, or e2e valid
 
 | Integration | Purpose | Stage first needed | Status | Notes |
 | --- | --- | --- | --- | --- |
-| `<integration>` | `<purpose>` | `<analysis/development/deploy/e2e_test>` | `<status>` | `<notes>` |
+| `<integration>` | `<purpose>` | `<setup/business_analysis/system_analysis/implementation/deploy/e2e>` | `<status>` | `<notes>` |
 
 ## Integration Status
 

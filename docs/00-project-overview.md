@@ -6,29 +6,32 @@ This file is the high-signal entry point for a new agent session.
 
 Use it to identify:
 
-- the current lifecycle stage;
+- the current repository mode;
 - the active initiative;
+- the active issue signal;
 - which canonical artifacts exist;
 - where each role must read next.
 
-## Lifecycle Summary
+## Workflow Summary
 
-The repository follows a fixed 6-stage lifecycle tracked in `.ai-dev-template.workflow-state.json`:
+The repository follows a fixed 2-mode workflow tracked in `.ai-dev-template.workflow-state.json`:
 
 1. `setup`
-2. `intake`
-3. `analysis`
-4. `development`
-5. `deploy`
-6. `e2e_test`
+2. `issue_driven`
 
-Each stage has one primary executor and a dedicated instruction branch. See `AGENTS.md` for routing and `docs/07-workflow.md` for lifecycle rules.
+Mode semantics:
+
+- `setup`: the technical agent prepares workflow assets, GitHub operating infrastructure, and the seeded starting backlog;
+- `issue_driven`: all post-setup work routes through the active GitHub Issue, its task metadata, its owner contour, its dependencies, and GitHub Project state.
+
+See `AGENTS.md` for routing and `docs/07-workflow.md` for the canonical workflow rules.
 
 ## Current Status
 
 - Workflow state file: `.ai-dev-template.workflow-state.json`
-- Active stage: `<fill-current-stage>`
-- Active initiative: `<fill-initiative-or-epic>`
+- Current mode: `<setup|issue_driven>`
+- Active initiative: `<fill-initiative>`
+- Active issue signal: `<issue number carrying session: active or none>`
 - Current owner role: `<fill-role>`
 - Delivery status: `<fill-status>`
 
@@ -68,12 +71,13 @@ Each stage has one primary executor and a dedicated instruction branch. See `AGE
 - Start with `AGENTS.md`.
 - Read `.ai-dev-template.workflow-state.json`.
 - Read only the branch selected by the router.
-- Load only the canonical artifacts required for the current stage and role.
-- If a later-stage role needs to infer behavior from unrelated code or documents, treat that as a blocker and return to `analysis` by updating the state file.
+- Load only the canonical artifacts required for the current mode, task type, and role.
+- If the active issue signal is missing, duplicated, or not resolvable by the documented rules, treat that as a blocker.
+- If an implementation, deploy, or e2e role needs to infer behavior from unrelated code or documents, treat that as a blocker and route the gap back into `system_analysis` through the issue workflow.
 
 ## GitHub Backbone
 
-- Epic and task tracking: GitHub Issues
+- Initiative and task tracking: GitHub Issues
 - Delivery status: GitHub Project
 - Integration metadata: `docs/09-integrations.md`
 

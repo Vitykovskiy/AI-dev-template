@@ -3,7 +3,7 @@
 ## Business Terms
 
 - Business task intake: structured clarification stage that turns a raw request into a fixed business problem statement, user scenarios, scope, and acceptance expectations.
-- Epic: a large initiative that moves through intake, analysis, development, deploy, and e2e validation.
+- Initiative: a top-level outcome that anchors the issue-driven delivery chain.
 - First version: the narrowest release scope that still produces meaningful business value.
 
 ## Technical Terms
@@ -16,7 +16,7 @@
 
 ## Working Definitions
 
-- Ready: sufficiently clarified to begin the current stage without guessing core behavior or contracts.
-- Done: delivered for the current stage, persisted in canonical artifacts, reflected in GitHub state, and advanced through the state file to the next allowed lifecycle step.
+- Ready: sufficiently clarified to begin the current task without guessing core behavior or contracts.
+- Done: delivered for the current task, persisted in canonical artifacts, and reflected in GitHub state with the required closure evidence.
 - Initiative complete: contour development is finished, deployment succeeded, and e2e validation passed.
-- Blocked: cannot continue because of an unresolved dependency, missing access, or missing specification that requires return to a previous stage through the state file.
+- Blocked: cannot continue because of an unresolved dependency, missing access, or missing specification that must be routed into the appropriate follow-up issue.
