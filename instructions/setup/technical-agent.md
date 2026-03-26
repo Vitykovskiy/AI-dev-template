@@ -42,7 +42,7 @@ Setup always requires reading `.ai-dev-template.config.json` because this stage 
 - If setup uses a user-updated `.ai-dev-template.config.json`, stage, commit, and push that file together with the setup changes so the committed repository state matches the effective setup policy.
 - Setup is responsible for preparing the repository so later agents can follow the instructions and produce the configured operating model without improvising process details.
 - Configure and validate the GitHub-side operating infrastructure required by the configured workflow during `setup`, including Issues/Project connectivity, project fields, labels, and issue templates.
-- Execute the GitHub bootstrap scripts manually during `setup`. At minimum, run `scripts/bootstrap-github-labels.sh` for repository labels, `scripts/bootstrap-github-project.sh` for the repository-linked GitHub Project, and `scripts/bootstrap-initial-backlog.sh` to seed the initial initiative plus `business_analysis` issue chain.
+- Execute GitHub bootstrap actions directly during `setup` through `gh` or equivalent GitHub-integrated tooling. At minimum, create or validate repository labels directly, create or validate the repository-linked GitHub Project directly, and seed the initial initiative plus `business_analysis` issue chain directly.
 - Create or validate the `session: active` issue label during `setup` and confirm the routing docs use it as the canonical active-task signal.
 - Do not leave `setup` until the seeded starting backlog exists and the initial `business_analysis` issue is active for the first `issue_driven` session.
 - Treat the bundled issue templates, labels, and project vocabulary as English baseline assets. If `.ai-dev-template.config.json` sets a different human-facing language, localize those assets during `setup` or record a documented blocker that preserves language-policy consistency.
@@ -51,5 +51,6 @@ Setup always requires reading `.ai-dev-template.config.json` because this stage 
 - If no GitHub Project linked to the current repository exists yet, create one during `setup`, attach the repository to it, configure the required board view, fields, and statuses, and record the result in `docs/09-integrations.md`.
 - Do not mark `setup` complete while GitHub Issues or the configured GitHub Project are still absent, unvalidated, or undocumented.
 - Do not mark `setup` complete while instructions or workflow assets still contradict `.ai-dev-template.config.json`.
+- If GitHub-side setup is blocked by missing CLI access, permissions, authentication, or other environment constraints, report the blocker immediately and keep the repository in `setup`. Do not spend setup time creating or rewriting bootstrap scripts unless the user explicitly asks for that fallback path.
 - Do not perform business analysis, system analysis, implementation, deployment, or e2e validation in this role.
 - If setup changes workflow structure, update all affected canonical docs in the same change set.

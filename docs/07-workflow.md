@@ -211,12 +211,13 @@ Mandatory completion conditions:
 - the project used for setup is linked to the current repository, not merely visible under the same owner account or organization;
 - the GitHub Project exists, is reachable, and its URL plus validation status are recorded in `docs/09-integrations.md`;
 - if no repository-linked GitHub Project existed before setup, setup created one, linked the repository, and applied the required fields and statuses;
-- setup manually executed the repository GitHub bootstrap scripts and verified the resulting labels, project fields, and board view;
+- setup executed the required GitHub bootstrap actions directly and verified the resulting labels, project fields, board view, and seeded backlog;
 - setup created or verified the `session: active` label used to mark the active issue;
 - setup created or verified the initial seeded backlog, including at least one open `initiative` issue and exactly one open initial `business_analysis` issue;
 - the initial `business_analysis` issue is marked with `session: active` before the repository enters `issue_driven`;
 - required GitHub workflow infrastructure for the configured process is prepared during setup, including project fields, labels, and issue templates needed by later tasks;
 - setup-side changes to instructions, docs, labels, project structure, or repository workflow assets are verified and recorded before setup exit;
+- when environment or permission blockers prevent GitHub-side setup, the blocker is reported immediately instead of being worked around with unrequested bootstrap tooling;
 - the repository has a top-level initiating Epic template or documented creation path.
 
 Bootstrap transition:

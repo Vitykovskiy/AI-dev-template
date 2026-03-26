@@ -34,7 +34,7 @@ The following remain configurable:
 
 Bundled bootstrap assets ship in English:
 
-- issue templates, label bootstrap scripts, and project bootstrap vocabulary are provided in English by default;
+- issue templates, label vocabulary, and project vocabulary are provided in English by default;
 - if a repository sets human-facing workflow languages to anything other than `en`, `setup` must localize those assets before leaving `setup`;
 - setup must surface the language-policy mismatch immediately and localize the assets before completion.
 
