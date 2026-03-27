@@ -40,6 +40,42 @@ Before downstream tasks may start, define:
 
 The package must be complete for the active bounded slice. It does not need to close the entire initiative in one issue when boundaries and follow-up analysis tasks are explicit.
 
+## UI Screens Rule
+
+When the initiative includes any UI, the `system_analysis` issue **must** fill the `ui_screens` field with each screen paired with its exact Figma frame link before the task can leave Inbox.
+
+- Link to specific Figma frames — not to a project, file root, or page.
+- Each frontend implementation task created from this analysis must inherit the frame link for its screen.
+- If a Figma frame is missing for a screen, the task for that screen must not be created until the link is supplied.
+
+## Priority Criteria
+
+Assign priority to each downstream task using exactly these definitions:
+
+- `high` — this task blocks at least one other task from starting
+- `medium` — this task is independent; no other task is waiting on it
+- `low` — this task is an improvement that does not block any other progress
+
+Do not assign `high` unless another specific task is documented as blocked by it.
+Do not assign all tasks the same priority.
+
+## Definition of Ready — Structural Validation
+
+A task must not move to `Ready` unless every mandatory field in its template is filled with a non-empty value. The agent validates field presence, not content quality. If any required field is empty, the task stays in `Inbox`.
+
+Frontend tasks additionally require:
+- `figma_frame` is a direct frame link (contains `node-id=`)
+- `api_contract` is filled or explicitly `none`
+- all tasks listed in `depends_on` are closed
+
+Backend tasks additionally require:
+- `api_contract` contains endpoint, request schema, and response schema
+- `business_logic` is non-empty
+
+Infrastructure tasks additionally require:
+- `env_vars_and_secrets` is non-empty
+- `target_environment` is `staging` or `production`
+
 ## Produce
 
 - complete canonical artifacts in `docs/analysis/`

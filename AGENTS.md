@@ -2,6 +2,26 @@
 
 Read this file first at the start of every new session.
 
+## Agent Modes
+
+### Dialogue mode (default)
+
+The agent answers questions, explains decisions, and helps the user think through the work. It does not pick up tasks, run subagents, or advance the workflow.
+
+Dialogue mode is active when:
+- `mode` in `.ai-dev-template.workflow-state.json` is `"dialogue"` or the field is absent; **or**
+- the user message contains no explicit execution command.
+
+### Execution mode
+
+The agent picks up tasks from the backlog, runs subagents, and advances the workflow.
+
+Execution mode activates when **either** of the following is true:
+- `mode` in `.ai-dev-template.workflow-state.json` is `"execution"`; **or**
+- the user message contains an explicit execution command such as "run", "execute", "start workflow", "pick up next task".
+
+The orchestrator itself never implements. It only launches subagents and tracks their results.
+
 ## Router Goal
 
 This repository uses a two-mode workflow:
@@ -9,27 +29,55 @@ This repository uses a two-mode workflow:
 1. `setup` bootstraps the repository, workflow assets, labels, and GitHub operating model.
 2. `issue_driven` runs all post-setup work through GitHub Issues, task dependencies, owner contours, and GitHub Project state.
 
-After `setup`, operational work starts from exactly one `business_analysis` issue and then flows through issue hierarchy, task metadata, dependencies, owner contours, and GitHub Project state.
+After `setup`, the workflow proceeds through these stages:
 
-Setup must not transition to `issue_driven` until the repository has a seeded starting backlog containing at least one open `initiative` issue and exactly one open initial `business_analysis` issue.
+```
+Stage 0  — Infrastructure   (devops)
+Stage 1  — Design system    (analyst)
+Stage 2  — Decomposition    (analyst)
+Stage 3+ — Implementation   (frontend / backend / devops)  ─┐
+Stage 4+ — QA per block     (qa-e2e)                        ─┘ repeat per block
+```
+
+Infrastructure (Stage 0) must be complete before any implementation task is created or starts.
+
+Setup must not transition to `issue_driven` until the repository has a seeded starting backlog containing at least one open `initiative` issue and exactly one open initial `system_analysis` issue.
+
+## Model Routing
+
+Each task carries a `model` field. The orchestrator uses it to select the subagent model.
+
+| Role | Default model | Reason |
+|---|---|---|
+| frontend | claude | Figma MCP, visual quality |
+| qa-e2e | claude | BrowserMCP, visual comparison |
+| backend | codex | Deterministic tasks |
+| devops | codex | Deterministic tasks |
+| analyst | codex | Deterministic tasks |
+
+The `model` field in each task overrides the role default. Allowed values: `claude`, `codex`, `from-config`.
+`from-config` means read the model from `.ai-dev-template.config.json` for the matching role.
 
 ## Bootstrap State Detection
 
-Read `.ai-dev-template.workflow-state.json` and use `current_stage` exactly as written.
+Read `.ai-dev-template.workflow-state.json` and use `current_stage` and `mode` exactly as written.
 
-Allowed values:
+`current_stage` allowed values:
 
 1. `setup`
 2. `issue_driven`
 
+`mode` allowed values:
+
+1. `dialogue` (default when absent)
+2. `execution`
+
 If the file is missing, malformed, or contains an unsupported value, stop and report a blocker.
 
-`current_stage` acts as a bootstrap guardrail with two repository-wide modes:
+`current_stage` acts as a bootstrap guardrail:
 
 - `setup` means the repository is being prepared for operational work;
 - `issue_driven` means setup is complete and routing comes from the active GitHub Issue plus GitHub Project state.
-
-`current_stage` accepts exactly these two values.
 
 ## Git Delivery Rule
 
@@ -86,21 +134,22 @@ Lifecycle rule:
 
 Every operational task must have these required attributes, expressed through issue body fields, labels, or project fields:
 
-- task type: one of `initiative`, `business_analysis`, `system_analysis`, `block_delivery`, `implementation`, `deploy`, `e2e`;
-- owner contour: exactly one of `business-analyst`, `system-analyst`, `frontend`, `backend`, `devops`, `qa-e2e`;
+- task type: one of `initiative`, `system_analysis`, `infrastructure`, `block_delivery`, `implementation`, `deploy`, `e2e`;
+- owner contour: exactly one of `system-analyst`, `frontend`, `backend`, `devops`, `qa-e2e`;
 - parent initiative: the top-level Epic or initiative issue;
 - parent block task: required for implementation issues that contribute to an integrated delivery block;
 - dependencies: explicit issue links or a `Blocked by` list;
 - ready rule: why the task is allowed to start;
 - done rule: what must be true to close the task;
 - canonical inputs: the specific repository artifacts and linked issues the task may rely on;
+- model: one of `claude`, `codex`, `from-config`;
 - project status: one of `Inbox`, `Ready`, `In Progress`, `Blocked`, `Waiting for Testing`, `Testing`, `Waiting for Fix`, `In Review`, `Done`.
 
 Required task chain after setup:
 
-1. one `business_analysis` issue confirms the business problem and operating vocabulary;
-2. one or more bounded `system_analysis` issues produce the canonical specification package in slices for the same initiative or version stream;
-3. each `system_analysis` issue decomposes only its approved analysis slice into one or more parent `block_delivery` tasks;
+1. one `infrastructure` issue completes CI/CD and VPS setup (Stage 0); no implementation task may start until this is done;
+2. one or more `system_analysis` issues produce the canonical specification package including `ui_screens` for any UI work;
+3. each `system_analysis` issue decomposes its approved analysis slice into one or more parent `block_delivery` tasks;
 4. each `block_delivery` task owns child implementation issues, one per responsible contour (`frontend`, `backend`, `devops`, `qa-e2e` when contour-owned test assets are required);
 5. `qa-e2e` validates the integrated result at the `block_delivery` level after all required child implementation issues are done;
 6. `deploy` remains separate when rollout is required for the validated slice.
@@ -122,7 +171,6 @@ Execution stays within the assigned contour, resolved dependency set, and declar
 
 Use the active task's `owner contour` field to determine the role for the current session:
 
-- `business-analyst`
 - `system-analyst`
 - `frontend`
 - `backend`
@@ -155,20 +203,9 @@ Read, in order:
 3. `instructions/setup/technical-agent.md`
 
 Setup must ensure the repository is configured according to `.ai-dev-template.config.json` before switching to `issue_driven`. Apply the configuration to workflow assets, instructions, issue templates, labels, project structure, and required repository-management infrastructure. Create or validate labels, GitHub Project structure, repository linkage, and other GitHub-side setup artifacts directly through `gh` or equivalent integrated tooling instead of relying on repository bootstrap scripts. If GitHub Project tracking is configured, treat only a project already linked to the current repository as an existing project for setup purposes. If no repository-linked project exists, create one, connect it to the repository, record it in the canonical docs, and advance the bootstrap state after that integration is validated.
-Setup must also seed the starting backlog before leaving `setup`. At minimum, create one open `initiative` issue plus one open `business_analysis` issue directly through GitHub, mark the `business_analysis` issue with `session: active`, and leave that issue ready for immediate execution in `issue_driven`.
+Setup must also seed the starting backlog before leaving `setup`. At minimum, create one open `initiative` issue plus one open `system_analysis` issue directly through GitHub, mark the `system_analysis` issue with `session: active`, and leave that issue ready for immediate execution in `issue_driven`.
 If GitHub-side setup is blocked by missing auth, permissions, CLI support, or other environment constraints, stop quickly, keep the repository in `setup`, and report the blocker instead of writing replacement bootstrap tooling unless the user explicitly requests that tooling.
 If setup consumed a user-updated `.ai-dev-template.config.json`, that file is part of the effective setup state and must be staged, committed, and pushed as part of the setup evidence unless a documented repository policy explicitly says otherwise.
-
-### business_analysis
-
-Read, in order:
-
-1. `instructions/intake/router.md`
-2. `instructions/intake/business-analyst.md`
-3. `docs/00-project-overview.md`
-4. `docs/01-product-vision.md`
-5. `docs/02-business-requirements.md`
-6. `docs/03-scope-and-boundaries.md`
 
 ### system_analysis
 
@@ -181,6 +218,16 @@ Read, in order:
 5. `docs/09-integrations.md`
 6. `docs/analysis/README.md`
 7. the specific files in `docs/analysis/` required for the initiative
+
+### infrastructure
+
+Read, in order:
+
+1. `instructions/delivery/router.md`
+2. `instructions/delivery/roles/devops.md`
+3. `docs/00-project-overview.md`
+4. `docs/04-tech-stack.md`
+5. `docs/09-integrations.md`
 
 ### implementation
 
@@ -240,7 +287,8 @@ Stop and report a blocker when any of the following is true:
 - the active role is ambiguous;
 - canonical analysis artifacts are insufficient for implementation, deployment, or testing;
 - a task tries to combine multiple contours without explicit decomposition;
-- a role would need to read unrelated instructions or sibling implementation code just to infer expected behavior.
+- a role would need to read unrelated instructions or sibling implementation code just to infer expected behavior;
+- a frontend task is missing a valid `figma_frame` link;
+- an infrastructure task is not yet done and an implementation task tries to start.
 
-When blocked by missing business context, route the work to a `business_analysis` task.
 When blocked by missing specifications, contracts, decomposition details, or UX behavior, stop implementation, mark the implementation task `Blocked`, and create or request a linked `system_analysis` follow-up issue before any coding continues.

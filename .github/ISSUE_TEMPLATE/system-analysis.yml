@@ -40,6 +40,19 @@ body:
     validations:
       required: true
   - type: textarea
+    id: ui_screens
+    attributes:
+      label: ui_screens
+      description: |
+        Required when the initiative includes UI. List each screen paired with its exact Figma frame link.
+        Format per line: `Screen name — https://www.figma.com/file/...?node-id=...`
+        Write `none` if no UI is involved.
+      placeholder: |
+        Home screen — https://www.figma.com/file/...?node-id=...
+        Cart screen — https://www.figma.com/file/...?node-id=...
+    validations:
+      required: true
+  - type: textarea
     id: decomposition_scope
     attributes:
       label: Decomposition scope
